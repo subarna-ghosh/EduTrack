@@ -61,7 +61,7 @@
             <!-- Body -->
 
             <div class="card-body p-4">
-              <form action="/batches/create" method="POST">
+              <form action="/web/save/batch" method="POST">
                 <!-- Batch Name -->
 
                 <div class="mb-3">
@@ -79,16 +79,12 @@
                 <!-- Course -->
 
                 <div class="mb-3">
-                  <label class="form-label"> Select Course </label>
-
+                  <label class="form-label"> Select Course </label>           
                   <select name="courseId" class="form-select" required>
                     <option value="">Choose Course</option>
-
-                    <option value="1">Node JS Complete</option>
-
-                    <option value="2">React JS</option>
-
-                    <option value="3">MERN Stack</option>
+                    <%listCourses.forEach((val)=>{%>               
+                    <option value="<%=val._id%>"><%=val.courseName%></option>
+                    <%})%>
                   </select>
                 </div>
 
@@ -99,12 +95,9 @@
 
                   <select name="facultyId" class="form-select" required>
                     <option value="">Choose Faculty</option>
-
-                    <option value="1">Raju Kayal</option>
-
-                    <option value="2">Amit Roy</option>
-
-                    <option value="3">Sayan Das</option>
+                    <%findFaculty.forEach((fac)=>{%>
+                    <option value="<%=fac._id%>"><%=fac.userInfo.name%></option>
+                    <%})%>
                   </select>
                 </div>
 

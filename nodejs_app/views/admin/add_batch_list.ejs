@@ -97,41 +97,28 @@
               <thead class="table-light">
                 <tr>
                   <th>#</th>
-
                   <th>Batch Name</th>
-
                   <th>Course</th>
-
                   <th>Faculty</th>
-
                   <th>Start Date</th>
-
                   <th>End Date</th>
-
                   <th>Status</th>
-
                   <th>Actions</th>
                 </tr>
               </thead>
-
+ 
               <tbody>
+                <%findBatch.forEach((val,index)=>{%>
                 <tr>
-                  <td>1</td>
-
-                  <td>WA-481</td>
-
-                  <td>Node JS Complete</td>
-
-                  <td>Raju Kayal</td>
-
-                  <td>01-Jul-2026</td>
-
-                  <td>31-Dec-2026</td>
-
+                  <td><%=index+1%></td>
+                  <td><%=val.batchName%></td>
+                  <td><%=val.courseList.courseName%></td>
+                  <td><%= val.userInfo?.name || "No Faculty" %></td>
+                  <td><%=new Date(val.startDate).toLocaleDateString("en-GB")%></td>
+                  <td><%=new Date(val.endDate).toLocaleDateString("en-GB")%></td>
                   <td>
-                    <span class="badge bg-success"> Active </span>
+                    <span class="badge bg-success"><%=val.status%></span>
                   </td>
-
                   <td>
                     <div class="d-flex gap-2">
                       <a href="#" class="btn btn-warning btn-sm action-btn">
@@ -144,66 +131,7 @@
                     </div>
                   </td>
                 </tr>
-
-                <tr>
-                  <td>2</td>
-
-                  <td>WA-500</td>
-
-                  <td>React JS</td>
-
-                  <td>Amit Roy</td>
-
-                  <td>10-Aug-2026</td>
-
-                  <td>15-Jan-2027</td>
-
-                  <td>
-                    <span class="badge bg-primary"> Upcoming </span>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <a href="#" class="btn btn-warning btn-sm action-btn">
-                        <i class="fa-solid fa-pen"></i>
-                      </a>
-
-                      <a href="#" class="btn btn-danger btn-sm action-btn">
-                        <i class="fa-solid fa-trash"></i>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>3</td>
-
-                  <td>WA-410</td>
-
-                  <td>PHP Laravel</td>
-
-                  <td>Sayan Das</td>
-
-                  <td>01-Jan-2026</td>
-
-                  <td>01-Jun-2026</td>
-
-                  <td>
-                    <span class="badge bg-secondary"> Completed </span>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <a href="#" class="btn btn-warning btn-sm action-btn">
-                        <i class="fa-solid fa-pen"></i>
-                      </a>
-
-                      <a href="#" class="btn btn-danger btn-sm action-btn">
-                        <i class="fa-solid fa-trash"></i>
-                      </a>
-                    </div>
-                  </td>
-                </tr>
+                <%})%>              
               </tbody>
             </table>
           </div>

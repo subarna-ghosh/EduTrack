@@ -15,7 +15,8 @@ const {
   departmentSchema,
   facultySchema,
 } = require("../../validations/facultyValidation");
-
+const { batchSchema } = require("../../validations/batchValidation");
+const { studentSchema } = require("../../validations/studentValidation");
 // admin dashboard
 Router.get(
   "/view/admin/dashboard",
@@ -64,6 +65,15 @@ Router.get(
   StudentManagementController.viewAddStudent,
 );
 
+Router.post(
+  "/create/student",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(studentSchema, "/web/view/add/student"),
+  uploadFacultyImage.single("profileImage"),
+  StudentManagementController.createStudent,
+);
+
 Router.get(
   "/view/add/student/list",
   authCheck,
@@ -100,6 +110,14 @@ Router.get(
   authCheck,
   roleCheck("admin"),
   BatchManagementController.viewBatch,
+);
+
+Router.post(
+  "/save/batch",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(batchSchema, "/web/view/add/batch"),
+  BatchManagementController.saveBatch,
 );
 
 Router.get(

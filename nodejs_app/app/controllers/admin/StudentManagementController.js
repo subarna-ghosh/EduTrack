@@ -8,6 +8,8 @@ class StudentManagementController {
     return res.render("admin/add_student");
   }
 
+  async createStudent(req, res) {}
+
   viewListStudent(req, res) {
     return res.render("admin/add_stu_list");
   }
