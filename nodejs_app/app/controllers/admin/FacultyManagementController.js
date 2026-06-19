@@ -6,7 +6,6 @@ const User = require("../../models/User");
 const Faculty = require("../../models/FacultyProfile");
 const Department = require("../../models/Department");
 const cloudinary = require("../../config/cloudinary");
-const sendMail = require("../../utils/sendMail");
 const sendEmail = require("../../utils/sendMail");
 class FacultyManagementController {
   async viewAddFaculty(req, res) {

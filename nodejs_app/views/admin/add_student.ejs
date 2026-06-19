@@ -82,7 +82,7 @@
 
             <div class="card-body p-4">
               <form
-                action="/students/add"
+                action="/web/create/student"
                 method="POST"
                 enctype="multipart/form-data"
               >
@@ -197,12 +197,9 @@
 
                   <select name="batchId" class="form-select" required>
                     <option value="">Select Batch</option>
-
-                    <option value="batch1">WA-481</option>
-
-                    <option value="batch2">WA-500</option>
-
-                    <option value="batch3">WA-600</option>
+                    <%findBatch.forEach((batch)=>{%>
+                    <option value="<%=batch._id%>"><%=batch.batchName%></option>
+                    <%})%>
                   </select>
                 </div>
 

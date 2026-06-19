@@ -9,6 +9,7 @@ const PaymentManagementController = require("../../controllers/admin/PaymentMana
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
 const uploadFacultyImage = require("../../utils/uploadImage");
+const uploadStudentImage = require("../../utils/uploadImage");
 const validateWeb = require("../../middlewares/validateWebMiddleware");
 const { courseSchema } = require("../../validations/courseValidation");
 const {
@@ -70,7 +71,7 @@ Router.post(
   authCheck,
   roleCheck("admin"),
   validateWeb(studentSchema, "/web/view/add/student"),
-  uploadFacultyImage.single("profileImage"),
+  uploadStudentImage.single("profileImage"),
   StudentManagementController.createStudent,
 );
 
