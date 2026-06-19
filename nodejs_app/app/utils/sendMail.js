@@ -10,11 +10,11 @@ const sendEmail = async (req, user) => {
         <p>Your account has been created successfully.</p>
         <p>Login Details:</p>
         <p><strong>Email:</strong> ${user.email}</p>
-        <p><strong>Temporary Password:</strong> ${req.body.password}</p>
+        <p><strong>Password:</strong> ${req.body.password}</p>
         <p>
           Login URL:
-          <a href="http://localhost:3006/api/view/login">
-            http://localhost:3006/api/view/login
+          <a href="http://localhost:3001/web/view/login">
+            http://localhost:3001/web/view/login
           </a>
         </p>
         <p>Please login and update your password immediately for security purposes.</p>

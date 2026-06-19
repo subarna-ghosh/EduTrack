@@ -14,8 +14,37 @@ class FacultyManagementController {
     return res.render("admin/add_faculty", { selectDept });
   }
 
-  viewListFaculty(req, res) {
-    return res.render("admin/add_fac_list");
+  async viewListFaculty(req, res) {
+    try {
+      const getFacultyInfo = await Faculty.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $lookup: {
+            from: "departments",
+            localField: "deptId",
+            foreignField: "_id",
+            as: "deptInfo",
+          },
+        },
+        { $unwind: "$userInfo" },
+        { $unwind: "$deptInfo" },
+      ]);
+
+      return res.render("admin/add_fac_list", {
+        getFacultyInfo,
+      });
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Unable to load faculty list");
+      return res.redirect("/web/view/admin/dashboard");
+    }
   }
 
   async saveDepartment(req, res) {
