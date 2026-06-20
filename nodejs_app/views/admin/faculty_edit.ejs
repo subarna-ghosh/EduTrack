@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Add Faculty</title>
+    <title>Edit Faculty</title>
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -26,14 +26,14 @@
             <!-- Header -->
 
             <div class="card-header bg-white py-3">
-              <h3 class="page-title mb-0">Add Faculty</h3>
+              <h3 class="page-title mb-0">Edit Faculty</h3>
             </div>
 
             <!-- Body -->
 
             <div class="card-body p-4">
               <form
-                action="/web/create/faculty"
+                action="/web/update/faculty/<%=showData[0]._id%>"
                 method="POST"
                 enctype="multipart/form-data"
               >
@@ -71,6 +71,7 @@
                     name="name"
                     class="form-control"
                     placeholder="Enter faculty name"
+                    value="<%= showData[0].userInfo.name %>"
                     required
                   />
                 </div>
@@ -85,6 +86,7 @@
                     name="email"
                     class="form-control"
                     placeholder="Enter email address"
+                    value="<%=showData[0].userInfo.email%>"
                     required
                   />
                 </div>
@@ -99,6 +101,7 @@
                     name="phone"
                     class="form-control"
                     placeholder="Enter phone number"
+                    value="<%=showData[0].phone%>"
                     required
                   />
                 </div>
@@ -128,7 +131,7 @@
                     class="form-control"
                     placeholder="Enter address"
                     required
-                  ></textarea>
+                  ><%=showData[0].address%></textarea>
                 </div>
 
                 <!-- Department -->
@@ -157,6 +160,7 @@
                     name="experience"
                     class="form-control"
                     placeholder="Enter experience"
+                    value="<%=showData[0].experience%>"
                     min="0"
                     required
                   />
@@ -179,7 +183,7 @@
                 <div class="d-flex gap-3">
                   <button type="submit" class="btn btn-primary">
                     <i class="fa-solid fa-user-plus me-2"></i>
-                    Add Faculty
+                    Update Faculty
                   </button>
 
                   <a

@@ -58,6 +58,35 @@ Router.post(
   FacultyManagementController.createFaculty,
 );
 
+Router.get(
+  "/faculty/profile/view/:id",
+  authCheck,
+  roleCheck("admin"),
+  FacultyManagementController.facultyProfile,
+);
+
+Router.get(
+  "/edit/faculty/view/:id",
+  authCheck,
+  roleCheck("admin"),
+  FacultyManagementController.editFacultyView,
+);
+
+Router.post(
+  "/update/faculty/:id",
+  authCheck,
+  roleCheck("admin"),
+  uploadFacultyImage.single("profileImage"),
+  FacultyManagementController.updateFaculty,
+);
+
+Router.get(
+  "/delete/faculty/:id",
+  authCheck,
+  roleCheck("admin"),
+  FacultyManagementController.deleteFaculty,
+);
+
 // student
 Router.get(
   "/view/add/student",
@@ -103,6 +132,27 @@ Router.get(
   authCheck,
   roleCheck("admin"),
   CourseManagementController.viewListCourse,
+);
+
+Router.get(
+  "/view/edit/course/:id",
+  authCheck,
+  roleCheck("admin"),
+  CourseManagementController.viewCourseEdit,
+);
+
+Router.post(
+  "/save/edit/course/:id",
+  authCheck,
+  roleCheck("admin"),
+  CourseManagementController.saveCourseEdit,
+);
+
+Router.get(
+  "/delete/course/:id",
+  authCheck,
+  roleCheck("admin"),
+  CourseManagementController.deleteCourse,
 );
 
 // batch
