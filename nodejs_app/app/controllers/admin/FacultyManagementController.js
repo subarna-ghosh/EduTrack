@@ -1,4 +1,5 @@
 const fs = require("fs").promises;
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Role = require("../../models/Role");
@@ -153,6 +154,129 @@ class FacultyManagementController {
       console.log(error);
       req.flash("error", "Something went wrong while creating faculty");
 
+      return res.redirect("/web/view/add/faculty/list");
+    }
+  }
+
+  async facultyProfile(req, res) {
+    try {
+      const id = req.params.id;
+      const showFacultyProfile = await Faculty.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $lookup: {
+            from: "departments",
+            localField: "deptId",
+            foreignField: "_id",
+            as: "deptInfo",
+          },
+        },
+        { $unwind: "$userInfo" },
+        { $unwind: "$deptInfo" },
+      ]);
+      return res.render("admin/faculty_profile", { showFacultyProfile });
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while viewing faculty");
+
+      return res.redirect("/web/view/add/faculty/list");
+    }
+  }
+
+  async editFacultyView(req, res) {
+    try {
+      const id = req.params.id;
+      const showData = await Faculty.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $lookup: {
+            from: "departments",
+            localField: "deptId",
+            foreignField: "_id",
+            as: "deptInfo",
+          },
+        },
+        { $unwind: "$userInfo" },
+        { $unwind: "$deptInfo" },
+      ]);
+      const selectDept = await Department.find({});
+      return res.render("admin/faculty_edit", { showData, selectDept });
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while editing faculty");
+      return res.redirect("/web/view/add/faculty/list");
+    }
+  }
+
+  async updateFaculty(req, res) {
+    try {
+      const id = req.params.id;
+      const isExist = await Faculty.findById(id);
+      if (req.file) {
+        // Deletes old image only when a new image is uploaded
+        if (isExist.profileImagePublicId) {
+          await cloudinary.uploader.destroy(isExist.profileImagePublicId);
+        }
+        const data = await cloudinary.uploader.upload(req.file.path, {
+          folder: "faculty",
+        });
+        await fs.unlink(req.file.path);
+        req.body.profileImage = data.secure_url;
+        req.body.profileImagePublicId = data.public_id;
+      }
+      await Faculty.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      req.flash("success", "Faculty updated successfully");
+      return res.redirect("/web/view/add/faculty/list");
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while updating faculty");
+      return res.redirect("/web/view/add/faculty/list");
+    }
+  }
+
+  async deleteFaculty(req, res) {
+    try {
+      const id = req.params.id;
+      const presentData = await Faculty.findById(id);
+      if (!presentData) {
+        console.log("Faculty not found");
+        return res.redirect("/web/view/add/faculty/list");
+      }
+      if (presentData.profileImagePublicId) {
+        await cloudinary.uploader.destroy(presentData.profileImagePublicId);
+      }
+      await Faculty.findByIdAndDelete(id);
+      req.flash("success", "Faculty deleted successfully");
+      return res.redirect("/web/view/add/faculty/list");
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while deleting faculty");
       return res.redirect("/web/view/add/faculty/list");
     }
   }

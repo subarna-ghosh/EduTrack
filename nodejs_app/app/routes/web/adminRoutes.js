@@ -18,7 +18,10 @@ const {
 } = require("../../validations/facultyValidation");
 const { batchSchema } = require("../../validations/batchValidation");
 const { studentSchema } = require("../../validations/studentValidation");
-// admin dashboard
+
+// =========================================
+//      admin dashboard
+// ========================================= 
 Router.get(
   "/view/admin/dashboard",
   authCheck,
@@ -26,7 +29,7 @@ Router.get(
   AdminController.viewAdminDashboard,
 );
 
-// faculty
+// shown below are faculty apis
 Router.get(
   "/view/add/faculty",
   authCheck,
@@ -58,7 +61,37 @@ Router.post(
   FacultyManagementController.createFaculty,
 );
 
-// student
+Router.get(
+  "/faculty/profile/view/:id",
+  authCheck,
+  roleCheck("admin"),
+  FacultyManagementController.facultyProfile,
+);
+
+Router.get(
+  "/edit/faculty/view/:id",
+  authCheck,
+  roleCheck("admin"),
+  FacultyManagementController.editFacultyView,
+);
+
+Router.post(
+  "/update/faculty/:id",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(facultySchema, "/web/view/add/faculty"),
+  uploadFacultyImage.single("profileImage"),
+  FacultyManagementController.updateFaculty,
+);
+
+Router.get(
+  "/delete/faculty/:id",
+  authCheck,
+  roleCheck("admin"),
+  FacultyManagementController.deleteFaculty,
+);
+
+// shown below are student apis
 Router.get(
   "/view/add/student",
   authCheck,
@@ -82,7 +115,37 @@ Router.get(
   StudentManagementController.viewListStudent,
 );
 
-// course
+Router.get(
+  "/view/student/profile/:id",
+  authCheck,
+  roleCheck("admin"),
+  StudentManagementController.studentProfile,
+);
+
+Router.get(
+  "/view/edit/student/:id",
+  authCheck,
+  roleCheck("admin"),
+  StudentManagementController.viewEditStudent,
+);
+
+Router.post(
+  "/update/student/:id",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(studentSchema, "/web/view/add/student"),
+  uploadStudentImage.single("profileImage"),
+  StudentManagementController.updateStudent,
+);
+
+Router.get(
+  "/delete/student/:id",
+  authCheck,
+  roleCheck("admin"),
+  StudentManagementController.deleteStudent,
+);
+
+// shown below are course apis
 Router.get(
   "/view/add/course",
   authCheck,
@@ -105,7 +168,28 @@ Router.get(
   CourseManagementController.viewListCourse,
 );
 
-// batch
+Router.get(
+  "/view/edit/course/:id",
+  authCheck,
+  roleCheck("admin"),
+  CourseManagementController.viewCourseEdit,
+);
+
+Router.post(
+  "/save/edit/course/:id",
+  authCheck,
+  roleCheck("admin"),
+  CourseManagementController.saveCourseEdit,
+);
+
+Router.get(
+  "/delete/course/:id",
+  authCheck,
+  roleCheck("admin"),
+  CourseManagementController.deleteCourse,
+);
+
+// shown below are batch apis
 Router.get(
   "/view/add/batch",
   authCheck,
@@ -128,7 +212,29 @@ Router.get(
   BatchManagementController.viewListBatch,
 );
 
-// payment management
+Router.get(
+  "/view/edit/batch/:id",
+  authCheck,
+  roleCheck("admin"),
+  BatchManagementController.viewEditBatch,
+);
+
+Router.post(
+  "/update/batch/:id",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(batchSchema, "/web/view/add/batch"),
+  BatchManagementController.updateBatch,
+);
+
+Router.get(
+  "/delete/batch/:id",
+  authCheck,
+  roleCheck("admin"),
+  BatchManagementController.deleteBatch,
+);
+
+// shown below are payment management apis
 Router.get(
   "/view/payment/management",
   authCheck,

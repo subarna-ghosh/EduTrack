@@ -32,8 +32,54 @@ class CourseManagementController {
   }
 
   async viewListCourse(req, res) {
-    const showCourses = await Course.find({});
-    return res.render("admin/add_course_list", { showCourses });
+    try {
+      const showCourses = await Course.find({});
+      return res.render("admin/add_course_list", { showCourses });
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while viewing course");
+      return res.redirect("/web/view/admin/dashboard");
+    }
+  }
+
+  async viewCourseEdit(req, res) {
+    try {
+      const id = req.params.id;
+      const showData = await Course.findById(id);
+      return res.render("admin/course_edit", { showData });
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while editing course");
+      return res.redirect("/web/view/add/course/list");
+    }
+  }
+
+  async saveCourseEdit(req, res) {
+    try {
+      const id = req.params.id;
+      const result = await Course.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      req.flash("success", "Updated successfully");
+      return res.redirect("/web/view/add/course/list");
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while updating course");
+      return res.redirect("/web/view/add/course/list");
+    }
+  }
+
+  async deleteCourse(req, res) {
+    try {
+      const id = req.params.id;
+      const deleteData = await Course.findByIdAndDelete(id);
+      req.flash("success", "Course deleted successfully");
+      return res.redirect("/web/view/add/course/list");
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while deleting course");
+      return res.redirect("/web/view/add/course/list");
+    }
   }
 }
 module.exports = new CourseManagementController();
