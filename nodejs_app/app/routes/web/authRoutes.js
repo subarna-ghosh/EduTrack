@@ -6,6 +6,9 @@ const { saveLoginSchema } = require("../../validations/authValidation");
 const authCheck = require("../../middlewares/authCheck");
 const allowRole = require("../../middlewares/allowRole");
 
+// =========================================
+//      auth dashboard
+// ========================================= 
 Router.get("/view/login", AuthController.viewlogin);
 Router.post(
   "/save/login",

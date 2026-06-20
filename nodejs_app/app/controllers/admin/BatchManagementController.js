@@ -1,4 +1,4 @@
-// Router.get("", AuthController.viewAdminDashboard);
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Role = require("../../models/Role");
@@ -52,52 +52,119 @@ class BatchManagementController {
   }
 
   async viewListBatch(req, res) {
-    const findBatch = await Batch.aggregate([
-      {
-        $lookup: {
-          from: "courses",
-          localField: "courseId",
-          foreignField: "_id",
-          as: "courseList",
+    try {
+      const findBatch = await Batch.aggregate([
+        {
+          $lookup: {
+            from: "courses",
+            localField: "courseId",
+            foreignField: "_id",
+            as: "courseList",
+          },
         },
-      },
-      {
-        $lookup: {
-          from: "faculties",
-          localField: "facultyId",
-          foreignField: "_id",
-          as: "facultyList",
+        {
+          $lookup: {
+            from: "faculties",
+            localField: "facultyId",
+            foreignField: "_id",
+            as: "facultyList",
+          },
         },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "facultyList.userId",
-          foreignField: "_id",
-          as: "userInfo",
+        {
+          $lookup: {
+            from: "users",
+            localField: "facultyList.userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
         },
-      },
-      {
-        $unwind: {
-          path: "$courseList",
-          preserveNullAndEmptyArrays: true,
+        {
+          $unwind: {
+            path: "$courseList",
+            preserveNullAndEmptyArrays: true,
+          },
         },
-      },
-      {
-        $unwind: {
-          path: "$facultyList",
-          preserveNullAndEmptyArrays: true,
+        {
+          $unwind: {
+            path: "$facultyList",
+            preserveNullAndEmptyArrays: true,
+          },
         },
-      },
-      {
-        $unwind: {
-          path: "$userInfo",
-          preserveNullAndEmptyArrays: true,
+        {
+          $unwind: {
+            path: "$userInfo",
+            preserveNullAndEmptyArrays: true,
+          },
         },
-      },
-    ]);
-    // console.log(JSON.stringify(findBatch, null, 2));
-    return res.render("admin/add_batch_list", { findBatch });
+      ]);
+      // console.log(JSON.stringify(findBatch, null, 2));
+      return res.render("admin/add_batch_list", { findBatch });
+    } catch (error) {
+      req.flash("error", "Something went wrong while listing batch");
+      return res.redirect("/web/view/admin/dashboard");
+    }
+  }
+
+  async viewEditBatch(req, res) {
+    try {
+      const id = req.params.id;
+      const listCourses = await Course.find({});
+      const findFaculty = await Faculty.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $unwind: "$userInfo",
+        },
+      ]);
+      const findBatch = await Batch.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(id),
+          },
+        },
+      ]);
+      return res.render("admin/batch_edit", {
+        listCourses,
+        findFaculty,
+        findBatch,
+      });
+    } catch (error) {
+      req.flash("error", "Something went wrong while editing batch");
+      return res.redirect("/web/view/add/batch/list");
+    }
+  }
+
+  async updateBatch(req, res) {
+    try {
+      const id = req.params.id;
+      const result = await Batch.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      req.flash("success", "Updated successfully");
+      return res.redirect("/web/view/add/batch/list");
+    } catch (error) {
+      req.flash("error", "Something went wrong while updaing batch");
+      return res.redirect("/web/view/add/batch/list");
+    }
+  }
+
+  async deleteBatch(req, res) {
+    try {
+      const id = req.params.id;
+      const deleteData = await Batch.findByIdAndDelete(id);
+      req.flash("success", "Batch deleted successfully");
+      return res.redirect("/web/view/add/batch/list");
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while deleting batch");
+      return res.redirect("/web/view/add/batch/list");
+    }
   }
 }
 module.exports = new BatchManagementController();

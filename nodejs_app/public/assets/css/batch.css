@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f5f7fb;
+  font-family: Arial, sans-serif;
+}
+
+.page-card {
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.table th {
+  font-weight: 600;
+  color: white;
+  background: #0d6efd;
+  vertical-align: middle;
+}
+.table td {
+  vertical-align: middle;
+}
+
+.page-title {
+  font-weight: 700;
+}
+
+.action-btn {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* batch form design */
+.batch-card {
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.page-title {
+  font-weight: 700;
+  color: #343a40;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.form-control,
+.form-select {
+  height: 50px;
+  border-radius: 12px;
+}
+
+textarea.form-control {
+  height: auto;
+}
+
