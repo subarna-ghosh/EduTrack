@@ -6,6 +6,7 @@ const FacultyManagementController = require("../../controllers/admin/FacultyMana
 const BatchManagementController = require("../../controllers/admin/BatchManagementController");
 const CourseManagementController = require("../../controllers/admin/CourseManagementController");
 const PaymentManagementController = require("../../controllers/admin/PaymentManagementController");
+const AttendanceManagementController = require("../../controllers/admin/AttendanceManagementController");
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
 const uploadFacultyImage = require("../../utils/uploadImage");
@@ -21,7 +22,7 @@ const { studentSchema } = require("../../validations/studentValidation");
 
 // =========================================
 //      admin dashboard
-// ========================================= 
+// =========================================
 Router.get(
   "/view/admin/dashboard",
   authCheck,
@@ -232,6 +233,28 @@ Router.get(
   authCheck,
   roleCheck("admin"),
   BatchManagementController.deleteBatch,
+);
+
+// shown below are attendance management apis
+Router.get(
+  "/view/attendance/list",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.viewAttendanceList,
+);
+
+Router.get(
+  "/view/mark/attendance",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.viewMarkAttendance,
+);
+
+Router.post(
+  "/save/attendance",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.saveAttendance,
 );
 
 // shown below are payment management apis

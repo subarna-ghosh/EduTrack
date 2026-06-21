@@ -8,6 +8,12 @@ const attendanceSchema = new Schema(
       required: true,
     },
 
+    courseId: {
+      type: Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
+
     batchId: {
       type: Schema.Types.ObjectId,
       ref: "Batch",
