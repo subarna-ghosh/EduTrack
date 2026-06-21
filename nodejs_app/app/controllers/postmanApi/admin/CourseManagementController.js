@@ -47,7 +47,7 @@ class CourseManagementController {
       });
     }
   }
-  
+
   async viewAllCourse(req, res) {
     try {
       const allCourses = await Course.find();
@@ -61,17 +61,93 @@ class CourseManagementController {
 
       return res.status(httpStatusCode.OK).json({
         success: true,
-        message: "New Course created successfully",
-        data: result
+        message: "All courses get successfully",
+        data: allCourses
       });
-      
+
     } catch (error) {
       return res.status(httpStatusCode.SERVER_ERROR).json({
         success: false,
         message: error.message
       });
     }
-  
+
+  }
+
+  async viewCourseEdit(req, res) {
+    try {
+      const id = req.params.id;
+      const existingCourse = await Course.findById(id);
+
+      if (!existingCourse) {
+        return res.status(httpStatusCode.NOT_FOUND).json({
+          success: false,
+          message: "Course not found"
+        });
+      }
+
+      return res.status(httpStatusCode.OK).json({
+        success: true,
+        message: "Course gets successfully",
+        existingCourse
+      });
+
+
+    } catch (error) {
+      return res.status(httpStatusCode.SERVER_ERROR).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+
+  async courseUpdate(req, res) {
+    try {
+
+      const id = req.params.id;
+      const updatedCourse = await Course.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+
+      return res.status(httpStatusCode.OK).json({
+        success: true,
+        message: "Course updates successfully",
+        updatedCourse
+      });
+
+    } catch (error) {
+      return res.status(httpStatusCode.SERVER_ERROR).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+
+  async deleteCourse(req, res) {
+    try {
+
+      const id = req.params.id;
+      const deleteCourse = await Course.findByIdAndDelete(id);
+
+      if (!deleteCourse) {
+        return res.status(httpStatusCode.NOT_FOUND).json({
+          success: false,
+          message: "Course not found"
+        });
+      }
+
+      return res.status(httpStatusCode.OK).json({
+        success: true,
+        message: "Course deleted successfully"
+
+      });
+
+    } catch (error) {
+      return res.status(httpStatusCode.SERVER_ERROR).json({
+        success: false,
+        message: error.message
+      });
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 const fs = require("fs").promises;
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Role = require("../../../models/Role");
@@ -27,17 +28,17 @@ class FacultyManagementController {
 
             const existingDepartment = await Department.findOne({ deptName });
 
-            if(existingDepartment){
+            if (existingDepartment) {
                 return res.status(httpStatusCode.BAD_REQUEST).json({
                     success: false,
                     message: "Department already exist",
                 });
             }
-            
+
             const newDepartment = new Department({ deptName });
 
             const result = await newDepartment.save();
-            
+
             return res.status(httpStatusCode.OK).json({
                 success: true,
                 message: "Department created successfully",
@@ -68,7 +69,7 @@ class FacultyManagementController {
             // Check duplicate email
 
             const existingFaculty = await User.findOne({ email });
-            
+
             if (existingFaculty) {
                 return res.status(httpStatusCode.BAD_REQUEST).json({
                     success: false,
@@ -121,7 +122,8 @@ class FacultyManagementController {
                         folder: "faculty",
                     });
                     // console.log(imageStore);
-                
+
+                    await fs.unlink(req.file.path);
                     newFaculty.profileImage = imageStore.secure_url;
                     newFaculty.profileImagePublicId = imageStore.public_id;
                 }
@@ -131,7 +133,7 @@ class FacultyManagementController {
                 const savedFaculty = await Faculty.create(newFaculty);
 
                 // Send Email after everything succeeds
-                
+
                 await sendEmail(req, {
                     name,
                     email,
@@ -139,19 +141,19 @@ class FacultyManagementController {
                 });
 
                 return res.status(httpStatusCode.OK).json({
-                success: false,
-                message: "Faculty created successfully",
-                data: savedFaculty
-            });
+                    success: false,
+                    message: "Faculty created successfully",
+                    data: savedFaculty
+                });
             } catch (facultyError) {
                 // Rollback User if Faculty creation fails
 
                 await User.findByIdAndDelete(newUser._id);
 
                 return res.status(httpStatusCode.SERVER_ERROR).json({
-                success: false,
-                message: facultyError.message
-            });
+                    success: false,
+                    message: facultyError.message
+                });
             }
         } catch (error) {
             return res.status(httpStatusCode.SERVER_ERROR).json({
@@ -172,8 +174,8 @@ class FacultyManagementController {
                         as: "userInfo",
                     },
                 },
-                { 
-                    $unwind: "$userInfo" 
+                {
+                    $unwind: "$userInfo"
                 },
                 {
                     $lookup: {
@@ -183,8 +185,8 @@ class FacultyManagementController {
                         as: "deptInfo",
                     },
                 },
-                { 
-                    $unwind: "$deptInfo" 
+                {
+                    $unwind: "$deptInfo"
                 },
             ]);
 
@@ -194,6 +196,169 @@ class FacultyManagementController {
                 data: getFacultyInfo
             });
 
+        } catch (error) {
+            return res.status(httpStatusCode.SERVER_ERROR).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
+
+    async facultyProfile(req, res) {
+        try {
+            const id = req.params.id;
+            const showFacultyProfile = await Faculty.aggregate([
+                {
+                    $match: {
+                        _id: new mongoose.Types.ObjectId(id),
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "userId",
+                        foreignField: "_id",
+                        as: "userInfo",
+                    },
+                },
+                {
+                    $unwind: "$userInfo"
+                },
+                {
+                    $lookup: {
+                        from: "departments",
+                        localField: "deptId",
+                        foreignField: "_id",
+                        as: "deptInfo",
+                    },
+                },
+                { $unwind: "$deptInfo" }
+            ]);
+
+            return res.status(httpStatusCode.OK).json({
+                success: true,
+                message: "Faculty Profile gets successfully",
+                facultyProfile: showFacultyProfile
+            });
+        } catch (error) {
+            return res.status(httpStatusCode.SERVER_ERROR).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
+
+    async editFacultyView(req, res) {
+        try {
+            const id = req.params.id;
+            const showData = await Faculty.aggregate([
+                {
+                    $match: {
+                        _id: new mongoose.Types.ObjectId(id),
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "userId",
+                        foreignField: "_id",
+                        as: "userInfo",
+                    },
+                },
+                {
+                    $unwind: "$userInfo"
+                },
+                {
+                    $lookup: {
+                        from: "departments",
+                        localField: "deptId",
+                        foreignField: "_id",
+                        as: "deptInfo",
+                    },
+                },
+                { $unwind: "$deptInfo" }
+            ]);
+
+            const selectDept = await Department.find();
+
+            return res.status(httpStatusCode.OK).json({
+                success: true,
+                message: "Faculty gets successfully",
+                showData,
+                selectDept
+            });
+
+        } catch (error) {
+            return res.status(httpStatusCode.SERVER_ERROR).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
+
+    async updateFaculty(req, res) {
+        try {
+            const id = req.params.id;
+            const isExist = await Faculty.findById(id);
+
+            if (!isExist) {
+                return res.status(httpStatusCode.NOT_FOUND).json({
+                    success: false,
+                    message: "Faculty does not found"
+                });
+            }
+
+            if (req.file) {
+                // Deletes old image only when a new image is uploaded
+                if (isExist.profileImagePublicId) {
+                    await cloudinary.uploader.destroy(isExist.profileImagePublicId);
+                }
+                const data = await cloudinary.uploader.upload(req.file.path, {
+                    folder: "faculty",
+                });
+                await fs.unlink(req.file.path);
+                req.body.profileImage = data.secure_url;
+                req.body.profileImagePublicId = data.public_id;
+            }
+            const updatedFaculty = await Faculty.findByIdAndUpdate(id, req.body, {
+                new: true,
+            });
+            return res.status(httpStatusCode.OK).json({
+                success: true,
+                message: "Batch updates successfully",
+                updatedFaculty
+            });
+
+        } catch (error) {
+            return res.status(httpStatusCode.SERVER_ERROR).json({
+                success: false,
+                message: error.message
+            });
+        }
+    }
+
+    async deleteFaculty(req, res) {
+        try {
+            const id = req.params.id;
+            const presentData = await Faculty.findById(id);
+
+            if (!presentData) {
+                return res.status(httpStatusCode.NOT_FOUND).json({
+                    success: false,
+                    message: "Faculty not found"
+                });
+            }
+            if (presentData.profileImagePublicId) {
+                await cloudinary.uploader.destroy(presentData.profileImagePublicId);
+            }
+
+            await Faculty.findByIdAndDelete(id);
+
+            return res.status(httpStatusCode.OK).json({
+                success: true,
+                message: "Faculty deleted successfully"
+
+            });
         } catch (error) {
             return res.status(httpStatusCode.SERVER_ERROR).json({
                 success: false,

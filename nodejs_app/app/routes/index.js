@@ -22,6 +22,10 @@ Router.use("/web", webStudent);
 
 
 
+const webFaculty = require("./webfaculty");
+Router.use("/webfaculty", webFaculty);
+
+
 // postman api auth routes
 
 Router.use("/adminapi", adminRouter);
