@@ -34,6 +34,7 @@
         .image-preview {
             width: 130px;
             height: 130px;
+            /* border-radius: 50%; */
             border: 2px dashed #ced4da;
             display: flex;
             align-items: center;
@@ -71,13 +72,13 @@
                     <!-- Header -->
 
                     <div class="card-header bg-white py-3">
-                        <h3 class="page-title mb-0">Add Project</h3>
+                        <h3 class="page-title mb-0">Add Course Material</h3>
                     </div>
 
                     <!-- Body -->
 
                     <div class="card-body p-4">
-                        <form action="/web/faculty/project/create" method="POST" enctype="multipart/form-data">
+                        <form action="/web/faculty/coursematerial/create" method="POST" enctype="multipart/form-data">
                             <!-- Hidden Faculty Role -->
 
                             <input type="hidden" name="roleId" value="" />
@@ -93,7 +94,7 @@
 
                                 <label class="form-label"> Project pdf </label>
 
-                                <input type="file" name="projectImage" class="form-control" accept="image/*"
+                                <input type="file" name="materialImage" class="form-control" accept="image/*"
                                     onchange="preview(event)" />
                             </div>
 
@@ -109,19 +110,19 @@
                             <!-- Project Title -->
 
                             <div class="mb-3">
-                                <label class="form-label"> Project Title </label>
+                                <label class="form-label"> Course Material Title </label>
 
-                                <input type="text" name="title" class="form-control" placeholder="Enter project title"
+                                <input type="text" name="title" class="form-control" placeholder="Enter Course Material Title"
                                     required />
                             </div>
 
                             <!-- Description -->
 
                             <div class="mb-3">
-                                <label class="form-label"> Project Description </label>
+                                <label class="form-label"> Course Material Description </label>
 
                                 <textarea name="description" class="form-control"
-                                    placeholder="Enter Project Description" required rows="6"></textarea>
+                                    placeholder="Enter Course Material Description" required rows="6"></textarea>
                             </div>
 
                             <!-- Address -->
@@ -135,20 +136,7 @@
 
                             <!-- Department -->
 
-                            <div class="mb-3">
-                                <label class="form-label"> Department </label>
-
-                                <select name="department" class="form-select" required>
-                                    <option value="">Select Department</option>
-
-                                    <% showAllBatch.forEach(course=> { %>
-                                        <option value="<%= course._id %>">
-                                            <%= course.courseInfo.courseName %>
-                                        </option>
-                                        <% }) %>
-                                </select>
-
-                            </div>
+                            
                             <div class="mb-3">
                                 <label class="form-label"> Batch Name </label>
 
@@ -163,43 +151,14 @@
 
                                 </select>
 
-                            </div>
-
-                            <!-- dueDate -->
-
-                            <div class="mb-3">
-                                <label class="form-label"> Deadline </label>
-
-                                <input type="date" name="dueDate" class="form-control" required />
-                            </div>
-
-                            <!-- Experience -->
-
-                            <!-- <div class="mb-3">
-                                <label class="form-label"> Experience (Years) </label>
-
-                                <input type="number" name="experience" class="form-control"
-                                    placeholder="Enter experience" min="0" required />
-                            </div> -->
-
-                            <!-- Status -->
-
-                            <div class="mb-4">
-                                <label class="form-label"> Status </label>
-
-                                <select name="status" class="form-select">
-                                    <option value="active">Active</option>
-
-                                    <option value="closed">Closed</option>
-                                </select>
-                            </div>
+                            </div> 
 
                             <!-- Buttons -->
 
                             <div class="d-flex gap-3">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa-solid fa-user-plus me-2"></i>
-                                    Add Project
+                                    Add Course Material
                                 </button>
 
                                 <a href="/web/view/add/faculty/list" class="btn btn-secondary">

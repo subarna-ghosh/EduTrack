@@ -14,6 +14,8 @@ const projectSchema = new Schema(
       ref: "Faculty",
       required: true,
     },
+    projectImage: String,
+    projectImagePublicId: String,
     startDate:{
       type: Date,
       default: Date.now()

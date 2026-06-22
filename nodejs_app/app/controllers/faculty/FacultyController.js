@@ -106,10 +106,10 @@ class FacultyController {
 
       // console.log("Starting");
       const id = req.user.id;
-const profile = await Faculty.findOne({ userId: id });
+      const profile = await Faculty.findOne({ userId: id });
 
       // console.log(id);
-      
+
       const findBatch = await Batch.aggregate([
         {
           $lookup: {
@@ -161,14 +161,101 @@ const profile = await Faculty.findOne({ userId: id });
         },
       ]);
 
+
       // console.log(JSON.stringify(findBatch, null, 2));
       // console.log(findBatch);
-      
+
       return res.render("faculty/faculty_batch", { findBatch, profile });
     } catch (error) {
       req.flash("error", "Something went wrong while listing batch");
       return res.redirect("/web/view/faculty/dashboard");
     }
   }
+
+  async viewFacultySingleBatch(req, res) {
+    try {
+      const batchId = req.params.id;
+      const id = req.user.id;
+      const profile = await Faculty.findOne({ userId: id });
+
+      // console.log(id);
+
+      const singleBatch = await Batch.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(batchId),
+            facultyId: new mongoose.Types.ObjectId(profile._id),
+          },
+        },
+        {
+          $lookup: {
+            from: "faculties",
+            localField: "facultyId",
+            foreignField: "_id",
+            as: "facultyList",
+          },
+        },
+        {
+          $lookup: {
+            from: "courses",
+            localField: "courseId",
+            foreignField: "_id",
+            as: "courseList",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "facultyList.userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $lookup: {
+            from: "departments",
+            localField: "facultyList.deptId",
+            foreignField: "_id",
+            as: "departmentInfo",
+          },
+        },
+        {
+          $unwind: {
+            path: "$facultyList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$userInfo",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$departmentInfo",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$courseList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+      ]);
+
+      // console.log(singleBatch);
+      
+      return res.render("faculty/faculty_single_batch", { singleBatch });
+
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "Something went wrong while viewing faculty");
+
+      return res.redirect("/web/view/add/faculty/list");
+    }
+  }
+  
 }
 module.exports = new FacultyController();

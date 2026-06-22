@@ -175,21 +175,14 @@
           </li>
 
           <li>
-            <a href="#" class="nav-link">
-              <i class="fa-solid fa-calendar-check"></i>
-              Attendance
-            </a>
-          </li>
-
-          <li>
-            <a href="/web/faculty/project/view" class="nav-link">
+            <a href="/web/faculty/allproject/view" class="nav-link">
               <i class="fa-solid fa-code"></i>
               Projects
             </a>
           </li>
 
           <li>
-            <a href="#" class="nav-link">
+            <a href="/web/faculty/view/allcoursematerial" class="nav-link">
               <i class="fa-solid fa-book-open"></i>
               Course Materials
             </a>
@@ -203,7 +196,7 @@
           </li>
 
           <li>
-            <a href="#" class="nav-link">
+            <a href="/web/logout" class="nav-link">
               <i class="fa-solid fa-right-from-bracket"></i>
               Logout
             </a>
@@ -344,7 +337,7 @@
             <tr>
               <th>Batch Name</th>
               <th>Course</th>
-              <th>Faculty</th>
+              
               <th>Start Date</th>
               <th>End Date</th>
               <th>Status</th>
@@ -363,16 +356,13 @@
                   <%= batch.courseList ? batch.courseList.courseName : "N/A" %>
                 </td>
 
+                
                 <td>
-                  <%= batch.userInfo ? batch.userInfo.name : "N/A" %>
+                  <%= batch.startDate ? new Date(batch.startDate).toLocaleDateString() : "-" %>
                 </td>
 
                 <td>
-                  <%= batch.startDate ? new Date(batch.startDate).toDateString() : "-" %>
-                </td>
-
-                <td>
-                  <%= batch.endDate ? new Date(batch.endDate).toDateString() : "-" %>
+                  <%= batch.endDate ? new Date(batch.endDate).toLocaleDateString() : "-" %>
                 </td>
 
                 <td>
@@ -380,7 +370,7 @@
                 </td>
 
                 <td>
-                  <a href="/faculty/batch/<%= batch._id %>" class="btn btn-primary rounded-2 text-white">
+                  <a href="/web/faculty/singlebatch/view/<%= batch._id %>" class="btn btn-primary rounded-2 text-white">
                     View Details
                   </a>
                 </td>
