@@ -20,7 +20,29 @@
     <div class="page-wrapper">
       <h2 class="page-title">Attendance List</h2>
 
-      <!-- connect-flash -->
+      <div class="attendance-card">
+        <div class="top-bar">
+          <form action="/web/view/attendance/list" method="GET" class="d-flex gap-2">
+            <input type="hidden" name="courseId" value="<%= courseId || '' %>"/>
+            <input type="hidden" name="batchId" value="<%= batchId || '' %>"/>
+            <input type="hidden" name="attendanceDate" value="<%= attendanceDate || '' %>"/>
+            <input type="text" name="search" value="<%= search || '' %>" class="form-control search-box" placeholder="Search Student..."/>
+            <button type="submit" class="search-btn-icon">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
+          </form>
+
+          <div class="d-flex gap-2">
+            <a href="/web/view/admin/dashboard" class="btn btn-secondary"
+              ><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</a
+            >
+            <a href="/web/view/mark/attendance" class="btn btn-primary"> + Mark Attendance </a>
+          </div>
+
+        </div>
+
+        <!-- connect-flash -->
         <% if (success.length > 0) { %>
           <div id="successAlert" class="alert alert-info">
              <%= success[0] %>
@@ -32,22 +54,6 @@
              <%= error[0] %>
           </div>
         <% } %>
-
-      <div class="attendance-card">
-        <div class="top-bar">
-          <input
-            type="text"
-            class="form-control search-box"
-            placeholder="Search Student..."
-          />
-
-          <div class="d-flex gap-2">
-            <a href="/web/view/admin/dashboard" class="btn btn-secondary"
-              ><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</a
-            >
-            <a href="/web/view/mark/attendance" class="btn btn-primary"> + Mark Attendance </a>
-          </div>
-        </div>
 
         <div class="summary-box">
           <div class="summary-card">
@@ -157,27 +163,29 @@
           </table>
         </div>
 
+        <!-- Pagination -->
         <div class="pagination-wrapper">
           <nav>
             <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="#"> Previous </a>
+              <!-- previous page -->
+              <li class="page-item <%= currentPage === 1? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/add/student/list?page=<%= Math.max(1,currentPage-1) %>"> Previous </a>
               </li>
 
-              <li class="page-item active">
-                <a class="page-link" href="#"> 1 </a>
+              <!-- Page Numbers -->
+              <%for(let i=1;i<=totalPages;i++){%>
+              <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" href="/web/view/add/student/list?page=<%=i%>"><%=i%></a>
               </li>
-
-              <li class="page-item">
-                <a class="page-link" href="#"> 2 </a>
-              </li>
-
-              <li class="page-item">
-                <a class="page-link" href="#"> Next </a>
+              <%}%>
+              <!-- next page -->
+              <li class="page-item <%= currentPage === totalPages? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/add/student/list?page=<%= Math.min(totalPages,currentPage+1)%>"> Next </a>
               </li>
             </ul>
           </nav>
         </div>
+
       </div>
     </div>
      <script>

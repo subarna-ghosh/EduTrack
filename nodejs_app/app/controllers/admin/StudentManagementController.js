@@ -113,42 +113,106 @@ class StudentManagementController {
   }
 
   async viewListStudent(req, res) {
-    const findStudent = await Student.aggregate([
-      {
-        $lookup: {
-          from: "users",
-          localField: "userId",
-          foreignField: "_id",
-          as: "userInfo",
+    try {
+      const page = Number(req.query.page) || 1;
+      const limit = 4;
+      const skip = (page - 1) * limit;
+
+      const search = req.query.search || "";
+
+      const findStudent = await Student.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
         },
-      },
-      {
-        $lookup: {
-          from: "batches",
-          localField: "batchId",
-          foreignField: "_id",
-          as: "batchInfo",
+        {
+          $unwind: "$userInfo",
         },
-      },
-      {
-        $lookup: {
-          from: "courses",
-          localField: "batchInfo.courseId",
-          foreignField: "_id",
-          as: "courseInfo",
+
+        {
+          $lookup: {
+            from: "batches",
+            localField: "batchId",
+            foreignField: "_id",
+            as: "batchInfo",
+          },
         },
-      },
-      {
-        $unwind: "$userInfo",
-      },
-      {
-        $unwind: "$batchInfo",
-      },
-      {
-        $unwind: "$courseInfo",
-      },
-    ]);
-    return res.render("admin/add_stu_list", { findStudent });
+        {
+          $unwind: "$batchInfo",
+        },
+
+        {
+          $lookup: {
+            from: "courses",
+            localField: "batchInfo.courseId",
+            foreignField: "_id",
+            as: "courseInfo",
+          },
+        },
+        {
+          $unwind: "$courseInfo",
+        },
+
+        // Search by student name
+        {
+          $match: {
+            "userInfo.name": {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        },
+
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+
+      // Count records for pagination
+      const totalStudent = await Student.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $unwind: "$userInfo",
+        },
+        {
+          $match: {
+            "userInfo.name": {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        },
+        {
+          $count: "total",
+        },
+      ]);
+
+      const totalRecords = totalStudent.length > 0 ? totalStudent[0].total : 0;
+
+      const totalPages = Math.ceil(totalRecords / limit);
+      return res.render("admin/add_stu_list", {
+        findStudent,
+        currentPage: page,
+        totalPages,
+        search,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async studentProfile(req, res) {

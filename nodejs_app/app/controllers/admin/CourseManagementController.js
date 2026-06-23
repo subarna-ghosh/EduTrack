@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const Role = require("../../models/Role");
 const User = require("../../models/User");
 const Course = require("../../models/Course");
+const { options } = require("joi");
 class CourseManagementController {
   viewCourse(req, res) {
     return res.render("admin/add_course");
@@ -33,8 +34,28 @@ class CourseManagementController {
 
   async viewListCourse(req, res) {
     try {
-      const showCourses = await Course.find({});
-      return res.render("admin/add_course_list", { showCourses });
+      // pagination
+      const page = Number(req.query.page) || 1;
+      const limit = 3;
+      const skip = (page - 1) * limit;
+      // search
+      const search = req.query.search || "";
+      const activeProducts = await Course.find({
+        courseName: {
+          $regex: search,
+          $options: "i",
+        },
+      })
+        .skip(skip)
+        .limit(limit);
+      const totalProduct = await Course.countDocuments();
+      const totalPages = Math.ceil(totalProduct / limit);
+      return res.render("admin/add_course_list", {
+        activeProducts,
+        currentPage: page,
+        totalPages,
+        limit,
+      });
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while viewing course");

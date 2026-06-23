@@ -53,7 +53,21 @@ class BatchManagementController {
 
   async viewListBatch(req, res) {
     try {
+      const page = Number(req.query.page) || 1;
+      const limit = 3;
+      const skip = (page - 1) * limit;
+
+      const search = req.query.search || "";
+
       const findBatch = await Batch.aggregate([
+        {
+          $match: {
+            batchName: {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        },
         {
           $lookup: {
             from: "courses",
@@ -96,10 +110,38 @@ class BatchManagementController {
             preserveNullAndEmptyArrays: true,
           },
         },
+
+        { $skip: skip },
+        { $limit: limit },
       ]);
-      // console.log(JSON.stringify(findBatch, null, 2));
-      return res.render("admin/add_batch_list", { findBatch });
+
+      // Count matching batches
+      const totalBatch = await Batch.aggregate([
+        {
+          $match: {
+            batchName: {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        },
+        {
+          $count: "total",
+        },
+      ]);
+
+      const totalRecords = totalBatch.length > 0 ? totalBatch[0].total : 0;
+
+      const totalPages = Math.ceil(totalRecords / limit);
+
+      return res.render("admin/add_batch_list", {
+        findBatch,
+        currentPage: page,
+        totalPages,
+        search,
+      });
     } catch (error) {
+      console.log(error);
       req.flash("error", "Something went wrong while listing batch");
       return res.redirect("/web/view/admin/dashboard");
     }

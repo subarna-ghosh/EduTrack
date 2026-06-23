@@ -9,6 +9,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/assets/css/student.css">
   </head>
   <body>
@@ -17,11 +18,18 @@
 
       <div class="student-card">
         <div class="top-bar">
-          <input
+
+          <form action="/web/view/add/student/list" method="GET" class="d-flex gap-2">
+            <input
             type="text"
-            class="form-control search-box"
+            name="search"
+            class="form-control"
             placeholder="Search Student..."
-          />
+           />
+            <button type="submit" class="search-btn-icon">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
 
           <div class="d-flex gap-2">
             <a href="/web/view/admin/dashboard" class="btn btn-secondary">
@@ -32,6 +40,7 @@
               + Add Student
             </a>
           </div>
+
         </div>
 
         <!-- connect-flash -->
@@ -64,9 +73,14 @@
             </thead>
 
             <tbody>
+              <%if(findStudent.length===0){%>
+                <tr>
+                  <td colspan="9" style="text-align: center;">List is empty!</td>
+                </tr>
+              <%}else{%>
               <%findStudent.forEach((student,index)=>{%>
               <tr>
-                <td><%=index+1%></td>
+                <td><%= (currentPage - 1) * 3 + index + 1 %></td>
                 <td>
                   <img
                     src="<%=student.profileImage%>"
@@ -91,31 +105,35 @@
                 </td>
               </tr>
               <%})%>
+              <%}%>
             </tbody>
           </table>
         </div>
 
+        <!-- Pagination -->
+
         <div class="pagination-wrapper">
           <nav>
             <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="#"> Previous </a>
+              <!-- previous page -->
+              <li class="page-item <%= currentPage === 1? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/add/student/list?page=<%= Math.max(1,currentPage-1) %>"> Previous </a>
               </li>
 
-              <li class="page-item active">
-                <a class="page-link" href="#"> 1 </a>
+              <!-- Page Numbers -->
+              <%for(let i=1;i<=totalPages;i++){%>
+              <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" href="/web/view/add/student/list?page=<%=i%>"><%=i%></a>
               </li>
-
-              <li class="page-item">
-                <a class="page-link" href="#"> 2 </a>
-              </li>
-
-              <li class="page-item">
-                <a class="page-link" href="#"> Next </a>
+              <%}%>
+              <!-- next page -->
+              <li class="page-item <%= currentPage === totalPages? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/add/student/list?page=<%= Math.min(totalPages,currentPage+1)%>"> Next </a>
               </li>
             </ul>
           </nav>
         </div>
+
       </div>
     </div>
         <script>

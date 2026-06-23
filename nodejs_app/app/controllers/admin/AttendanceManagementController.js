@@ -8,11 +8,34 @@ const Attendance = require("../../models/Attendance");
 class AttendanceManagementController {
   async viewAttendanceList(req, res) {
     try {
+      console.log(req.query);
+      const page = Number(req.query.page) || 1;
+      const limit = 3;
+      const skip = (page - 1) * limit;
+
+      const search = req.query.search || "";
+
       const { courseId, batchId, attendanceDate } = req.query;
+
       const courses = await Course.find({});
       const batches = await Batch.find({});
+
       let students = [];
-      if (courseId && batchId) {
+      let totalPages = 0;
+
+      let totalStudents = 0;
+      let totalPresent = 0;
+      let totalAbsent = 0;
+      let totalLate = 0;
+
+      if (courseId && batchId && attendanceDate) {
+        const matchCondition = {
+          batchId: new mongoose.Types.ObjectId(batchId),
+          courseId: new mongoose.Types.ObjectId(courseId),
+          attendanceDate: new Date(attendanceDate),
+        };
+
+        // Student List with Search + Pagination
         students = await Attendance.aggregate([
           {
             $lookup: {
@@ -30,8 +53,12 @@ class AttendanceManagementController {
               as: "studentInfo",
             },
           },
-          { $unwind: "$batchInfo" },
-          { $unwind: "$studentInfo" },
+          {
+            $unwind: "$batchInfo",
+          },
+          {
+            $unwind: "$studentInfo",
+          },
           {
             $lookup: {
               from: "users",
@@ -40,7 +67,9 @@ class AttendanceManagementController {
               as: "userInfo",
             },
           },
-          { $unwind: "$userInfo" },
+          {
+            $unwind: "$userInfo",
+          },
           {
             $lookup: {
               from: "courses",
@@ -49,37 +78,113 @@ class AttendanceManagementController {
               as: "courseInfo",
             },
           },
-          { $unwind: "$courseInfo" },
+          {
+            $unwind: "$courseInfo",
+          },
           {
             $match: {
-              batchId: new mongoose.Types.ObjectId(batchId),
-              courseId: new mongoose.Types.ObjectId(courseId),
-              attendanceDate: new Date(attendanceDate),
+              ...matchCondition,
+              "userInfo.name": {
+                $regex: search,
+                $options: "i",
+              },
+            },
+          },
+          {
+            $skip: skip,
+          },
+          {
+            $limit: limit,
+          },
+        ]);
+
+        // Total Records for Pagination
+        const countResult = await Attendance.aggregate([
+          {
+            $lookup: {
+              from: "students",
+              localField: "studentId",
+              foreignField: "_id",
+              as: "studentInfo",
+            },
+          },
+          {
+            $unwind: "$studentInfo",
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "studentInfo.userId",
+              foreignField: "_id",
+              as: "userInfo",
+            },
+          },
+          {
+            $unwind: "$userInfo",
+          },
+          {
+            $match: {
+              ...matchCondition,
+              "userInfo.name": {
+                $regex: search,
+                $options: "i",
+              },
+            },
+          },
+          {
+            $count: "total",
+          },
+        ]);
+
+        const totalRecords = countResult.length > 0 ? countResult[0].total : 0;
+
+        totalPages = Math.ceil(totalRecords / limit);
+
+        // Attendance Summary
+        const attendanceSummary = await Attendance.aggregate([
+          {
+            $match: matchCondition,
+          },
+          {
+            $group: {
+              _id: "$status",
+              count: {
+                $sum: 1,
+              },
             },
           },
         ]);
+
+        totalStudents = totalRecords;
+
+        attendanceSummary.forEach((item) => {
+          if (item._id === "present") {
+            totalPresent = item.count;
+          } else if (item._id === "absent") {
+            totalAbsent = item.count;
+          } else if (item._id === "late") {
+            totalLate = item.count;
+          }
+        });
       }
-      const totalStudents = students.length;
-      const totalPresent = students.filter(
-        (item) => item.status === "present",
-      ).length;
-      const totalAbsent = students.filter(
-        (item) => item.status === "absent",
-      ).length;
-      const totalLate = students.filter(
-        (item) => item.status === "late",
-      ).length;
+
       return res.render("admin/add_attendance_list", {
         courses,
         batches,
         students,
+
         courseId,
         batchId,
         attendanceDate,
+        search,
+
         totalStudents,
         totalPresent,
         totalAbsent,
         totalLate,
+
+        currentPage: page,
+        totalPages,
       });
     } catch (error) {
       console.log(error);
