@@ -269,7 +269,7 @@ Router.get(
   PaymentManagementController.viewPaymentPage,
 );
 
-//
+// shown below are announcement management apis
 Router.get(
   "/view/announcement/list",
   authCheck,
@@ -290,6 +290,35 @@ Router.post(
   roleCheck("admin"),
   validateWeb(announcementSchema, "/web/view/announcement/list"),
   AnnouncementManagementController.saveAnnouncement,
+);
+
+Router.get(
+  "/view/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewAnnouncement,
+);
+
+Router.get(
+  "/view/edit/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewEditAnnouncement,
+);
+
+Router.post(
+  "/update/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(announcementSchema, "/web/view/announcement/list"),
+  AnnouncementManagementController.updateAnnouncement,
+);
+
+Router.get(
+  "/delete/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.deleteAnnouncement,
 );
 
 module.exports = Router;

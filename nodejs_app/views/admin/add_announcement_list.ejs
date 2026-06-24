@@ -87,9 +87,14 @@
             </thead>
 
             <tbody>
+              <%if(showAnnouncement.length===0){%>
+                <tr>
+                  <td colspan="9" style="text-align: center;">List is empty!</td>
+                </tr>
+              <%}else{%>
               <%showAnnouncement.forEach((val,index)=>{%>
               <tr>
-                <td><%=index+1%></td>
+                <td><%= (currentPage - 1) * 3 + index + 1 %></td>
                 <td><%=val.title%></td>
                 <td><%=val.description%></td>
                 <td>
@@ -105,40 +110,41 @@
                 <td><%=new Date(val.createdAt).toLocaleDateString("en-GB")%></td>
                 <td>
                   <div class="action-btns">
-                    <a href="/web<%=val._id %>" class="btn btn-sm btn-info">View</a>
-                    <a href="/web/<%=val._id %>" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="/web<%=val._id %>" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="/web/view/announcement/<%=val._id %>" class="btn btn-sm btn-info">View</a>
+                    <a href="/web/view/edit/announcement/<%=val._id %>" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/web/delete/announcement/<%=val._id %>" class="btn btn-sm btn-danger">Delete</a>
                   </div>
                 </td>
               </tr>
               <%})%>
+              <%}%>
             </tbody>
           </table>
         </div>
 
         <!-- Pagination -->
-
-        <div class="pagination-wrapper">
+        <div class="pagination-wrapper d-flex justify-content-end">
           <nav>
             <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="#"> Previous </a>
+              <!-- previous page -->
+              <li class="page-item <%= currentPage === 1? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/announcement/list?page=<%= Math.max(1,currentPage-1) %>"> Previous </a>
               </li>
 
-              <li class="page-item active">
-                <a class="page-link" href="#"> 1 </a>
+              <!-- Page Numbers -->
+              <%for(let i=1;i<=totalPages;i++){%>
+              <li class="page-item <%= currentPage === i? 'active':'' %>">
+                <a class="page-link" href="/web/view/announcement/list?page=<%=i%>"><%=i%></a>
               </li>
-
-              <li class="page-item">
-                <a class="page-link" href="#"> 2 </a>
-              </li>
-
-              <li class="page-item">
-                <a class="page-link" href="#"> Next </a>
+              <%}%>
+              <!-- next page -->
+              <li class="page-item <%= currentPage === totalPages? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/announcement/list?page=<%= Math.min(totalPages,currentPage+1)%>"> Next </a>
               </li>
             </ul>
           </nav>
-        </div>
+        </div> 
+
       </div>
     </div>
     <script>
