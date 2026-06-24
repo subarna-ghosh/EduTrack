@@ -7,6 +7,7 @@ const BatchManagementController = require("../../controllers/admin/BatchManageme
 const CourseManagementController = require("../../controllers/admin/CourseManagementController");
 const PaymentManagementController = require("../../controllers/admin/PaymentManagementController");
 const AttendanceManagementController = require("../../controllers/admin/AttendanceManagementController");
+const AnnouncementManagementController = require("../../controllers/admin/AnnouncementManagementController");
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
 const uploadFacultyImage = require("../../utils/uploadImage");
@@ -19,6 +20,9 @@ const {
 } = require("../../validations/facultyValidation");
 const { batchSchema } = require("../../validations/batchValidation");
 const { studentSchema } = require("../../validations/studentValidation");
+const {
+  announcementSchema,
+} = require("../../validations/announcementValidation");
 
 // =========================================
 //      admin dashboard
@@ -264,4 +268,28 @@ Router.get(
   roleCheck("admin"),
   PaymentManagementController.viewPaymentPage,
 );
+
+//
+Router.get(
+  "/view/announcement/list",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewListAnnouncement,
+);
+
+Router.get(
+  "/view/add/announcement",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewAddAnnouncement,
+);
+
+Router.post(
+  "/save/announcement",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(announcementSchema, "/web/view/announcement/list"),
+  AnnouncementManagementController.saveAnnouncement,
+);
+
 module.exports = Router;
