@@ -5,13 +5,22 @@ const feeSchema = new Schema(
     studentId: {
       type: Schema.Types.ObjectId,
       ref: "Student",
+      required: true,
     },
 
-    totalFee: Number,
+    totalFee: {
+      type: Number,
+      required: true,
+    },
 
     paidAmount: {
       type: Number,
       default: 0,
+    },
+
+    dueAmount: {
+      type: Number,
+      required: true,
     },
   },
   { timestamps: true, versionKey: false },

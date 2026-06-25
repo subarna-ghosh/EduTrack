@@ -269,6 +269,13 @@ Router.get(
   PaymentManagementController.viewPaymentPage,
 );
 
+Router.get(
+  "/view/assign/fee",
+  authCheck,
+  roleCheck("admin"),
+  PaymentManagementController.viewAssignFee,
+);
+
 // shown below are announcement management apis
 Router.get(
   "/view/announcement/list",
