@@ -6,7 +6,12 @@ const StudentProfileController = require("../../controllers/student/StudentProfi
 const PaymentController = require("../../controllers/student/PaymentController");
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
+const validateWeb = require("../../middlewares/validateWebMiddleware");
+const { paymentSchema } = require("../../validations/paymentValidation");
 
+// =========================================
+//      student dashboard
+// =========================================
 Router.get(
   "/view/student/dashboard",
   authCheck,
@@ -14,6 +19,7 @@ Router.get(
   StudentController.viewStudentDashboard,
 );
 
+// shown below are student payment apis
 Router.get(
   "/view/student/pay/now",
   authCheck,
@@ -21,6 +27,16 @@ Router.get(
   StudentController.viewStudentPayNow,
 );
 
+Router.post(
+  "/save/payment",
+  authCheck,
+  roleCheck("student"),
+  validateWeb(paymentSchema, "/web/view/student/pay/now"),
+  StudentController.savePayment,
+);
+
+
+// shown below are student profile apis
 Router.get(
   "/view/student/profile",
   authCheck,
@@ -28,6 +44,8 @@ Router.get(
   StudentProfileController.viewStudentProfile,
 );
 
+
+// shown below are student announcement apis
 Router.get(
   "/view/show/announcement",
   authCheck,
@@ -35,6 +53,8 @@ Router.get(
   AnnouncementController.showAnnouncement,
 );
 
+
+// shown below are student pay history apis
 Router.get(
   "/view/payment/history",
   authCheck,

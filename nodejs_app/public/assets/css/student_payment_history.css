@@ -52,6 +52,11 @@ body {
   background: #198754;
 }
 
+.status-pending {
+  background: #ffc107;
+  color: #000;
+}
+
 .status-rejected {
   background: #dc3545;
 }

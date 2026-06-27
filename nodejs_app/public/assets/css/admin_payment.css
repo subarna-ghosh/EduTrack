@@ -74,6 +74,10 @@ body {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
+.head-style{
+  color: #111112;
+  font-weight:500;
+}
 /* Table */
 
 .table-card {
@@ -89,7 +93,7 @@ body {
 
 .table th {
   font-weight: 600;
-  color: #495057;
+  color: #4e4e51;
   white-space: nowrap;
 }
 
