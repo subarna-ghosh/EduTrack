@@ -6,7 +6,11 @@ const StudentManagementController = require("../../controllers/api/admin/Student
 const FacultyManagementController = require("../../controllers/api/admin/FacultyManagementController");
 const BatchManagementController = require("../../controllers/api/admin/BatchManagementController");
 const CourseManagementController = require("../../controllers/api/admin/CourseManagementController");
-// const PaymentManagementController = require("../../controllers/postmanApi/admin/PaymentManagementController");
+const PaymentManagementController = require("../../controllers/api/admin/PaymentManagementController");
+const AttendanceManagementController = require("../../controllers/api/admin/AttendanceManagementController");
+const AnnouncementManagementController = require("../../controllers/api/admin/AnnouncementManagementController");
+// const FeeManagementController = require("../../controllers/api/admin/");
+// const PaymentRecordController = require("../../controllers/admin/PaymentRecordController");
 
 const authCheck = require("../../middlewares/api/authCheck");
 const roleCheck = require("../../middlewares/api/roleCheck");
@@ -807,29 +811,22 @@ router.delete(
  *             properties:
  *               batchName:
  *                 type: string
- *                 example: MERN Batch A
  *               courseId:
  *                 type: string
- *                 example: 687fd6b56f5d2d0012345678
  *               facultyId:
  *                 type: string
- *                 example: 687fd6b56f5d2d0012345679
  *               startDate:
  *                 type: string
  *                 format: date
- *                 example: "2026-09-01"
  *               endDate:
  *                 type: string
  *                 format: date
- *                 example: "2027-03-01"
  *               status:
  *                 type: string
  *                 enum:
  *                   - active
  *                   - completed
  *                   - upcoming
- *                 example: active
- *     responses:
  *       201:
  *         description: Batch created successfully
  *       400:
@@ -873,7 +870,7 @@ router.get(
   "/view/allbatch",
   authCheck,
   roleCheck("admin"),
-  BatchManagementController.viewAllBatch,
+  BatchManagementController.viewAllBatch
 );
 
 
@@ -962,21 +959,95 @@ router.delete(
   "/delete/batch/:id",
   authCheck,
   roleCheck("admin"),
-  BatchManagementController.deleteBatch,
+  BatchManagementController.deleteBatch
 );
 
 
 
+// attendance management apis
+
+router.get(
+  "/view/attendance/list",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.viewAttendanceList,
+);
 
 // router.get(
-//   "/view/add/batch/list",
+//   "/view/mark/attendance",
 //   authCheck,
 //   roleCheck("admin"),
-//   BatchManagementController.viewBatch,
+//   AttendanceManagementController.viewMarkAttendance,
 // );
 
+/**
+ * @swagger
+ * /api/save/attendance:
+ *   post:
+ *     tags:
+ *       - Attendance
+ *     summary: Save Attendance
+ *     description: Save attendance for students of a batch on a specific date.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - courseId
+ *               - batchId
+ *               - attendanceDate
+ *               - attendance
+ *             properties:
+ *               courseId:
+ *                 type: string
+ *                 description: Course ID
+ *               batchId:
+ *                 type: string
+ *                 description: Batch ID
+ *               attendanceDate:
+ *                 type: string
+ *                 format: date
+ *                 description: Attendance date
+ *               attendance:
+ *                 type: array
+ *                 description: List of student attendance records
+ *                 items:
+ *                   type: object
+ *                   required:
+ *                     - studentId
+ *                     - status
+ *                   properties:
+ *                     studentId:
+ *                       type: string
+ *                       description: Student ID
+ *                     status:
+ *                       type: string
+ *                       enum:
+ *                         - Present
+ *                         - Absent
+ *     responses:
+ *       200:
+ *         description: Attendance saved successfully.
+ *       400:
+ *         description: Bad Request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
 
-// payment management
+router.post(
+  "/save/attendance",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.saveAttendance
+);
+
+// shown below are payment management apis
 // router.get(
 //   "/view/payment/management",
 //   authCheck,
@@ -984,5 +1055,102 @@ router.delete(
 //   PaymentManagementController.viewPaymentPage,
 // );
 
+// router.get(
+//   "/view/assign/fee",
+//   authCheck,
+//   roleCheck("admin"),
+//   PaymentManagementController.viewAssignFee,
+// );
+
+// router.post(
+//   "/create/fee",
+//   authCheck,
+//   roleCheck("admin"),
+//   validateWeb(feeSchema, "/web/view/assign/fee"),
+//   PaymentManagementController.createFee,
+// );
+
+// router.post(
+//   "/admin/payment/approve/:id",
+//   authCheck,
+//   roleCheck("admin"),
+//   PaymentManagementController.approvePayment,
+// );
+
+// router.post(
+//   "/admin/payment/reject/:id",
+//   authCheck,
+//   roleCheck("admin"),
+//   PaymentManagementController.rejectPayment,
+// );
+
+// shown below are assigned fee to student apis
+// router.get(
+//   "/view/assigned/fee/student",
+//   authCheck,
+//   roleCheck("admin"),
+//   FeeManagementController.viewAssignedFee,
+// );
+
+// shown below are payment records of student apis
+
+// router.get(
+//   "/view/payment/record",
+//   authCheck,
+//   roleCheck("admin"),
+//   PaymentRecordController.viewPaymentRecord,
+// );
+
+// shown below are announcement management apis
+// router.get(
+//   "/view/announcement/list",
+//   authCheck,
+//   roleCheck("admin"),
+//   AnnouncementManagementController.viewListAnnouncement,
+// );
+
+// router.get(
+//   "/view/add/announcement",
+//   authCheck,
+//   roleCheck("admin"),
+//   AnnouncementManagementController.viewAddAnnouncement,
+// );
+
+// router.post(
+//   "/save/announcement",
+//   authCheck,
+//   roleCheck("admin"),
+//   validateWeb(announcementSchema, "/web/view/announcement/list"),
+//   AnnouncementManagementController.saveAnnouncement,
+// );
+
+// router.get(
+//   "/view/announcement/:id",
+//   authCheck,
+//   roleCheck("admin"),
+//   AnnouncementManagementController.viewAnnouncement,
+// );
+
+// router.get(
+//   "/view/edit/announcement/:id",
+//   authCheck,
+//   roleCheck("admin"),
+//   AnnouncementManagementController.viewEditAnnouncement,
+// );
+
+// router.post(
+//   "/update/announcement/:id",
+//   authCheck,
+//   roleCheck("admin"),
+//   validateWeb(announcementSchema, "/web/view/announcement/list"),
+//   AnnouncementManagementController.updateAnnouncement,
+// );
+
+// router.get(
+//   "/delete/announcement/:id",
+//   authCheck,
+//   roleCheck("admin"),
+//   AnnouncementManagementController.deleteAnnouncement,
+// );
 
 module.exports = router;

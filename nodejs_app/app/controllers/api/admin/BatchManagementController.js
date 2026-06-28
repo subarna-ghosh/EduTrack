@@ -26,6 +26,16 @@ class BatchManagementController {
         })
       }
 
+      
+      const existingBatch = await Batch.findOne({ batchName });
+
+      if (existingBatch) {
+        return res.status(httpStatusCode.BAD_REQUEST).json({
+          success: false,
+          message: "Batch already exist",
+        });
+      }
+
       const newBatch = new Batch({
         batchName,
         courseId,

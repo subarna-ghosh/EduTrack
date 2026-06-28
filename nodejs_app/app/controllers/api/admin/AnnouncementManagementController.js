@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const Batch = require("../../models/Batch");
-const User = require("../../models/User");
-const Faculty = require("../../models/FacultyProfile");
-const Student = require("../../models/StudentProfile");
-const Announcement = require("../../models/Announcement");
+const Batch = require("../../../models/Batch");
+const User = require("../../../models/User");
+const Faculty = require("../../../models/FacultyProfile");
+const Student = require("../../../models/StudentProfile");
+const Announcement = require("../../../models/Announcement");
 
 const httpStatusCode = require("../../../utils/httpStatusCode");
 
