@@ -30,6 +30,7 @@ const batchScheduleSchema = new Schema(
     },
     startTime: String,
     endTime: String,
+    topic: String,
     meetingLink: String,
   },
   {

@@ -21,6 +21,12 @@ body {
   overflow-y: auto;
 }
 
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .logo {
   font-size: 24px;
   font-weight: 700;
@@ -274,4 +280,37 @@ body {
 
 .card-header-custom {
   margin-bottom: 20px;
+}
+
+/* class timing */
+.dashboard-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.dashboard-card .table thead th {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  border-bottom: 1px solid #ececec;
+}
+
+.dashboard-card .table tbody td {
+  vertical-align: middle;
+  padding: 18px 10px;
+}
+
+.dashboard-card .table tbody tr {
+  transition: 0.25s;
+}
+
+.dashboard-card .table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.dashboard-card .badge {
+  border-radius: 30px;
+  font-weight: 500;
 }
