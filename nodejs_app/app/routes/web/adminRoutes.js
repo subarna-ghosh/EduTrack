@@ -10,6 +10,7 @@ const AttendanceManagementController = require("../../controllers/admin/Attendan
 const AnnouncementManagementController = require("../../controllers/admin/AnnouncementManagementController");
 const FeeManagementController = require("../../controllers/admin/FeeManagementController");
 const PaymentRecordController = require("../../controllers/admin/PaymentRecordController");
+const BatchScheduleController = require("../../controllers/admin/BatchScheduleController");
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
 const uploadFacultyImage = require("../../utils/uploadImage");
@@ -20,7 +21,10 @@ const {
   departmentSchema,
   facultySchema,
 } = require("../../validations/facultyValidation");
-const { batchSchema } = require("../../validations/batchValidation");
+const {
+  batchSchema,
+  batchScheduleValidation,
+} = require("../../validations/batchValidation");
 const { studentSchema } = require("../../validations/studentValidation");
 const { feeSchema } = require("../../validations/feeValidation");
 const {
@@ -240,6 +244,58 @@ Router.get(
   authCheck,
   roleCheck("admin"),
   BatchManagementController.deleteBatch,
+);
+
+// shown below are batch schedule apis
+Router.get(
+  "/view/create/schedule",
+  authCheck,
+  roleCheck("admin"),
+  BatchScheduleController.viewCreateSchedule,
+);
+
+Router.get(
+  "/view/batch/schedule/list",
+  authCheck,
+  roleCheck("admin"),
+  BatchScheduleController.viewBatchScheduleList,
+);
+
+Router.post(
+  "/save/schedule",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(batchScheduleValidation, "/web/view/create/schedule"),
+  BatchScheduleController.saveSchedule,
+);
+
+Router.get(
+  "/view/demo",
+  authCheck,
+  roleCheck("admin", "faculty", "student"),
+  BatchScheduleController.demo,
+);
+
+Router.get(
+  "/batch/schedule/edit/:id",
+  authCheck,
+  roleCheck("admin"),
+  BatchScheduleController.viewEditSchedule,
+);
+
+Router.post(
+  "/batch/schedule/update/:id",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(batchScheduleValidation, "/web/view/create/schedule"),
+  BatchScheduleController.updateSchedule,
+);
+
+Router.get(
+  "/batch/schedule/delete/:id",
+  authCheck,
+  roleCheck("admin"),
+  BatchScheduleController.deleteSchedule,
 );
 
 // shown below are attendance management apis

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Batch Schedule List</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/assets/css/admin_schedule_class.css" />
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <h2 class="page-title">Batch Schedule List</h2>
+
+      <div class="schedule-card">
+        <!-- Top Bar -->
+
+        <div class="top-bar">
+          <form action="/web/view/batch/schedule/list" method="GET" class="d-flex gap-2">
+            <input
+              name="search"
+              type="text"
+              class="form-control search-box"
+              placeholder="Search Batch..."
+            />
+            <button type="submit" class="search-btn-icon">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
+
+          <div class="d-flex gap-2">
+            <a href="/web/view/admin/dashboard" class="btn btn-secondary">
+              ← Back to Dashboard
+            </a>
+
+            <a href="/web/view/create/schedule" class="btn btn-primary">
+              + Create Schedule
+            </a>
+          </div>
+        </div>
+
+        <!-- connect-flash -->
+        <% if (success.length > 0) { %>
+          <div id="successAlert" class="alert alert-info">
+             <%= success[0] %>
+          </div>
+        <% } %>
+
+        <% if (error.length > 0) { %>
+          <div id="successAlert" class="alert alert-danger">
+             <%= error[0] %>
+          </div>
+        <% } %>
+
+        <!-- Table -->
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Sl.no</th>
+                <th>Batch</th>
+                <th>Faculty</th>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Topic</th>
+                <th>Meeting Link</th>
+                <th>Created Date</th>
+                <th width="180">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%findSchedule.forEach((val,index)=>{%>
+              <tr>
+                <td><%= (currentPage - 1) * 3 + index + 1 %></td>
+                <td><%=val.batchInfo.batchName%></td>
+                <td><%=val.userInfo.name%></td>
+                <td>
+                  <span class="badge-day"><%=val.day%></span>
+                </td>
+                <td><%=val.startTime%> - <%=val.endTime%></td>
+                <td><%=val.topic%></td>
+                <td>
+                  <a href="<%=val.meetingLink%>" target="_blank"><%=val.meetingLink%></a>
+                </td>
+                <td><%=new Date(val.createdAt).toLocaleDateString("en-GB")%></td>
+                <td>
+                  <div class="action-btns">
+                    <a href="/web/batch/schedule/edit/<%=val._id %>" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i>Edit</a>
+                    <a href="/web/batch/schedule/delete/<%=val._id %>" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>Delete</a>
+                  </div>
+                </td>
+              </tr>
+              <%})%>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-wrapper d-flex justify-content-end">
+          <nav>
+            <ul class="pagination">
+              <!-- previous page -->
+              <li class="page-item <%= currentPage === 1? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/batch/schedule/list?page=<%= Math.max(1,currentPage-1) %>"> Previous </a>
+              </li>
+
+              <!-- Page Numbers -->
+              <%for(let i=1;i<=totalPages;i++){%>
+              <li class="page-item <%= currentPage === i? 'active':'' %>">
+                <a class="page-link" href="/web/view/batch/schedule/list?page=<%=i%>"><%=i%></a>
+              </li>
+              <%}%>
+              <!-- next page -->
+              <li class="page-item <%= currentPage === totalPages? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/batch/schedule/list?page=<%= Math.min(totalPages,currentPage+1)%>"> Next </a>
+              </li>
+            </ul>
+          </nav>
+        </div> 
+
+      </div>
+    </div>
+    <script>
+      setTimeout(() => {
+        const alert = document.getElementById("successAlert");
+          if (alert) {
+            alert.remove();
+          }
+        }, 2000); // 2 seconds
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

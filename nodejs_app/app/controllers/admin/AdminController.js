@@ -6,6 +6,7 @@ const Student = require("../../models/StudentProfile");
 const Faculty = require("../../models/FacultyProfile");
 const Course = require("../../models/Course");
 const Batch = require("../../models/Batch");
+const BatchSchedule = require("../../models/BatchSchedule");
 const Fee = require("../../models/Fee");
 const Payment = require("../../models/Payment");
 class AdminController {
@@ -57,6 +58,46 @@ class AdminController {
 
       const dueAmount =
         dueAmountResult.length > 0 ? dueAmountResult[0].totalDue : 0;
+
+      const listBatch = await BatchSchedule.aggregate([
+        {
+          $lookup: {
+            from: "batches",
+            localField: "batchId",
+            foreignField: "_id",
+            as: "batchInfo",
+          },
+        },
+        { $unwind: "$batchInfo" },
+        {
+          $lookup: {
+            from: "courses",
+            localField: "batchInfo.courseId",
+            foreignField: "_id",
+            as: "courseInfo",
+          },
+        },
+        { $unwind: "$courseInfo" },
+        {
+          $lookup: {
+            from: "faculties",
+            localField: "facultyId",
+            foreignField: "_id",
+            as: "facultyInfo",
+          },
+        },
+        { $unwind: "$facultyInfo" },
+        {
+          $lookup: {
+            from: "users",
+            localField: "facultyInfo.userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        { $unwind: "$userInfo" },
+      ]);
+
       return res.render("admin/admin_dashboard", {
         totalStudent,
         totalFaculty,
@@ -67,6 +108,7 @@ class AdminController {
         assignedFee,
         collected,
         dueAmount,
+        listBatch,
       });
     } catch (error) {
       console.error(error);
