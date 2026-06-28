@@ -9,7 +9,10 @@ const materialSchema = new Schema(
 
     description: String,
 
-    fileUrl: String,
+    materialImage: {
+      type: String,
+     
+    },
 
     filePublicId: String,
 
@@ -27,5 +30,5 @@ const materialSchema = new Schema(
   },
   { timestamps: true, versionKey: false },
 );
-const MaterialModel = mongoose.model("Material", projectSchema);
+const MaterialModel = mongoose.model("Material", materialSchema);
 module.exports = MaterialModel;

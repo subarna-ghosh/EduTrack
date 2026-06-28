@@ -1,26 +1,32 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const Faculty = require("../../models/FacultyProfile");
 const Batch = require("../../models/Batch");
+
+const httpStatusCode = require("../../../utils/httpStatusCode");
+
 
 class FacultyController {
 
   async viewFacultyDashboard(req, res) {
     try {
-      const profile = await Faculty.findOne({ userId: req.user.id });
+      const facultyProfile = await Faculty.findOne({ userId: req.user.id });
 
-      // console.log(profile);
-
-      return res.render("faculty/faculty_dashboard", {
-        profile
+      return res.status(httpStatusCode.OK).json({
+        success: true,
+        message: "Welcome to faculty dashboard",
+        facultyProfile
       });
+
     } catch (error) {
-      console.log(error.message);
-
-      return res.redirect("/web/view/login");
+      return res.status(httpStatusCode.SERVER_ERROR).json({
+        success: false,
+        message: error.message
+      });
     }
-
   }
 
   async facultyProfile(req, res) {
@@ -52,54 +58,64 @@ class FacultyController {
         { $unwind: "$userInfo" },
         { $unwind: "$deptInfo" },
       ]);
-      return res.render("faculty/faculty_profile", { showFacultyProfile });
-    } catch (error) {
-      console.log(error);
-      req.flash("error", "Something went wrong while viewing faculty");
 
-      return res.redirect("/web/view/login");
-    }
-  }
-
-  async viewListFaculty(req, res) {
-    try {
-      const id = req.user.id;
-
-      const getFacultyInfo = await Faculty.aggregate([
-        {
-          $match: {
-            _id: new mongoose.Types.ObjectId(id),
-          },
-        },
-        {
-          $lookup: {
-            from: "users",
-            localField: "userId",
-            foreignField: "_id",
-            as: "userInfo",
-          },
-        },
-        {
-          $lookup: {
-            from: "departments",
-            localField: "deptId",
-            foreignField: "_id",
-            as: "deptInfo",
-          },
-        },
-        { $unwind: "$userInfo" },
-        { $unwind: "$deptInfo" },
-      ]);
-
-      return res.render("faculty/faculty_dashboard", {
-        getFacultyInfo
+      return res.status(httpStatusCode.OK).json({
+        success: true,
+        message: "Faculty profile gets successfully",
+        facultyProfile: showFacultyProfile
       });
+
     } catch (error) {
-      console.log(error);
-      req.flash("error", "Unable to load faculty list");
-      return res.redirect("/web/view/login");
+      return res.status(httpStatusCode.SERVER_ERROR).json({
+        success: false,
+        message: error.message
+      });
     }
   }
+
+  // async viewListFaculty(req, res) {
+  //   try {
+  //     const id = req.user.id;
+
+  //     const getFacultyInfo = await Faculty.aggregate([
+  //       {
+  //         $match: {
+  //           _id: new mongoose.Types.ObjectId(id),
+  //         },
+  //       },
+  //       {
+  //         $lookup: {
+  //           from: "users",
+  //           localField: "userId",
+  //           foreignField: "_id",
+  //           as: "userInfo",
+  //         },
+  //       },
+  //       {
+  //         $lookup: {
+  //           from: "departments",
+  //           localField: "deptId",
+  //           foreignField: "_id",
+  //           as: "deptInfo",
+  //         },
+  //       },
+  //       { $unwind: "$userInfo" },
+  //       { $unwind: "$deptInfo" },
+  //     ]);
+
+  //     return res.status(httpStatusCode.OK).json({
+  //       success: true,
+  //       message: "Welcome to admin dashboard",
+  //       facultyInfo: getFacultyInfo
+  //     });
+
+  //   } catch (error) {
+  //     return res.status(httpStatusCode.SERVER_ERROR).json({
+  //       success: false,
+  //       message: error.message
+  //     });
+  //   }
+  // }
 
   async viewFacultyBatch(req, res) {
     try {
@@ -140,7 +156,6 @@ class FacultyController {
             "facultyList.userId": new mongoose.Types.ObjectId(id),
           },
         },
-
         {
           $unwind: {
             path: "$courseList",
@@ -165,10 +180,18 @@ class FacultyController {
       // console.log(JSON.stringify(findBatch, null, 2));
       // console.log(findBatch);
 
-      return res.render("faculty/faculty_batch", { findBatch, profile });
+      return res.status(httpStatusCode.OK).json({
+        success: true,
+        message: "Batches get successfully",
+        findBatch,
+        profile
+      });
+
     } catch (error) {
-      req.flash("error", "Something went wrong while listing batch");
-      return res.redirect("/web/view/faculty/dashboard");
+      return res.status(httpStatusCode.SERVER_ERROR).json({
+        success: false,
+        message: error.message
+      });
     }
   }
 
@@ -246,16 +269,21 @@ class FacultyController {
       ]);
 
       // console.log(singleBatch);
-      
-      return res.render("faculty/faculty_single_batch", { singleBatch });
+
+      return res.status(httpStatusCode.OK).json({
+        success: true,
+        message: "Batch gets successfully",
+        profile,
+        singleBatch
+      });
 
     } catch (error) {
-      console.log(error);
-      req.flash("error", "Something went wrong while viewing faculty");
-
-      return res.redirect("/web/view/add/faculty/list");
+      return res.status(httpStatusCode.SERVER_ERROR).json({
+        success: false,
+        message: error.message
+      });
     }
   }
-  
 }
+
 module.exports = new FacultyController();

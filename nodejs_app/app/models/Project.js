@@ -14,6 +14,12 @@ const projectSchema = new Schema(
       ref: "Faculty",
       required: true,
     },
+    projectImage: String,
+    projectImagePublicId: String,
+    startDate:{
+      type: Date,
+      default: Date.now()
+    },
     dueDate: {
       type: Date,
       required: true,
@@ -31,5 +37,5 @@ const projectSchema = new Schema(
   { timestamps: true, versionKey: false },
 );
 
-const ProjecttModel = mongoose.model("Project", projectSchema);
+const ProjectModel = mongoose.model("Project", projectSchema);
 module.exports = ProjectModel;

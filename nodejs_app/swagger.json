@@ -1,0 +1,27 @@
+{
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Test API",
+      "version": "1.0.0",
+      "description": "Student API documentation"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3001"
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+        "BearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  },
+  "apis": [
+    "./app/routes/api/**/*.js"
+  ]
+}

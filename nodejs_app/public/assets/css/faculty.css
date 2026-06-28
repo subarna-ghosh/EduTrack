@@ -159,6 +159,12 @@ textarea {
   border: 4px solid #0d6efd;
 }
 
+.project-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
 .label {
   font-weight: 600;
   color: #6c757d;
