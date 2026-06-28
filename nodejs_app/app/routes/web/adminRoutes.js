@@ -8,6 +8,8 @@ const CourseManagementController = require("../../controllers/admin/CourseManage
 const PaymentManagementController = require("../../controllers/admin/PaymentManagementController");
 const AttendanceManagementController = require("../../controllers/admin/AttendanceManagementController");
 const AnnouncementManagementController = require("../../controllers/admin/AnnouncementManagementController");
+const FeeManagementController = require("../../controllers/admin/FeeManagementController");
+const PaymentRecordController = require("../../controllers/admin/PaymentRecordController");
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
 const uploadFacultyImage = require("../../utils/uploadImage");
@@ -20,6 +22,7 @@ const {
 } = require("../../validations/facultyValidation");
 const { batchSchema } = require("../../validations/batchValidation");
 const { studentSchema } = require("../../validations/studentValidation");
+const { feeSchema } = require("../../validations/feeValidation");
 const {
   announcementSchema,
 } = require("../../validations/announcementValidation");
@@ -274,6 +277,44 @@ Router.get(
   authCheck,
   roleCheck("admin"),
   PaymentManagementController.viewAssignFee,
+);
+
+Router.post(
+  "/create/fee",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(feeSchema, "/web/view/assign/fee"),
+  PaymentManagementController.createFee,
+);
+
+Router.post(
+  "/admin/payment/approve/:id",
+  authCheck,
+  roleCheck("admin"),
+  PaymentManagementController.approvePayment,
+);
+
+Router.post(
+  "/admin/payment/reject/:id",
+  authCheck,
+  roleCheck("admin"),
+  PaymentManagementController.rejectPayment,
+);
+
+// shown below are assigned fee to student apis
+Router.get(
+  "/view/assigned/fee/student",
+  authCheck,
+  roleCheck("admin"),
+  FeeManagementController.viewAssignedFee,
+);
+
+// shown below are payment records of student apis
+Router.get(
+  "/view/payment/record",
+  authCheck,
+  roleCheck("admin"),
+  PaymentRecordController.viewPaymentRecord,
 );
 
 // shown below are announcement management apis

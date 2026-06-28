@@ -22,7 +22,7 @@ class FacultyManagementController {
 
             const { deptName } = req.body;
 
-            if (!deptName) {
+            if (!deptName || deptName.trim() === "") {
                 return res.status(httpStatusCode.BAD_REQUEST).json({
                     success: false,
                     message: "deptName are required"
@@ -58,6 +58,8 @@ class FacultyManagementController {
 
     async createFaculty(req, res) {
         try {
+            console.log("Starting");
+            
             const {
                 name,
                 email,
@@ -363,6 +365,53 @@ class FacultyManagementController {
                 });
             }
 
+            const {
+                name,
+                email,
+                phone,
+                password,
+                address,
+                deptId,
+                experience,
+                status,
+            } = req.body;
+
+            if (deptId === "") {
+    delete req.body.deptId;
+}
+
+            if (name && name !== "string" && name.trim() !== "") {
+                isExist.name = name;
+            }
+
+            if (email && email !== "string" && email.trim() !== "") {
+                isExist.email = email;
+            }
+
+            if (phone !== undefined && phone !== "string" && phone.trim() !== "") {
+                isExist.phone = phone;
+            }
+
+            if (password !== undefined && password !== "string" && password.trim() !== "") {
+                isExist.password = password;
+            }
+
+            if (address !== undefined && address !== "string" && address.trim() !== "") {
+                isExist.address = address;
+            }
+
+            if (experience !== undefined && experience !== "number" && experience !== "") {
+                isExist.experience = experience;
+            }
+
+            if (deptId && deptId.trim() !== "" && mongoose.Types.ObjectId.isValid(deptId)) {
+    isExist.deptId = new mongoose.Types.ObjectId(deptId);
+}
+
+            if (status !== undefined && status !== "") {
+                isExist.status = status;
+            }
+
             if (req.file) {
                 // Deletes old image only when a new image is uploaded
                 if (isExist.profileImagePublicId) {
@@ -372,16 +421,16 @@ class FacultyManagementController {
                     folder: "faculty",
                 });
                 await fs.unlink(req.file.path);
-                req.body.profileImage = data.secure_url;
-                req.body.profileImagePublicId = data.public_id;
+                isExist.profileImage = data.secure_url;
+                isExist.profileImagePublicId = data.public_id;
             }
-            const updatedFaculty = await Faculty.findByIdAndUpdate(id, req.body, {
-                new: true,
-            });
+
+            const updatedFaculty = await isExist.save();
+
             return res.status(httpStatusCode.OK).json({
                 success: true,
-                message: "Batch updates successfully",
-                updatedFaculty
+                message: "Faculty updates successfully",
+                facultyProfile: updatedFaculty
             });
 
         } catch (error) {

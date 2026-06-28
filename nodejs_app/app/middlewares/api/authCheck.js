@@ -1,29 +1,48 @@
-const jwt = require('jsonwebtoken');
-const httpStatusCode = require('../../utils/httpStatusCode');
+const jwt = require("jsonwebtoken");
+const httpStatusCode = require("../../utils/httpStatusCode");
 
 
-const AuthCheck = (req, res, next) => {
-   
-   const token = req?.body?.token||req?.query?.token||req?.headers['x-access-token']||req?.headers['authorization'];
-    if(!token){
-        return res.status(httpStatusCode.BAD_REQUEST).json({
-            status: false,
-            message: 'Token is required for access this url'
-        })
+const authChek = (req, res, next) => {
+
+  try {
+
+    let token = req.headers.authorization;
+
+    // console.log("Authorization Header:", token);
+
+    if (!token) {
+      return res.status(httpStatusCode.UNAUTHORIZED).json({
+        status: false,
+        message: "Token is required",
+      });
     }
-    try{
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
-        req.user = decoded;
-        
-    }catch(err){
-        return res.status(httpStatusCode.SERVER_ERROR).json({
-            status: false,
-            message: "invalid token"
-        })
+
+    // Remove Bearer
+    if (token.startsWith("Bearer")) {
+      token = token.split(" ")[1];
     }
-    return next();
 
-}
+    // console.log(token);
 
+    const decoded = jwt.verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET_KEY
+    );
 
-module.exports = AuthCheck;
+    // console.log(decoded);
+
+    req.user = decoded;
+
+    next();
+
+  } catch (err) {
+
+    return res.status(401).json({
+      status: false,
+      message: "invalid token",
+    });
+
+  }
+};
+
+module.exports = authChek;

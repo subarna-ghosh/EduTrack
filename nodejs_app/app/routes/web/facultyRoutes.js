@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const FacultyController = require("../../controllers/faculty/FacultyController");
-const ProjectController = require("../../controllers/faculty/project.controller");
+const ProjectController = require("../../controllers/faculty/ProjectController");
 const AuthCheck = require("../../middlewares/authCheck");
 const RoleCheck = require("../../middlewares/allowRole");
 const { projectSchema } = require("../../validations/projectValidation");
 const uploadProjectImage = require("../../utils/uploadImage");
 const validateWeb = require("../../middlewares/validateWebMiddleware");
-const coursematerialController = require("../../controllers/faculty/coursematerial.controller");
+const coursematerialController = require("../../controllers/faculty/CourseMaterialController");
 
 
 router.get("/view/faculty/dashboard", AuthCheck, RoleCheck('faculty'), FacultyController.viewFacultyDashboard);
@@ -130,12 +130,12 @@ router.post(
 )
 
 
-router.get(
-  "/faculty/view/singlecoursematerial/:id",
-  AuthCheck,
-  RoleCheck("faculty"),
-  coursematerialController.viewSingleCourseMaterial
-)
+// router.get(
+//   "/faculty/view/singlecoursematerial/:id",
+//   AuthCheck,
+//   RoleCheck("faculty"),
+//   coursematerialController.viewSingleCourseMaterial
+// )
 
 
 module.exports = router;

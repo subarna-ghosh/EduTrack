@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Assigned Students</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/assets/css/fee.css">
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <h2 class="page-title">Assigned Fee</h2>
+
+      <div class="table-card">
+        <!-- Top Bar -->
+         
+        <div class="top-bar">
+          <form action="/web/view/assigned/fee/student" method="GET" class="d-flex gap-2">
+            <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search Student..."
+            />
+            <button type="submit" class="search-btn-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            </button>        
+          </form>
+
+          <div class="d-flex gap-2">
+            <a href="/web/view/payment/management" class="btn btn-secondary">
+              ← Back
+            </a>
+
+            <a href="/web/view/assign/fee" class="btn btn-primary">
+              + Assign Fee
+            </a>
+          </div>
+        </div>
+
+        <!-- connect-flash -->
+        <% if (success.length > 0) { %>
+          <div id="successAlert" class="alert alert-info">
+             <%= success[0] %>
+          </div>
+        <% } %>
+
+        <% if (error.length > 0) { %>
+          <div id="successAlert" class="alert alert-danger">
+             <%= error[0] %>
+          </div>
+        <% } %>
+
+        <!-- Table -->
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Sl.no</th>
+                <th>Student Name</th>
+                <th>Total Fee</th>
+                <th>Paid Amount</th>
+                <th>Due Amount</th>
+                <th>Status</th>
+                <th>Assigned Date</th>
+                <th width="180">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <%let status = ""%>
+              <%if(listFee.length===0){%>
+                <tr>
+                  <td colspan="8" style="text-align: center;">List is empty!</td>
+                </tr>
+              <%}else{%>
+              <%listFee.forEach((data,index)=>{%>
+              <tr>
+                <td><%=index+1%></td>
+                <td><%=data.userInfo.name%></td>
+                <td>₹<%=data.totalFee%></td>
+                <td>₹<%=data.paidAmount%></td>
+                <td>₹<%=data.dueAmount%></td>
+                <td>
+                  <%if(data.dueAmount === data.totalFee){%>
+                    <span class="status-failed">Unpaid</span>
+                    <%}else if(data.dueAmount === 0){%>
+                  <span class="status-paid">Paid</span>
+                  <%}else{%>
+                    <span class="status-pending">Partail</span>
+                    <%}%>
+                </td>
+                <td><%=new Date(data.createdAt).toLocaleDateString("en-GB")%></td>
+                <td>
+                  <div class="action-btns">
+                    <a href="/web/view/student/profile/<%=data._id %>" class="btn btn-sm btn-info">View</a>
+                    <a href="/web/view/edit/student/<%=data._id %>" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/web/delete/student/<%=data._id %>" class="btn btn-sm btn-danger">Delete</a>
+                  </div>
+                </td>
+              </tr>
+              <%})%>
+              <%}%>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+
+        <div class="pagination-wrapper">
+          <nav>
+            <ul class="pagination">
+              <!-- previous page -->
+              <li class="page-item <%= currentPage === 1? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/assigned/fee/student?page=<%= Math.max(1,currentPage-1) %>"> Previous </a>
+              </li>
+
+              <!-- Page Numbers -->
+              <%for(let i=1;i<=totalPages;i++){%>
+              <li class="page-item <%= currentPage === i? 'active':'' %>">
+                <a class="page-link" href="/web/view/assigned/fee/student?page=<%=i%>"><%=i%></a>
+              </li>
+              <%}%>
+              <!-- next page -->
+              <li class="page-item <%= currentPage === totalPages? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/assigned/fee/student?page=<%= Math.min(totalPages,currentPage+1)%>"> Next </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </div>
+    <script>
+      setTimeout(() => {
+        const alert = document.getElementById("successAlert");
+          if (alert) {
+            alert.remove();
+          }
+        }, 1000); // 1 seconds
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

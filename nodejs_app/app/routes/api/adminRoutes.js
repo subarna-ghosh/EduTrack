@@ -24,23 +24,21 @@ const { batchSchema } = require("../../validations/batchValidation");
 
 /**
  * @swagger
- * /adminapi/view/admindashboard:
- *  get:
- *    summary: Get admin dashboard
- *    tags:
+ * /api/view/admin/dashboard:
+ *   get:
+ *     tags:
  *       - Admin
- *    security:
- *       - bearerAuth: []
- *    produces:
- *      - application/json
- *    responses:
- *      200:
- *        description: data fetched successfully.
- *      500: 
- *        description: Server error
+ *     summary: Get admin dashboard
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Data fetched successfully.
+ *       500:
+ *         description: Server error
  */
 
-router.get("/view/admindashboard",
+router.get("/view/admin/dashboard",
   authCheck,
   roleCheck("admin"),
   AdminController.viewAdminDashboard
@@ -51,26 +49,24 @@ router.get("/view/admindashboard",
 
 /**
  * @swagger
- * /adminapi/create/department:
+ * /api/save/department:
  *   post:
  *     summary: Create a new department
  *     tags:
  *       - Department
  *     security:
- *       - bearerAuth: []
- *     produces: 
- *       - application/json
- *     parameters: 
- *       - in: body
- *         name: Add Category
- *         description: Create Category
- *         schema: 
- *           type: object
- *           required: 
- *             - deptName    
- *           properties: 
- *             deptName: 
- *               type: string            
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - deptName
+ *             properties:
+ *               deptName:
+ *                 type: string              
  *     responses:
  *       201:
  *         description: Department created successfully
@@ -80,7 +76,7 @@ router.get("/view/admindashboard",
  *         description: Server error
  */
 
-router.post("/create/department",
+router.post("/save/department",
   authCheck,
   roleCheck("admin"),
   validateApi(departmentSchema),
@@ -93,54 +89,50 @@ router.post("/create/department",
 
 /**
  * @swagger
- * /adminapi/create/faculty:
+ * /api/create/faculty:
  *   post:
  *     tags:
  *       - Faculty
- *     security:
- *       - bearerAuth: []
  *     summary: Create Faculty
- *     consumes:
- *       - multipart/form-data
- *     parameters:
- *       - in: formData
- *         name: name
- *         type: string
- *         required: true
- *       - in: formData
- *         name: email
- *         type: string
- *         required: true
- *       - in: formData
- *         name: phone
- *         type: string
- *         required: true
- *       - in: formData
- *         name: password
- *         type: string
- *         required: true
- *       - in: formData
- *         name: address
- *         type: string
- *         required: true
- *       - in: formData
- *         name: deptId
- *         type: string
- *         required: true
- *         description: Department ID (MongoDB ObjectId)
- *       - in: formData
- *         name: experience
- *         type: integer
- *         required: true
- *       - in: formData
- *         name: status
- *         type: boolean
- *         required: true
- *       - in: formData
- *         name: profileImage
- *         type: file
- *         required: false
- *         description: Faculty Profile Image
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - phone
+ *               - password
+ *               - address
+ *               - deptId
+ *               - experience              
+ *             properties:
+ *               name:
+ *                 type: string                 
+ *               email:
+ *                 type: string
+ *                 format: email                
+ *               phone:
+ *                 type: string                
+ *               password:
+ *                 type: string
+ *                 format: password                 
+ *               address:
+ *                 type: string             
+ *               deptId:
+ *                 type: string                              
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - inactive           
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Faculty created successfully
@@ -150,23 +142,24 @@ router.post("/create/department",
  *         description: Server error
  */
 
-router.post( "/create/faculty", 
-    authCheck, 
-    roleCheck("admin"), 
-    validateApi(facultySchema),
-    uploadProfileImage.single("profileImage"),
-    FacultyManagementController.createFaculty
+router.post(
+  "/create/faculty",
+  authCheck,
+  roleCheck("admin"),
+  uploadProfileImage.single("profileImage"),
+  validateApi(facultySchema),
+  FacultyManagementController.createFaculty
 );
 
 /**
  * @swagger
- * /adminapi/view/allfaculty:
+ * /api/view/allfaculty:
  *  get: 
- *    summary: Get all faculty                                            
+ *    summary: Get all faculty (admin only)                                          
  *    tags:
- *       - Admin
+ *       - Faculty
  *    security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *    produces:
  *      - application/json
  *    responses:
@@ -185,14 +178,14 @@ router.get("/view/allfaculty",
 
 /**
  * @swagger
- * /adminapi/view/faculty/{id}:
+ * /api/faculty/profile/view/{id}:
  *   get:
  *     tags:
  *       - Faculty
  *     summary: View Faculty Profile
  *     description: Get a faculty profile by Faculty ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -203,19 +196,6 @@ router.get("/view/allfaculty",
  *     responses:
  *       200:
  *         description: Faculty profile fetched successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Faculty profile fetched successfully.
- *                 data:
- *                   type: object
  *       400:
  *         description: Invalid Faculty ID.
  *       401:
@@ -229,7 +209,7 @@ router.get("/view/allfaculty",
  */
 
 router.get(
-  "/view/faculty/:id",
+  "/faculty/profile/view/:id",
   authCheck,
   roleCheck("admin"),
   FacultyManagementController.facultyProfile
@@ -238,14 +218,14 @@ router.get(
 
 /**
  * @swagger
- * /adminapi/view/faculty/{id}:
+ * /api/edit/faculty/view/{id}:
  *   get:
  *     tags:
  *       - Faculty
  *     summary: View Faculty Profile
  *     description: Get a faculty profile by Faculty ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -256,19 +236,6 @@ router.get(
  *     responses:
  *       200:
  *         description: Faculty profile fetched successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Faculty profile fetched successfully.
- *                 data:
- *                   type: object
  *       400:
  *         description: Invalid Faculty ID.
  *       401:
@@ -282,25 +249,22 @@ router.get(
  */
 
 router.get(
-  "/edit/faculty/:id",
+  "/edit/faculty/view/:id",
   authCheck,
   roleCheck("admin"),
-  FacultyManagementController.editFacultyView,
+  FacultyManagementController.editFacultyView
 );
-
 
 /**
  * @swagger
- * /adminapi/update/faculty/{id}:
+ * /api/update/faculty/{id}:
  *   put:
  *     tags:
  *       - Faculty
  *     summary: Update Faculty
- *     description: Update faculty details including profile image. Only Admin can access this API.
- *     consumes:
- *       - multipart/form-data
+ *     description: Update faculty details including profile image.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -308,44 +272,47 @@ router.get(
  *         description: Faculty ID
  *         schema:
  *           type: string
- *       - in: formData
- *         name: name
- *         type: string
- *         required: false
- *       - in: formData
- *         name: email
- *         type: string
- *         required: false
- *       - in: formData
- *         name: phone
- *         type: string
- *         required: false
- *       - in: formData
- *         name: department
- *         type: string
- *         required: false
- *       - in: formData
- *         name: designation
- *         type: string
- *         required: false
- *       - in: formData
- *         name: profileImage
- *         type: file
- *         required: false
- *         description: Upload faculty profile image
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               deptId:
+ *                 type: string              
+ *               experience:
+ *                 type: integer
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - inactive
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Faculty updated successfully.
  *       400:
  *         description: Bad Request.
  *       401:
- *         description: Unauthorized. Invalid or missing token.
+ *         description: Unauthorized.
  *       403:
- *         description: Forbidden. Admin access only.
+ *         description: Forbidden.
  *       404:
  *         description: Faculty not found.
  *       500:
- *         description: Internal server error.
+ *         description: Internal Server Error.
  */
 
 router.put(
@@ -353,20 +320,20 @@ router.put(
   authCheck,
   roleCheck("admin"),
   uploadProfileImage.single("profileImage"),
-  FacultyManagementController.updateFaculty,
+  FacultyManagementController.updateFaculty
 );
 
 
 /**
  * @swagger
- * /adminapi/delete/faculty/{id}:
+ * /api/delete/faculty/{id}:
  *   delete:
  *     tags:
  *       - Faculty
  *     summary: Delete Faculty
  *     description: Delete a faculty by ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -403,7 +370,7 @@ router.delete(
 
 /**
  * @swagger
- * /adminapi/create/student:
+ * /api/create/student:
  *   post:
  *     tags:
  *       - Student
@@ -472,13 +439,13 @@ router.post(
 
 /**
  * @swagger
- * /adminapi/view/allstudent:
+ * /api/view/allstudent:
  *  get: 
  *    summary: Get all student                                          
  *    tags:
  *       - Student
  *    security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *    produces:
  *      - application/json
  *    responses:
@@ -498,14 +465,14 @@ router.get(
 
 /**
  * @swagger
- * /adminapi/view/student/{id}:
+ * /api/view/student/{id}:
  *   get:
  *     tags:
  *       - Student
  *     summary: View student Profile
  *     description: Get a student profile by Student ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -551,14 +518,14 @@ router.get(
 
 /**
  * @swagger
- * /adminapi/edit/student/{id}:
+ * /api/edit/student/{id}:
  *   get:
  *     tags:
  *       - Student
  *     summary: View Student Profile
  *     description: Get a student profile by Student ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -600,14 +567,14 @@ router.get(
 
 /**
  * @swagger
- * /adminapi/delete/student/{id}:
+ * /api/delete/student/{id}:
  *   delete:
  *     tags:
  *       - Student
  *     summary: Delete Student
  *     description: Delete a Student by ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -640,50 +607,42 @@ router.delete(
 
 // course
 
-
 /**
  * @swagger
- * /adminapi/create/course:
+ * /api/save/course:
  *   post:
  *     tags:
  *       - Course
  *     summary: Create a new course
  *     description: Create a new course
  *     security:
- *       - bearerAuth: []
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - in: body
- *         name: body
- *         description: Course details
- *         required: true
- *         schema:
- *           type: object
- *           required:
- *             - courseName
- *             - duration
- *             - fees
- *             - description
- *             - status
- *           properties:
- *             courseName:
- *               type: string
- *               example: BCA
- *             duration:
- *               type: string
- *               example: 3 Years
- *             fees:
- *               type: number
- *               example: 50000
- *             description:
- *               type: string
- *               example: Bachelor of Computer Applications
- *             status:
- *               type: boolean
- *               example: true
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - courseName
+ *               - duration
+ *               - fees
+ *               - description
+ *               - status
+ *             properties:
+ *               courseName:
+ *                 type: string                
+ *               duration:
+ *                 type: string                 
+ *               fees:
+ *                 type: number                 
+ *               description:
+ *                 type: string                
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - inactive
  *     responses:
  *       201:
  *         description: Course created successfully
@@ -697,7 +656,7 @@ router.delete(
  *         description: Internal Server Error
  */
 
-router.post("/create/course",
+router.post("/save/course",
   authCheck,
   roleCheck("admin"),
   validateApi(courseSchema),
@@ -705,16 +664,15 @@ router.post("/create/course",
 );
 
 
-
 /**
  * @swagger
- * /adminapi/view/allcourse:
+ * /api/view/add/course:
  *  get: 
  *    summary: Get all course                                    
  *    tags:
  *       - Course
  *    security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *    produces:
  *      - application/json
  *    responses:
@@ -724,24 +682,23 @@ router.post("/create/course",
  *        description: Server error
  */
 
-router.get("/view/allcourse",
+router.get("/view/add/course",
   authCheck,
   roleCheck("admin"),
-  CourseManagementController.viewAllCourse,
+  CourseManagementController.viewAllCourse
 );
-
 
 
 /**
  * @swagger
- * /adminapi/edit/course/{id}:
+ * /api/edit/course/{id}:
  *   get:
  *     tags:
  *       - Course
  *     summary: View Course Profile
  *     description: Get a Course by Course ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -768,7 +725,7 @@ router.get(
   "/edit/course/:id",
   authCheck,
   roleCheck("admin"),
-  CourseManagementController.viewCourseEdit,
+  CourseManagementController.viewCourseEdit
 );
 
 
@@ -783,14 +740,14 @@ router.put(
 
 /**
  * @swagger
- * /adminapi/delete/course/{id}:
+ * /api/delete/course/{id}:
  *   delete:
  *     tags:
  *       - Course
  *     summary: Delete Course
  *     description: Delete a Course by ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -826,53 +783,52 @@ router.delete(
 
 /**
  * @swagger
- * /adminapi/create/batch:
+ * /api/create/batch:
  *   post:
  *     tags:
  *       - Batch
  *     summary: Create a new Batch
  *     description: Create a new Batch
  *     security:
- *       - bearerAuth: []
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - in: body
- *         name: body
- *         description: Batch details
- *         required: true
- *         schema:
- *           type: object
- *           required:
- *             - batchName
- *             - courseId
- *             - facultyId
- *             - startDate
- *             - endDate
- *             - status
- *           properties:
- *             batchName:
- *               type: string
- *               example: BCA Morning Batch
- *             courseId:
- *               type: string
- *               example: 6864d5e6f8a9b12345678901
- *             facultyId:
- *               type: string
- *               example: 6864d60af8a9b12345678902
- *             startDate:
- *               type: string
- *               format: date
- *               example: "2026-07-01"
- *             endDate:
- *               type: string
- *               format: date
- *               example: "2029-06-30"
- *             status:
- *               type: boolean
- *               example: true
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - batchName
+ *               - courseId
+ *               - facultyId
+ *               - startDate
+ *               - endDate
+ *               - status
+ *             properties:
+ *               batchName:
+ *                 type: string
+ *                 example: MERN Batch A
+ *               courseId:
+ *                 type: string
+ *                 example: 687fd6b56f5d2d0012345678
+ *               facultyId:
+ *                 type: string
+ *                 example: 687fd6b56f5d2d0012345679
+ *               startDate:
+ *                 type: string
+ *                 format: date
+ *                 example: "2026-09-01"
+ *               endDate:
+ *                 type: string
+ *                 format: date
+ *                 example: "2027-03-01"
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - completed
+ *                   - upcoming
+ *                 example: active
  *     responses:
  *       201:
  *         description: Batch created successfully
@@ -897,13 +853,13 @@ router.post(
 
 /**
  * @swagger
- * /adminapi/view/allbatch:
+ * /api/view/allbatch:
  *  get: 
  *    summary: Get all batch                                
  *    tags:
  *       - Batch
  *    security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *    produces:
  *      - application/json
  *    responses:
@@ -924,14 +880,14 @@ router.get(
 
 /**
  * @swagger
- * /adminapi/edit/batch/{id}:
+ * /api/edit/batch/{id}:
  *   get:
  *     tags:
  *       - Batch
  *     summary: View Batch
  *     description: Get a Batch by Batch ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -972,14 +928,14 @@ router.put(
 
 /**
  * @swagger
- * /adminapi/delete/batch/{id}:
+ * /api/delete/batch/{id}:
  *   delete:
  *     tags:
  *       - Batch
  *     summary: Delete Batch
  *     description: Delete a batch by ID. Only Admin can access this API.
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

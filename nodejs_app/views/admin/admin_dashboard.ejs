@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <!doctype html>
+ <!doctype html>
     <html lang="en">
       <head>
         <meta charset="UTF-8" />
@@ -182,7 +168,7 @@
               </nav>
 
               <!-- HEADING -->
-                             <div class="page-heading">
+              <div class="page-heading">
                 <div>
                   <h2>Dashboard</h2>
                   <p>Monitor students, faculties, batches and revenue.</p>
@@ -233,14 +219,14 @@
                 <div class="col-lg-4">
                   <div class="stats-card">
                     <h6>Total Revenue</h6>
-                    <h2>₹24,50,000</h2>
+                    <h2>₹<%= totalRevenue.length > 0 ? totalRevenue[0].totalRev : 0 %></h2>
                   </div>
                 </div>
 
                 <div class="col-lg-4">
                   <div class="stats-card">
                     <h6>Pending Payments</h6>
-                    <h2>28</h2>
+                    <h2><%=pendingPayments%></h2>
                   </div>
                 </div>
 
@@ -258,10 +244,10 @@
                 <div class="col-lg-8">
                   <div class="dashboard-card">
                     <div class="card-header-custom">
-                      <h5>Revenue Performance</h5>
+                      <h5>Fee Collection Overview</h5>
                     </div>
 
-                    <canvas id="revenueChart"></canvas>
+                    <canvas id="feeChart"></canvas>
                   </div>
                 </div>
 
@@ -375,39 +361,39 @@
             </div>
           </div>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-        <script>
-          setTimeout(() => {
-            const alert = document.getElementById("successAlert");
-            if (alert) {
-              alert.remove();
-            }
-          }, 3000); // 3 seconds
-
-          const ctx = document.getElementById("revenueChart");
-
-          new Chart(ctx, {
-            type: "bar",
-            data: {
-              labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-              datasets: [
-                {
-                  label: "Revenue",
-                  data: [120000, 180000, 150000, 220000, 210000, 260000],
-                },
-              ],
-            },
-          });
-        </script>
-      </body>
-    </html>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        
+<!-- Load Chart.js FIRST -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous">
+    </script>
+
+    <!-- Then your script that uses Chart -->
+    <script>
+      setTimeout(() => {
+        const alert = document.getElementById("successAlert");
+        if (alert) alert.remove();
+      }, 3000);
+
+      const ctx = document.getElementById("feeChart");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Assigned Fee", "Collected Fee", "Due Fee"],
+          datasets: [{
+            label: "Amount (₹)",
+            data: ["<%= assignedFee %>", "<%= collected %>"," <%= dueAmount %>"],
+            backgroundColor: ["rgba(54, 162, 235, 0.2)","rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
+            borderColor: ["rgb(54, 162, 235)","rgb(75, 192, 192)","rgb(255, 99, 132)"],
+            borderWidth: 1
+          }],
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true }}
+        }
+      });
+    </script>
   </body>
 </html>

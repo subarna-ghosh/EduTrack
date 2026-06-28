@@ -13,23 +13,19 @@ class CourseManagementController {
   async createCourse(req, res) {
     try {
 
+      console.log(req.body);
+      
       const { courseName, duration, fees, description, status } = req.body;
 
-      if (!courseName || !duration || !fees || !description || !status) {
-        return res.status(httpStatusCode.BAD_REQUEST).json({
-          success: false,
-          message: "All fields are required"
-        })
-      }
 
-      const existingCourse = await Course.findOne({ courseName });
+      // const existingCourse = await Course.findOne({ courseName });
 
-      if (existingCourse) {
-        return res.status(httpStatusCode.BAD_REQUEST).json({
-          success: false,
-          message: "Course already exist",
-        });
-      }
+      // if (existingCourse) {
+      //   return res.status(httpStatusCode.BAD_REQUEST).json({
+      //     success: false,
+      //     message: "Course already exist",
+      //   });
+      // }
 
       const newCourse = await new Course({ courseName, duration, fees, description, status });
 

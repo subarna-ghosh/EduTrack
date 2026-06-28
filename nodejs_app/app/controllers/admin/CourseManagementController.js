@@ -12,6 +12,7 @@ class CourseManagementController {
 
   async saveCourse(req, res) {
     try {
+      
       console.log(req.body);
       const { courseName, duration, fees, description, status } = req.body;
       const data = new Course({

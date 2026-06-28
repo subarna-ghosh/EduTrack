@@ -1,52 +1,27 @@
 {
-    "swaggerDefinition": {
-      "info": {
-        "title": "Test API",
-        "version": "1.0.0",
-        "description": "Student API documentation create by webskitters",
-        "contact": {
-          "name": "Raju kayal"
-        },
-        "servers": [
-          "http://localhost:3001"
-          
-        ]  
-      },
-      "tags": [
-        {
-            "name": "Admin",
-            "description": "Admin API"
-        },
-        {
-            "name": "Auth",
-            "description": "Auth API"
-        },
-        {
-            "name": "Department",
-            "description": "Department API"
-        },
-        {
-          
-            "name": "Student",
-            "description": "Student API"
-        },
-        {
-          
-            "name": "Course",
-            "description": "Course API"
-        },
-        {
-          
-            "name": "Batch",
-            "description": "Batch API"
-        }
-        
-    ],
-    "schemes": "['https', 'http']"
-      
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Test API",
+      "version": "1.0.0",
+      "description": "Student API documentation"
     },
-    "apis": [
-      "app.js",
-      "./app/routes/api/**/*.js"
-    ]
-  }
+    "servers": [
+      {
+        "url": "http://localhost:3001"
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+        "BearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  },
+  "apis": [
+    "./app/routes/api/**/*.js"
+  ]
+}

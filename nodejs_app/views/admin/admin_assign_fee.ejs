@@ -35,7 +35,7 @@
                 amount will start from ₹0.
               </div>
 
-              <form action="#" method="POST">
+              <form action="/web/create/fee" method="POST">
                 <!-- Student -->
 
                 <div class="mb-3">
@@ -43,12 +43,9 @@
 
                   <select name="studentId" class="form-select" required>
                     <option value="">Select Student</option>
-
-                    <option value="1">Subarna Ghosh</option>
-
-                    <option value="2">Rahul Das</option>
-
-                    <option value="3">Priya Roy</option>
+                    <%listStudents.forEach((val)=>{%>
+                    <option value="<%=val.userInfo._id%>"><%=val.userInfo.name%> (<%=val.courseInfo.courseName%>)</option>
+                    <%})%>
                   </select>
                 </div>
 
@@ -66,19 +63,6 @@
                   />
                 </div>
 
-                <!-- Course -->
-
-                <div class="mb-3">
-                  <label class="form-label"> Course Name </label>
-
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Node.js Complete"
-                    readonly
-                  />
-                </div>
-
                 <!-- Paid Amount -->
 
                 <div class="mb-3">
@@ -86,6 +70,7 @@
 
                   <input
                     type="number"
+                    name="paidAmount"
                     class="form-control"
                     value="0"
                     readonly
@@ -100,9 +85,9 @@
                     Assign Fee
                   </button>
 
-                  <a href="/web/view/payment/management" class="btn btn-secondary">
+                  <a href="/web/view/assigned/fee/student" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left me-2"></i>
-                    Back
+                    Back to Assigned Fee List
                   </a>
                 </div>
               </form>

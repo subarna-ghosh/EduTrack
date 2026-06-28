@@ -29,8 +29,7 @@ class AdminController {
       });
 
     } catch (error) {
-      console.error(error);
-
+     
       return res.status(httpStatusCode.SERVER_ERROR).json({
         success: false,
         message: error.message

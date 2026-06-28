@@ -9,6 +9,11 @@ const path = require("path");
 const session = require("express-session");
 const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require('swagger-ui-express');
+const SwaggerOptions = require('./swagger.json');
+const swaggerDocument = swaggerJsDoc(SwaggerOptions);
+
 db();
 
 app.use(express.json());
@@ -39,6 +44,8 @@ app.use((req, res, next) => {
 
 const api = require("./app/routes");
 app.use(api);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const port = 3001;
 app.listen(port, () => {

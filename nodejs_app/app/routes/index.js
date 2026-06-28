@@ -22,8 +22,8 @@ Router.use("/web", webStudent);
 
 
 
-const webFaculty = require("./webfaculty");
-Router.use("/web", webFaculty);
+// const webFaculty = require("./webfaculty");
+// Router.use("/web", webFaculty);
 
 
 // postman api auth routes
