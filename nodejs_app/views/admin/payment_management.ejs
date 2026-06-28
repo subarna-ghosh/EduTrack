@@ -61,7 +61,10 @@
                 </li>
 
                 <li>
-                  <a class="dropdown-item" href="/web/view/assigned/fee/student">
+                  <a
+                    class="dropdown-item"
+                    href="/web/view/assigned/fee/student"
+                  >
                     <i class="fa-solid fa-users me-2 text-primary"></i>
                     Assigned Fees
                   </a>
@@ -91,17 +94,14 @@
 
       <div class="row g-4 mb-4">
         <div class="col-lg-3 col-md-6">
-          <div class="card stat-card card-blue">
+          <div class="card stat-card">
             <div class="card-body">
               <div class="d-flex justify-content-between">
                 <div>
                   <small>Total Assigned Fee</small>
-
-                  <div class="stat-value">₹18.5L</div>
-                </div>
-
-                <div class="stat-icon bg-primary text-white">
-                  <i class="fa-solid fa-wallet"></i>
+                  <div class="stat-value">
+                    ₹<%=totalAssignedFee[0].totalFee%>
+                  </div>
                 </div>
               </div>
             </div>
@@ -109,17 +109,14 @@
         </div>
 
         <div class="col-lg-3 col-md-6">
-          <div class="card stat-card card-green">
+          <div class="card stat-card">
             <div class="card-body">
               <div class="d-flex justify-content-between">
                 <div>
                   <small>Total Collected</small>
-
-                  <div class="stat-value">₹12.5L</div>
-                </div>
-
-                <div class="stat-icon bg-success text-white">
-                  <i class="fa-solid fa-circle-check"></i>
+                  <div class="stat-value">
+                    ₹<%=totalCollected[0].totalCollect%>
+                  </div>
                 </div>
               </div>
             </div>
@@ -127,17 +124,14 @@
         </div>
 
         <div class="col-lg-3 col-md-6">
-          <div class="card stat-card card-red">
+          <div class="card stat-card">
             <div class="card-body">
               <div class="d-flex justify-content-between">
                 <div>
                   <small>Total Due</small>
-
-                  <div class="stat-value text-danger">₹6L</div>
-                </div>
-
-                <div class="stat-icon bg-danger text-white">
-                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  <div class="stat-value text-danger">
+                    ₹<%=totalDueAmount[0].totalDue%>
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,17 +139,12 @@
         </div>
 
         <div class="col-lg-3 col-md-6">
-          <div class="card stat-card card-orange">
+          <div class="card stat-card">
             <div class="card-body">
               <div class="d-flex justify-content-between">
                 <div>
                   <small>Pending Requests</small>
-
-                  <div class="stat-value">28</div>
-                </div>
-
-                <div class="stat-icon bg-warning text-dark">
-                  <i class="fa-solid fa-clock"></i>
+                  <div class="stat-value"><%=totalPendingRequest%></div>
                 </div>
               </div>
             </div>
@@ -163,40 +152,67 @@
         </div>
       </div>
 
-      <!-- Filters -->
+      <!-- Payment Method Distribution -->
+      <div class="card table-card mb-4">
+        <div
+          class="card-header bg-white py-3 d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">
+            <i class="fa-solid fa-chart-pie text-primary me-2"></i>
+            Payment Method Distribution
+          </h5>
+          <small class="text-muted"> Based on all payment requests </small>
+        </div>
 
-      <div class="card filter-card mb-4">
         <div class="card-body">
-          <div class="row g-3">
-            <div class="col-lg-4">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search student name..."
-              />
+          <div class="row align-items-center">
+            <!-- Pie Chart -->
+            <div class="col-lg-6">
+              <canvas
+                id="paymentMethodChart"
+                style="max-width: 260px; max-height: 260px; margin: auto"
+              ></canvas>
             </div>
 
-            <div class="col-lg-3">
-              <select class="form-select">
-                <option>All Status</option>
-                <option>Paid</option>
-                <option>Pending</option>
-                <option>Failed</option>
-              </select>
-            </div>
+            <!-- Summary -->
+            <div class="col-lg-6"> 
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <span>
+                  <i class="fa-solid fa-circle me-2" style="color:#ff6384;"></i>
+                  UPI Payments
+                </span>
+                <strong><%=upiCount%></strong>
+              </div>
 
-            <div class="col-lg-3">
-              <select class="form-select">
-                <option>All Methods</option>
-                <option>UPI</option>
-                <option>Cash</option>
-                <option>Card</option>
-                <option>Bank</option>
-              </select>
-            </div>
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <span>
+                  <i class="fa-solid fa-circle me-2" style="color:#ff9f63;"></i>
+                  Cash Payments
+                </span>
+                <strong><%=cashCount%></strong>
+              </div>
 
-            <div class="col-lg-2">
-              <button class="btn btn-primary w-100">Filter</button>
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <span>
+                  <i class="fa-solid fa-circle me-2" style="color:#ffe563;"></i>
+                  Card Payments
+                </span>
+                <strong><%=cardCount%></strong>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <span>
+                  <i class="fa-solid fa-circle me-2" style="color:#5accc1;"></i>
+                  Bank Transfers
+                </span>
+                <strong><%=bankCount%></strong>
+              </div>
             </div>
           </div>
         </div>
@@ -222,7 +238,6 @@
                   <th>Action</th>
                 </tr>
               </thead>
-
               <tbody>
                 <%if(findPayment.length===0){%>
                   <tr>
@@ -265,7 +280,6 @@
         </div>
       </div>
     </div>
-
     <!-- modal -->
     <div class="modal fade" id="paymentModal" tabindex="-1">
       <div class="modal-dialog modal-lg">
@@ -347,5 +361,54 @@
       });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      const ctx = document.getElementById("paymentMethodChart");
+
+      new Chart(ctx, {
+        type: "pie",
+
+        data: {
+          labels: ["UPI", "Cash", "Card", "Bank"],
+
+          datasets: [
+            {
+              data: [
+                "<%=upiCount%>",
+                "<%=cashCount%>",
+                "<%=cardCount%>",
+                "<%=bankCount%>",
+              ],
+
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(255, 159, 64, 0.2)",
+                "rgba(255, 205, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+              ],
+              borderColor: [
+                "rgb(255, 99, 132)",
+                "rgb(255, 159, 64)",
+                "rgb(255, 205, 86)",
+                "rgb(75, 192, 192)",
+              ],
+              borderWidth: 2,
+            },
+          ],
+        },
+
+        options: {
+          responsive: true,
+
+          plugins: {
+            legend: {
+              position: "bottom",
+            },
+          },
+        },
+      });
+    </script>
   </body>
 </html>

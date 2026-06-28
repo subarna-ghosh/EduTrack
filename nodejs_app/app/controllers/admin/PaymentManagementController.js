@@ -7,6 +7,8 @@ const Fee = require("../../models/Fee");
 const Payment = require("../../models/Payment");
 class PaymentManagementController {
   async viewPaymentPage(req, res) {
+    // console.log(req.query);
+    const { search, paymentMethod, date } = req.query;
     const findPayment = await Payment.aggregate([
       {
         $lookup: {
@@ -24,9 +26,64 @@ class PaymentManagementController {
       },
       { $match: { paymentStatus: "pending" } },
     ]);
+    const totalAssignedFee = await Fee.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalFee: { $sum: "$totalFee" },
+        },
+      },
+    ]);
+    const totalCollected = await Fee.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalCollect: { $sum: "$paidAmount" },
+        },
+      },
+    ]);
+    const totalDueAmount = await Fee.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalDue: { $sum: "$dueAmount" },
+        },
+      },
+    ]);
+    const totalPendingRequest = await Payment.countDocuments({
+      paymentStatus: "pending",
+    });
+    const paymentCounts = await Payment.aggregate([
+      {
+        $group: {
+          _id: "$paymentMethod",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
 
-    // console.log(JSON.stringify(findPayment, null, 2));
-    return res.render("admin/payment_management", { findPayment });
+    let upiCount = 0;
+    let cashCount = 0;
+    let cardCount = 0;
+    let bankCount = 0;
+
+    paymentCounts.forEach((item) => {
+      if (item._id === "upi") upiCount = item.count;
+      if (item._id === "cash") cashCount = item.count;
+      if (item._id === "card") cardCount = item.count;
+      if (item._id === "bank") bankCount = item.count;
+    });
+    return res.render("admin/payment_management", {
+      findPayment,
+      totalAssignedFee,
+      totalCollected,
+      totalDueAmount,
+      totalPendingRequest,
+      upiCount,
+      cashCount,
+      cardCount,
+      bankCount,
+    });
   }
 
   async viewAssignFee(req, res) {
