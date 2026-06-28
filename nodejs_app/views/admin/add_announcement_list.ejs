@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Announcement List</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="/assets/css/announcement.css" />
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <h2 class="page-title">Announcement List</h2>
+
+      <div class="announcement-card">
+        <!-- Top Bar -->
+        <div class="top-bar">
+          <!-- Search -->
+          <form
+            action="/web/view/announcement/list"
+            method="GET"
+            class="d-flex gap-2"
+          >
+            <input
+              name="search"
+              class="form-control"
+              placeholder="Search Announcement..."
+              type="text"
+            />
+            <button type="submit" class="search-btn-icon">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
+
+          <div class="d-flex gap-2">
+            <a href="/web/view/admin/dashboard" class="btn btn-secondary">
+              ← Back to Dashboard
+            </a>
+
+            <a href="/web/view/add/announcement" class="btn btn-primary">
+              + Add Announcement
+            </a>
+          </div>
+        </div>
+
+        <!-- connect-flash -->
+        <% if (success.length > 0) { %>
+          <div id="successAlert" class="alert alert-info">
+             <%= success[0] %>
+          </div>
+        <% } %>
+
+        <% if (error.length > 0) { %>
+          <div id="successAlert" class="alert alert-danger">
+             <%= error[0] %>
+          </div>
+        <% } %>
+
+        <!-- Table -->
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Sl.no</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Batch</th>
+                <th>Status</th>
+                <th>Created By</th>
+                <th>Created Date</th>
+                <th width="180" style="text-align: center;">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <%if(showAnnouncement.length===0){%>
+                <tr>
+                  <td colspan="9" style="text-align: center;">List is empty!</td>
+                </tr>
+              <%}else{%>
+              <%showAnnouncement.forEach((val,index)=>{%>
+              <tr>
+                <td><%= (currentPage - 1) * 3 + index + 1 %></td>
+                <td><%=val.title%></td>
+                <td><%=val.description%></td>
+                <td>
+                  <span class="type-global"><%=val.announcementType%></span>
+                </td>
+                <td>
+                  <%= val.batchInfo ? val.batchInfo.batchName : "-" %>
+                </td>
+                <td>
+                  <span class="status-active"><%=val.status%></span>
+                </td>
+                <td><%=val.userInfo.name%></td>
+                <td><%=new Date(val.createdAt).toLocaleDateString("en-GB")%></td>
+                <td>
+                  <div class="action-btns">
+                    <a href="/web/view/announcement/<%=val._id %>" class="btn btn-sm btn-info">View</a>
+                    <a href="/web/view/edit/announcement/<%=val._id %>" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/web/delete/announcement/<%=val._id %>" class="btn btn-sm btn-danger">Delete</a>
+                  </div>
+                </td>
+              </tr>
+              <%})%>
+              <%}%>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-wrapper d-flex justify-content-end">
+          <nav>
+            <ul class="pagination">
+              <!-- previous page -->
+              <li class="page-item <%= currentPage === 1? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/announcement/list?page=<%= Math.max(1,currentPage-1) %>"> Previous </a>
+              </li>
+
+              <!-- Page Numbers -->
+              <%for(let i=1;i<=totalPages;i++){%>
+              <li class="page-item <%= currentPage === i? 'active':'' %>">
+                <a class="page-link" href="/web/view/announcement/list?page=<%=i%>"><%=i%></a>
+              </li>
+              <%}%>
+              <!-- next page -->
+              <li class="page-item <%= currentPage === totalPages? 'disabled':'' %>">
+                <a class="page-link" href="/web/view/announcement/list?page=<%= Math.min(totalPages,currentPage+1)%>"> Next </a>
+              </li>
+            </ul>
+          </nav>
+        </div> 
+
+      </div>
+    </div>
+    <script>
+      setTimeout(() => {
+        const alert = document.getElementById("successAlert");
+          if (alert) {
+            alert.remove();
+          }
+        }, 1000); // 1 seconds
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

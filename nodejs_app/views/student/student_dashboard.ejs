@@ -1,1 +1,342 @@
-student
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student Dashboard</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/assets/css/student_style.css" />
+    <style></style>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+
+        <div class="col-lg-2 sidebar">
+          <div class="logo">EduTrack</div>
+
+          <ul class="nav flex-column">
+            <li>
+              <a href="#" class="nav-link active">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+              </a>
+            </li>
+
+            <li>
+              <a href="/web/view/student/profile" class="nav-link">
+                <i class="fa-solid fa-user"></i>
+                My Profile
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="nav-link">
+                <i class="fa-solid fa-users"></i>
+                Batch
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="nav-link">
+                <i class="fa-solid fa-code"></i>
+                Projects
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="nav-link">
+                <i class="fa-solid fa-book"></i>
+                Course Materials
+              </a>
+            </li>
+
+            <li>
+              <a href="/web/view/show/announcement" class="nav-link">
+                <i class="fa-solid fa-bullhorn"></i>
+                Announcements
+              </a>
+            </li>
+
+            <li>
+              <a href="/web/view/payment/history" class="nav-link">
+                <i class="fa-solid fa-money-bill"></i>
+                Payment History
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="nav-link">
+                <i class="fa-solid fa-certificate"></i>
+                Certificates
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="col-lg-10 main-content">
+
+          <!-- TOPBAR -->
+          <nav class="topbar">
+            <div>
+              <h2 class="page-title">Dashboard</h2>
+              <p class="page-subtitle">Welcome back, Subarna Ghosh</p>
+            </div>
+
+            <div class="top-right">
+              <button class="top-btn notification-btn">
+                <i class="fa-regular fa-bell"></i>
+                <span class="notification-count">2</span>
+              </button>
+
+              <a href="#" class="top-btn">
+                <i class="fa-regular fa-circle-question"></i>
+                Help Center
+              </a>
+
+              <a href="/web/view/student/pay/now" class="pay-btn">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+                Pay Now
+              </a>
+
+              <div class="dropdown">
+                <button
+                  class="profile-dropdown dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                >
+                  <i class="fa-solid fa-user-graduate me-2"></i>
+                  Student
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#"> Profile </a>
+                  </li>
+
+                  <li>
+                    <a class="dropdown-item" href="#"> Settings </a>
+                  </li>
+
+                  <li><hr class="dropdown-divider" /></li>
+
+                  <li>
+                    <a class="dropdown-item text-danger" href="/web/logout"> Logout </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+          <!-- WELCOME CARD -->
+
+          <div class="welcome-card mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h3>Welcome Back, Subarna Ghosh</h3>
+                <p class="mb-0">
+                  Track your learning journey and upcoming classes.
+                </p>
+              </div>
+
+              <span class="badge bg-success p-2"> Ongoing Course </span>
+            </div>
+          </div>
+
+          <!-- STATS -->
+
+          <div class="row g-4 mb-4">
+            <div class="col-lg-3 col-md-6">
+              <div class="stats-card blue">
+                <h6>Attendance</h6>
+                <h2>92%</h2>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="stats-card green">
+                <h6>Projects</h6>
+                <h2>5</h2>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="stats-card orange">
+                <h6>Assignments</h6>
+                <h2>8</h2>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="stats-card red">
+                <h6>Certificates</h6>
+                <h2>1</h2>
+              </div>
+            </div>
+          </div>
+
+          <!-- PERSONAL INFO + CLASSES -->
+
+          <div class="row g-4 mb-4">
+            <div class="col-lg-4">
+              <div class="dashboard-card">
+                <h5 class="mb-4">Personal Information</h5>
+
+                <p><strong>Name:</strong> Subarna Ghosh</p>
+                <p><strong>Email:</strong> subarna@gmail.com</p>
+                <p><strong>Phone:</strong> 7003358881</p>
+                <p><strong>Course:</strong> Node JS Complete</p>
+                <p><strong>Batch:</strong> WA-481</p>
+              </div>
+            </div>
+
+            <div class="col-lg-8">
+              <div class="dashboard-card">
+                <div class="d-flex justify-content-between mb-3">
+                  <h5>Today's Classes</h5>
+
+                  <span class="badge bg-primary"> 2 Classes </span>
+                </div>
+
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Course</th>
+                      <th>Faculty</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr>
+                      <td>Node JS</td>
+                      <td>Raju Kayal</td>
+                      <td>10:00 AM</td>
+                    </tr>
+
+                    <tr>
+                      <td>MongoDB</td>
+                      <td>Amit Roy</td>
+                      <td>02:00 PM</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- BATCH + DOCUMENTS -->
+
+          <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+              <div class="dashboard-card">
+                <h5 class="mb-4">Batch Details</h5>
+
+                <p><strong>Batch:</strong> WA-481</p>
+                <p><strong>Course:</strong> Node JS Complete</p>
+                <p><strong>Faculty:</strong> Raju Kayal</p>
+
+                <span class="badge bg-success"> Active </span>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="dashboard-card">
+                <h5 class="mb-4">Document Status</h5>
+
+                <div class="document-item">
+                  <span>Address Proof</span>
+                  <span class="badge bg-success"> Verified </span>
+                </div>
+
+                <div class="document-item">
+                  <span>Educational Documents</span>
+                  <span class="badge bg-warning text-dark"> Under Review </span>
+                </div>
+
+                <div class="document-item">
+                  <span>Resume</span>
+                  <span class="badge bg-danger"> Pending </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROGRESS + ASSIGNMENTS -->
+
+          <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+              <div class="dashboard-card text-center">
+                <h5 class="mb-4">Course Progress</h5>
+
+                <div class="progress-circle">75%</div>
+
+                <h6 class="mt-4">Node JS Complete</h6>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="dashboard-card">
+                <h5 class="mb-4">Upcoming Assignments</h5>
+
+                <ul class="list-group">
+                  <li class="list-group-item">API Development Project</li>
+
+                  <li class="list-group-item">MongoDB Aggregation Task</li>
+
+                  <li class="list-group-item">React Dashboard Assignment</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANNOUNCEMENTS + PAYMENT -->
+
+          <div class="row g-4">
+            <div class="col-lg-7">
+              <div class="dashboard-card">
+                <h5 class="mb-4">Announcements</h5>
+
+                <div class="announcement">
+                  Project Submission Deadline: 15 July
+                </div>
+
+                <div class="announcement">
+                  New React Classes Starting Next Week
+                </div>
+
+                <div class="announcement">Attendance Requirement Updated</div>
+              </div>
+            </div>
+
+            <div class="col-lg-5">
+              <div class="dashboard-card">
+                <h5 class="mb-4">Payment Summary</h5>
+
+                <p>Total Fee: ₹45,000</p>
+                <p>Paid: ₹35,000</p>
+                <p>Due: ₹10,000</p>
+
+                <button class="btn btn-primary">View Payment History</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

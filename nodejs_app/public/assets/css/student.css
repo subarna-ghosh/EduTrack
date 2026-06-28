@@ -29,6 +29,21 @@
   margin-bottom: 25px;
   flex-wrap: wrap;
 }
+.search-btn-icon {
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 8px;
+  background: #0d6efd;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-btn-icon:hover {
+  background: #0b5ed7;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
 
 .search-box {
   width: 300px;
@@ -76,6 +91,51 @@
   margin-top: 25px;
   display: flex;
   justify-content: end;
+}
+
+/* student add */
+.form-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 0.15rem 1.75rem rgba(58, 59, 69, 0.15);
+}
+
+.page-title {
+  font-weight: 700;
+  color: #343a40;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.image-preview {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 2px dashed #ced4da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #fff;
+  margin: auto;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.image-preview i {
+  font-size: 45px;
+  color: #adb5bd;
+}
+
+textarea {
+  resize: none;
 }
 
 /* student profile */

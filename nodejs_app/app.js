@@ -42,5 +42,5 @@ app.use(api);
 
 const port = 3001;
 app.listen(port, () => {
-  console.log(`server is running on port-->http://localhost:${port}`);
+  console.log(`server is running on port --> http://localhost:${port}`);
 });

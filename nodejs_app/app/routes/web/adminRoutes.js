@@ -6,6 +6,8 @@ const FacultyManagementController = require("../../controllers/admin/FacultyMana
 const BatchManagementController = require("../../controllers/admin/BatchManagementController");
 const CourseManagementController = require("../../controllers/admin/CourseManagementController");
 const PaymentManagementController = require("../../controllers/admin/PaymentManagementController");
+const AttendanceManagementController = require("../../controllers/admin/AttendanceManagementController");
+const AnnouncementManagementController = require("../../controllers/admin/AnnouncementManagementController");
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
 const uploadFacultyImage = require("../../utils/uploadImage");
@@ -18,10 +20,13 @@ const {
 } = require("../../validations/facultyValidation");
 const { batchSchema } = require("../../validations/batchValidation");
 const { studentSchema } = require("../../validations/studentValidation");
+const {
+  announcementSchema,
+} = require("../../validations/announcementValidation");
 
 // =========================================
 //      admin dashboard
-// ========================================= 
+// =========================================
 Router.get(
   "/view/admin/dashboard",
   authCheck,
@@ -234,6 +239,28 @@ Router.get(
   BatchManagementController.deleteBatch,
 );
 
+// shown below are attendance management apis
+Router.get(
+  "/view/attendance/list",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.viewAttendanceList,
+);
+
+Router.get(
+  "/view/mark/attendance",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.viewMarkAttendance,
+);
+
+Router.post(
+  "/save/attendance",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.saveAttendance,
+);
+
 // shown below are payment management apis
 Router.get(
   "/view/payment/management",
@@ -241,4 +268,64 @@ Router.get(
   roleCheck("admin"),
   PaymentManagementController.viewPaymentPage,
 );
+
+Router.get(
+  "/view/assign/fee",
+  authCheck,
+  roleCheck("admin"),
+  PaymentManagementController.viewAssignFee,
+);
+
+// shown below are announcement management apis
+Router.get(
+  "/view/announcement/list",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewListAnnouncement,
+);
+
+Router.get(
+  "/view/add/announcement",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewAddAnnouncement,
+);
+
+Router.post(
+  "/save/announcement",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(announcementSchema, "/web/view/announcement/list"),
+  AnnouncementManagementController.saveAnnouncement,
+);
+
+Router.get(
+  "/view/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewAnnouncement,
+);
+
+Router.get(
+  "/view/edit/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewEditAnnouncement,
+);
+
+Router.post(
+  "/update/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  validateWeb(announcementSchema, "/web/view/announcement/list"),
+  AnnouncementManagementController.updateAnnouncement,
+);
+
+Router.get(
+  "/delete/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.deleteAnnouncement,
+);
+
 module.exports = Router;

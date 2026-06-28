@@ -16,6 +16,11 @@ class FacultyManagementController {
 
   async viewListFaculty(req, res) {
     try {
+      const page = Number(req.query.page) || 1;
+      const limit = 4;
+      const skip = (page - 1) * limit;
+
+      const search = req.query.search || "";
       const getFacultyInfo = await Faculty.aggregate([
         {
           $lookup: {
@@ -25,6 +30,7 @@ class FacultyManagementController {
             as: "userInfo",
           },
         },
+        { $unwind: "$userInfo" },
         {
           $lookup: {
             from: "departments",
@@ -33,12 +39,57 @@ class FacultyManagementController {
             as: "deptInfo",
           },
         },
-        { $unwind: "$userInfo" },
         { $unwind: "$deptInfo" },
-      ]);
 
+        // Search by faculty name
+        {
+          $match: {
+            "userInfo.name": {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+      // Count records for pagination
+      const totalFaculty = await Faculty.aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $unwind: "$userInfo",
+        },
+        {
+          $match: {
+            "userInfo.name": {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        },
+        {
+          $count: "total",
+        },
+      ]);
+      const totalRecords = totalFaculty.length > 0 ? totalFaculty[0].total : 0;
+
+      const totalPages = Math.ceil(totalRecords / limit);
       return res.render("admin/add_fac_list", {
         getFacultyInfo,
+        totalPages,
+        currentPage: page,
+        search,
       });
     } catch (error) {
       console.log(error);

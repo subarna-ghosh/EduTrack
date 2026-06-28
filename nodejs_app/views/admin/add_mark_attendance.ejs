@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mark Attendance</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/attendance.css" />
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <h2 class="page-title">Mark Attendance</h2>
+
+      <div class="attendance-card">
+        <div class="top-bar">
+          <div>
+            <h5 class="mb-0">Attendance Form</h5>
+            <small class="text-muted">
+              Select course and batch to load students
+            </small>
+          </div>
+
+          <a href="/web/view/attendance/list" class="btn btn-secondary"
+            ><i class="fa-solid fa-arrow-left me-2"></i>Back
+          </a>
+        </div>
+
+        <!-- FILTER SECTION -->
+        <div class="filter-section">
+          <form action="/web/view/mark/attendance" method="GET">
+            <div class="row g-3">
+              
+              <div class="col-md-4">
+                <label class="form-label">Course</label>
+
+                <select class="form-select" name="courseId">
+                  <option value="">Select Course</option>
+                  <%courses.forEach((val)=>{%>
+                  <option value="<%=val._id%>"><%=val.courseName%></option>
+                  <%})%>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Batch</label>
+
+                <select class="form-select" name="batchId">
+                  <option value="">Select Batch</option>
+                  <%batches.forEach((data)=>{%>
+                  <option value="<%=data._id%>"><%=data.batchName%></option>
+                  <%})%>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Attendance Date</label>
+                <input type="date" class="form-control" name="attendanceDate" />
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <button type="submit" class="btn btn-primary">
+                Load Students
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- INFO -->
+        <%if(students.length===0){%>
+        <div class="info-box">
+          <strong>Instructions:</strong>
+          Select Course, Batch and Date first. Then click
+          <strong>Load Students</strong> to fetch students of the selected
+          batch.
+        </div>
+        
+        <!-- EMPTY STATE -->
+        <div class="empty-state">
+          <h5>No Students Loaded Yet</h5>
+
+          <p class="mb-0">
+            Select Course, Batch and Date then click
+            <strong>Load Students</strong>.
+          </p>
+        </div>
+        <%}%>
+
+        <%if(students.length>0){%>
+        <form action="/web/save/attendance" method="POST">
+          <input type="hidden" name="courseId" value="<%= courseId %>">
+          <input type="hidden" name="batchId" value="<%= batchId %>">
+          <input type="hidden" name="attendanceDate" value="<%= attendanceDate %>">
+          <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Sl.no</th>
+                        <th>Student Name</th>
+                        <th>Student Code</th>
+                        <th>Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <%students.forEach((val,index)=>{%>
+                    <tr>
+                        <td><%=index+1%></td>
+                        <td><%=val.userInfo.name%></td>
+                        <td><%=val.studentCode%></td>
+                        <td>
+                            <div class="attendance-option">
+                                <label>
+                                    <input type="radio" name="attendance[<%= val._id %>]" value="present">
+                                    Present
+                                </label>
+                                <label>
+                                    <input type="radio" name="attendance[<%= val._id %>]" value="absent">
+                                    Absent
+                                </label>
+                                <label>
+                                    <input type="radio" name="attendance[<%= val._id %>]" value="late">
+                                    Late
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <%})%>
+                </tbody>
+              </table>
+          </div>
+          <div class="action-section">
+            <button class="btn btn-success">
+                Save Attendance
+            </button>
+          </div>
+        </form>
+        <%}%>
+
+
+      </div>
+    </div>
+  </body>
+</html>

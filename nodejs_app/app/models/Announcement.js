@@ -12,10 +12,22 @@ const announcementSchema = new Schema(
       required: true,
     },
 
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
+
+    announcementType: {
+      type: String,
+      enum: ["global", "student", "faculty", "batch"],
+      required: true,
+    },
+
     batchId: {
       type: Schema.Types.ObjectId,
       ref: "Batch",
-      required: true,
+      required: false, // only filled when announcementType = "batch"
     },
 
     createdBy: {

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Update Announcement</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/assets/css/announcement.css" />
+  </head>
+
+  <body>
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card form-card">
+            <div class="card-header bg-white py-3">
+              <h3 class="page-title mb-0">
+                <i class="fa-solid fa-bullhorn me-2"></i>
+                Update Announcement
+              </h3>
+            </div>
+
+            <div class="card-body p-4">
+              <div class="info-box">
+                <strong>Announcement Visibility:</strong>
+
+                <ul class="mb-0 mt-2">
+                  <li>Global → Visible to everyone</li>
+                  <li>Student → Visible to all students</li>
+                  <li>Faculty → Visible to all faculty</li>
+                  <li>Batch → Visible to selected batch only</li>
+                </ul>
+              </div>
+
+              <form action="/web/update/announcement/<%=showAnnouncements._id%>" method="POST">
+                <!-- Title -->
+
+                <div class="mb-3">
+                  <label class="form-label">Announcement Title</label>
+
+                  <input
+                    type="text"
+                    name="title"
+                    class="form-control"
+                    value="<%=showAnnouncements.title%>"
+                    placeholder="Enter announcement title"
+                    required
+                  />
+                </div>
+
+                <!-- Type -->
+
+                <div class="mb-3">
+                  <label class="form-label"> Announcement Type </label>
+
+                  <select
+                    name="announcementType"
+                    id="announcementType"
+                    class="form-select"
+                    onchange="toggleBatch()"
+                    required
+                  >
+                    <option value="">Select Type</option>
+
+                    <option value="global">Global</option>
+
+                    <option value="student">Student</option>
+
+                    <option value="faculty">Faculty</option>
+
+                    <option value="batch">Batch</option>
+                  </select>
+                </div>
+
+                <!-- Batch -->
+
+                <div class="mb-3" id="batchSection" style="display: none">
+                  <label class="form-label"> Select Batch </label>
+
+                  <select name="batchId" class="form-select">
+                    <option value="">Select Batch</option>
+                    <%listBatches.forEach((val)=>{%>
+                    <option value="<%=val._id%>"><%=val.batchName%></option>
+                    <%})%>
+                  </select>
+                </div>
+
+                <!-- Description -->
+
+                <div class="mb-3">
+                  <label class="form-label"> Description </label>
+
+                  <textarea
+                    name="description"
+                    rows="6"
+                    class="form-control"
+                    placeholder="Write announcement details..."
+                    required
+                  ><%=showAnnouncements.description%></textarea>
+                </div>
+
+                <!-- Status -->
+
+                <div class="mb-4">
+                  <label class="form-label"> Status </label>
+
+                  <select name="status" class="form-select">
+                    <option value="active">Active</option>
+
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+
+                <!-- Buttons -->
+
+                <div class="d-flex gap-3">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-paper-plane me-2"></i>
+                    Modify Announcement
+                  </button>
+
+                  <a href="/web/view/announcement/list" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                    Back
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleBatch() {
+        const type = document.getElementById("announcementType").value;
+
+        const batchSection = document.getElementById("batchSection");
+
+        if (type === "batch") {
+          batchSection.style.display = "block";
+        } else {
+          batchSection.style.display = "none";
+          3;
+        }
+      }
+    </script>
+  </body>
+</html>

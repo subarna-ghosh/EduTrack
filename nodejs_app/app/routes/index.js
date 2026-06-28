@@ -2,8 +2,8 @@ const express = require("express");
 const Router = express.Router();
 
 
-const adminRouter = require("../routes/postmanApiRoutes/admin.routes");
-const apiAuthRoutes = require("../routes/postmanApiRoutes/authRoutes");
+const adminRoutes = require("../routes/api/adminRoutes");
+const apiAuthRoutes = require("../routes/api/authRoutes");
 
 
 
@@ -23,16 +23,16 @@ Router.use("/web", webStudent);
 
 
 const webFaculty = require("./webfaculty");
-Router.use("/webfaculty", webFaculty);
+Router.use("/web", webFaculty);
 
 
 // postman api auth routes
 
-Router.use("/adminapi", adminRouter);
+Router.use("/api", adminRoutes);
 
 // postman api admin routes
 
-Router.use("/authapi", apiAuthRoutes);
+Router.use("/api", apiAuthRoutes);
 
 // postman api faculty routes
 // const webFacultyRoutes = require("./web/facultyRoutes");
