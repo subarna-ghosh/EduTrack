@@ -97,7 +97,7 @@
               <nav class="topbar">
                 <div>
                   <h2 class="page-title">Dashboard</h2>
-                  <p class="page-subtitle">Welcome back, Admin</p>
+                  <p class="page-subtitle">Welcome back, <%=admin.name%></p>
                 </div>
 
                 <div class="top-right">
@@ -149,7 +149,7 @@
                       data-bs-toggle="dropdown"
                     >
                       <i class="fa-solid fa-user-shield me-2"></i>
-                      Admin
+                      <%=admin.name%>
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -327,9 +327,13 @@
                                     <%=val.startTime%> - <%=val.endTime%>
                                 </td>
                                 <td>
-                                    <span class="badge bg-success">
-                                        Upcoming
-                                   </span>
+                                  <% if (val.status === "Upcoming") { %>
+                                    <span class="badge bg-primary">Upcoming</span>
+                                  <% } else if (val.status === "Ongoing") { %>
+                                    <span class="badge bg-success">Ongoing</span>
+                                  <% } else { %>
+                                    <span class="badge bg-secondary">Completed</span>
+                                  <% } %>
                                 </td>
                             </tr>
                           <%})%>

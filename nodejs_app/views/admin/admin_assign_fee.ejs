@@ -44,7 +44,7 @@
                   <select name="studentId" class="form-select" required>
                     <option value="">Select Student</option>
                     <%listStudents.forEach((val)=>{%>
-                    <option value="<%=val.userInfo._id%>"><%=val.userInfo.name%> (<%=val.courseInfo.courseName%>)</option>
+                    <option value="<%=val._id%>"><%=val.userInfo.name%> (<%=val.courseInfo.courseName%>)</option>
                     <%})%>
                   </select>
                 </div>

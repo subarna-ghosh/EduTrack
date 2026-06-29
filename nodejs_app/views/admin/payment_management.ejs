@@ -246,7 +246,7 @@
                 <%}else{%>
                 <%findPayment.forEach((data)=>{%>
                 <tr>
-                  <td><%=data.userInfo ? data.userInfo.name : 'N/A'%></td>
+                  <td><%=data.userInfo.name%></td>
                   <td>₹<%=data.amount%></td>
                   <td>
                     <span class="badge bg-light text-dark border"><%=data.paymentMethod%></span>

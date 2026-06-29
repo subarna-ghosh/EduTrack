@@ -67,7 +67,12 @@
 
   <body>
     <div class="container py-5">
-      <h2 class="page-title">My Batch</h2>
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="page-title">My Batch</h2>
+        <a href="/web/view/student/dashboard" class="btn btn-secondary">
+          ← Back to Dashboard
+        </a>
+      </div>
 
       <div class="row g-4">
         <!-- Batch Information -->
@@ -81,120 +86,76 @@
 
               <div class="info-item">
                 <strong>Course</strong>
-
                 <br />
-
-                MERN Stack Development
+                <%=showSchedule[0].courseInfo.courseName%>
               </div>
 
               <div class="info-item">
                 <strong>Batch</strong>
-
                 <br />
-
-                MERN - A
+                <%=showSchedule[0].batchInfo.batchName%>
               </div>
 
               <div class="info-item">
                 <strong>Faculty</strong>
-
                 <br />
-
-                Rahul Sharma
+                <%=showSchedule[0].facultyUser.name%>
               </div>
 
-              <div class="info-item">
-                <strong>Batch Timing</strong>
-
-                <br />
-
-                10:00 AM - 12:00 PM
-              </div>
             </div>
           </div>
         </div>
 
         <!-- Today's Class -->
-
+        <%if(todayClass){%>
         <div class="col-lg-8">
           <div class="card card-box today-class">
             <div class="card-header bg-white">
               <h5 class="mb-0">Today's Class</h5>
             </div>
-
             <div class="card-body">
-              <h4>Authentication using JWT</h4>
-
-              <p>
-                Today's topic covers JWT authentication, login flow and
-                middleware implementation.
-              </p>
-
+              <h4><%= todayClass.scheduleInfo.topic %></h4>
               <div class="row">
                 <div class="col-md-4">
                   <strong>Faculty</strong>
-
                   <br />
-
-                  Rahul Sharma
+                  <%= todayClass.facultyUser.name %>
                 </div>
-
                 <div class="col-md-4">
                   <strong>Time</strong>
-
                   <br />
-
-                  10:00 AM - 12:00 PM
+                  <%= todayClass.scheduleInfo.startTime %> - <%= todayClass.scheduleInfo.endTime %>
                 </div>
-
                 <div class="col-md-4">
                   <strong>Status</strong>
-
                   <br />
-
                   <span class="badge bg-success"> Live Today </span>
                 </div>
               </div>
-
               <hr />
-
-              <a href="#" class="btn btn-success join-btn">
+              <a href="<%= todayClass.scheduleInfo.meetingLink %>" class="btn btn-success join-btn">
                 <i class="fa-solid fa-video me-2"></i>
-
                 Join Class
               </a>
             </div>
           </div>
         </div>
       </div>
-
+      <%}else{%>
       <!-- Holiday Card -->
-
-      <!-- Replace Today's Class card with this card whenever
-    no schedule is available today. -->
-
-      <!-- <div class="card card-box holiday mt-4">
-
+     <div class="card card-box holiday mt-4">
         <div class="card-body text-center">
-
             <h3>
-
                 No classes today!
-
             </h3>
-
             <p class="mb-0">
-
                 There are no classes scheduled for today.
-
-                Enjoy your day and we'll see you
+                We'll see you
                 in the next class.
-
             </p>
-
         </div>
-
-    </div> -->
+      </div> 
+      <%}%>
 
       <!-- Upcoming Classes -->
 
@@ -209,45 +170,22 @@
               <thead>
                 <tr>
                   <th>Day</th>
-
                   <th>Topic</th>
-
                   <th>Faculty</th>
-
                   <th>Time</th>
                 </tr>
               </thead>
 
               <tbody>
+                <%showSchedule.forEach((val)=>{%>
                 <tr>
-                  <td>Monday</td>
-
-                  <td>Authentication using JWT</td>
-
-                  <td>Rahul Sharma</td>
-
-                  <td>10:00 AM - 12:00 PM</td>
+                  <td><%=val.scheduleInfo.day%></td>
+                  <td><%=val.scheduleInfo.topic%></td>
+                  <td><%=val.facultyUser.name%></td>
+                  <td><%=val.scheduleInfo.startTime%> - <%=val.scheduleInfo.endTime%></td>
                 </tr>
+                <%})%>
 
-                <tr>
-                  <td>Wednesday</td>
-
-                  <td>React Components</td>
-
-                  <td>Rahul Sharma</td>
-
-                  <td>10:00 AM - 12:00 PM</td>
-                </tr>
-
-                <tr>
-                  <td>Friday</td>
-
-                  <td>React Router</td>
-
-                  <td>Rahul Sharma</td>
-
-                  <td>10:00 AM - 12:00 PM</td>
-                </tr>
               </tbody>
             </table>
           </div>

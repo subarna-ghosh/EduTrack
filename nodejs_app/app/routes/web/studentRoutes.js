@@ -3,11 +3,17 @@ const Router = express.Router();
 const StudentController = require("../../controllers/student/StudentController");
 const AnnouncementController = require("../../controllers/student/AnnouncementController");
 const StudentProfileController = require("../../controllers/student/StudentProfileController");
+const StudentBatchController = require("../../controllers/student/StudentBatchController");
 const PaymentController = require("../../controllers/student/PaymentController");
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
 const validateWeb = require("../../middlewares/validateWebMiddleware");
-const { paymentSchema } = require("../../validations/paymentValidation");
+const upload=require("../../utils/uploadImage")
+const {
+  paymentSchema,
+  changePasswordValidation,
+  updateProfileValidation,
+} = require("../../validations/paymentValidation");
 
 // =========================================
 //      student dashboard
@@ -35,7 +41,6 @@ Router.post(
   StudentController.savePayment,
 );
 
-
 // shown below are student profile apis
 Router.get(
   "/view/student/profile",
@@ -44,6 +49,44 @@ Router.get(
   StudentProfileController.viewStudentProfile,
 );
 
+Router.get(
+  "/view/edit/my/student/profile",
+  authCheck,
+  roleCheck("student"),
+  StudentProfileController.viewEditStudentProfile,
+);
+
+Router.post(
+  "/student/my/profile/update",
+  authCheck,
+  roleCheck("student"),
+  validateWeb(updateProfileValidation, "/web/view/edit/my/student/profile"),
+  upload.single("profileImage"),
+  StudentProfileController.updateMyProfile,
+);
+
+Router.get(
+  "/view/change/my/password",
+  authCheck,
+  roleCheck("student"),
+  StudentProfileController.viewStudentChangePassword,
+);
+
+Router.post(
+  "/change/my/password",
+  authCheck,
+  roleCheck("student"),
+  validateWeb(changePasswordValidation, "/web/view/student/profile"),
+  StudentProfileController.changePassword,
+);
+
+// shown below are student's batch apis
+Router.get(
+  "/view/student/batch",
+  authCheck,
+  roleCheck("student"),
+  StudentBatchController.viewStudentBatch,
+);
 
 // shown below are student announcement apis
 Router.get(
@@ -52,7 +95,6 @@ Router.get(
   roleCheck("student"),
   AnnouncementController.showAnnouncement,
 );
-
 
 // shown below are student pay history apis
 Router.get(
