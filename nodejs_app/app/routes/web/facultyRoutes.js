@@ -8,7 +8,8 @@ const { projectSchema } = require("../../validations/projectValidation");
 const uploadProjectImage = require("../../utils/uploadImage");
 const validateWeb = require("../../middlewares/validateWebMiddleware");
 const coursematerialController = require("../../controllers/faculty/CourseMaterialController");
-
+const AnnouncementController = require("../../controllers/faculty/AnnouncementController");
+const BatchController = require("../../controllers/faculty/BatchController");
 
 router.get("/view/faculty/dashboard", AuthCheck, RoleCheck('faculty'), FacultyController.viewFacultyDashboard);
 
@@ -36,7 +37,7 @@ router.get(
   "/faculty/batch/view",
   AuthCheck,
   RoleCheck("faculty"),
-  FacultyController.viewFacultyBatch
+  BatchController.viewFacultyBatch
 );
 
 
@@ -44,7 +45,7 @@ router.get(
   "/faculty/singlebatch/view/:id",
   AuthCheck,
   RoleCheck("faculty"),
-  FacultyController.viewFacultySingleBatch
+  BatchController.viewFacultySingleBatch
 );
 
 
@@ -100,8 +101,13 @@ router.post(
   ProjectController.projectUpdate
 );
 
-
-
+router.get(
+  "/project/delete/:id",
+  AuthCheck,
+  RoleCheck("faculty"),
+  uploadProjectImage.single("projectImage"),
+  ProjectController.projectDelete
+);
 
 
 // course material
@@ -130,12 +136,20 @@ router.post(
 )
 
 
-// router.get(
-//   "/faculty/view/singlecoursematerial/:id",
-//   AuthCheck,
-//   RoleCheck("faculty"),
-//   coursematerialController.viewSingleCourseMaterial
-// )
+router.get(
+  "/view/show/announcement",
+  AuthCheck,
+  RoleCheck("faculty"),
+  AnnouncementController.showAnnouncement
+);
+
+
+router.get(
+  "/faculty/view/singlecoursematerial/:id",
+  AuthCheck,
+  RoleCheck("faculty"),
+  coursematerialController.viewSingleCourseMaterial
+)
 
 
 module.exports = router;

@@ -90,8 +90,6 @@ class FacultyController {
       ]);
 
       console.log(findBatch);
-      
-
       return res.render("faculty/faculty_batch", { findBatch, profile });
 
     } catch (error) {

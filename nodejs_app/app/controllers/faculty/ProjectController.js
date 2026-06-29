@@ -7,9 +7,7 @@ const Project = require("../../models/Project");
 
 const cloudinary = require("../../config/cloudinary");
 
-
 class ProjectController {
-
   async viewProjectUploadDashboard(req, res) {
     try {
       const id = req.user.id;
@@ -154,9 +152,8 @@ class ProjectController {
       const limit = 5;
       const skip = (page - 1) * limit;
 
-
       const totalProjects = await Project.countDocuments({
-        facultyId: profileId
+        facultyId: profileId,
       });
 
       const totalPages = Math.ceil(totalProjects / limit);
@@ -164,8 +161,8 @@ class ProjectController {
       const getProjectInfo = await Project.aggregate([
         {
           $match: {
-            facultyId: new mongoose.Types.ObjectId(profileId)
-          }
+            facultyId: new mongoose.Types.ObjectId(profileId),
+          },
         },
         {
           $lookup: {
@@ -195,19 +192,18 @@ class ProjectController {
         { $unwind: "$batchInfo" },
         { $unwind: "$userInfo" },
         {
-          $skip: skip
+          $skip: skip,
         },
         {
-          $limit: limit
-        }
+          $limit: limit,
+        },
       ]);
-
 
       return res.render("faculty/faculty_project", {
         getProjectInfo,
         profile,
         currentPage: page,
-        totalPages
+        totalPages,
       });
     } catch (error) {
       console.log(error);
@@ -287,7 +283,6 @@ class ProjectController {
 
   async viewFacultySingleProject(req, res) {
     try {
-
       const projectId = req.params.id;
       const id = req.user.id;
       const profile = await Faculty.findOne({ userId: id });
@@ -346,8 +341,8 @@ class ProjectController {
             from: "students",
             localField: "batchId",
             foreignField: "batchId",
-            as: "studentList"
-          }
+            as: "studentList",
+          },
         },
         {
           $lookup: {
@@ -387,14 +382,12 @@ class ProjectController {
             preserveNullAndEmptyArrays: true,
           },
         },
-
       ]);
 
       // console.log(singleProject);
       // console.log(singleProject[0].studentList[0].address);
 
       return res.render("faculty/faculty_single_project", { singleProject });
-
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while viewing faculty");
@@ -405,7 +398,6 @@ class ProjectController {
 
   async viewProjectEdit(req, res) {
     try {
-
       const projectId = req.params.id;
       const id = req.user.id;
       const profile = await Faculty.findOne({ userId: id });
@@ -419,14 +411,12 @@ class ProjectController {
             facultyId: new mongoose.Types.ObjectId(profile._id),
           },
         },
-
       ]);
 
       // console.log(singleProject);
       // console.log(singleProject[0].studentList[0].address);
 
       return res.render("faculty/project_edit", { singleProject });
-
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while viewing faculty");
@@ -444,28 +434,28 @@ class ProjectController {
       const singleProject = await Project.aggregate([
         {
           $match: {
-            _id: new mongoose.Types.ObjectId(projectId)
-          }
+            _id: new mongoose.Types.ObjectId(projectId),
+          },
         },
         {
           $lookup: {
             from: "batches",
             localField: "batchId",
             foreignField: "_id",
-            as: "batch"
-          }
+            as: "batch",
+          },
         },
         {
-          $unwind: "$batch"
+          $unwind: "$batch",
         },
         {
           $project: {
             title: 1,
             description: 1,
             batchId: 1,
-            batchName: "$batch.name"
-          }
-        }
+            batchName: "$batch.name",
+          },
+        },
       ]);
 
       console.log(singleProject);
@@ -524,7 +514,6 @@ class ProjectController {
 
       req.flash("success", "Project updated successfully");
       return res.redirect("/web/faculty/allproject/view");
-
     } catch (error) {
       console.log(error);
 
@@ -533,6 +522,30 @@ class ProjectController {
     }
   }
 
+  async projectDelete(req, res) {
+    try {
+      const id = req.params.id;
+
+      // const profile = await Faculty.findOne({ userId: req.user.id });
+
+      const presentData = await Project.findById(id);
+
+      if (presentData.projectImagePublicId) {
+        await cloudinary.uploader.destroy(presentData.projectImagePublicId);
+      }
+
+      await Project.findByIdAndDelete(id);
+
+      req.flash("success", "Project deleted successfully");
+      return res.redirect("/web/faculty/allproject/view");
+      
+    } catch (error) {
+      console.log(error);
+
+      req.flash("error", "Something went wrong while updating project");
+      return res.redirect("/web/view/faculty/dashboard");
+    }
+  }
 }
 
 module.exports = new ProjectController();

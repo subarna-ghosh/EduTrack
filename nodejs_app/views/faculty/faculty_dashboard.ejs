@@ -223,7 +223,7 @@ background-color: #7dd8ff !important; /* Yellow */
           </li>
 
           <li>
-            <a href="#" class="nav-link">
+            <a href="/web/view/show/announcement" class="nav-link">
               <i class="fa-solid fa-bullhorn"></i>
               Announcements
             </a>
@@ -277,7 +277,7 @@ background-color: #7dd8ff !important; /* Yellow */
           <div class="col-lg-3 col-md-6">
             <div class="stats-card blue">
               <h6>Assigned Batches</h6>
-              <h2>8</h2>
+              <h2><%- totalActiveBatch.length %></h2>
             </div>
           </div>
 
@@ -288,19 +288,19 @@ background-color: #7dd8ff !important; /* Yellow */
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-6">
+          <!-- <div class="col-lg-3 col-md-6">
             <div class="stats-card orange">
               <h6>Total Students</h6>
               <h2>210</h2>
             </div>
-          </div>
-
+          </div> -->
+<!-- 
           <div class="col-lg-3 col-md-6">
             <div class="stats-card red">
               <h6>Pending Reviews</h6>
               <h2>12</h2>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- SCHEDULE + ATTENDANCE -->
@@ -361,7 +361,7 @@ background-color: #7dd8ff !important; /* Yellow */
           <div class="d-flex justify-content-between mb-3">
             <h5>Assigned Batches</h5>
 
-            <button class="btn btn-sm btn-outline-primary">Manage</button>
+            <!-- <button class="btn btn-sm btn-outline-primary">Manage</button> -->
           </div>
 
           <table class="table">
@@ -375,22 +375,28 @@ background-color: #7dd8ff !important; /* Yellow */
             </thead>
 
             <tbody>
-              <tr>
-                <td>WA-481</td>
-                <td>Node JS</td>
-                <td>35</td>
-                <td>
-                  <span class="badge bg-success">Active</span>
-                </td>
-              </tr>
+              <% totalActiveBatch.forEach(batch => { %>
+<tr>
 
-              <tr>
-                <td>WA-500</td>
-                <td>React JS</td>
-                <td>42</td>
-                <td>
-                  <span class="badge bg-success">Active</span>
+  <td>
+                  <%= batch.batchName %>
                 </td>
+                 
+                <td>
+                  <%= batch.courseName %>
+                </td>
+
+                <td>
+                  <%= batch.studentCount %>
+                </td>
+                
+                <td>
+                  <span class="badge <%= batch.status === 'active' ? 'bg-success' : 'bg-danger' %>">
+    <%= batch.status %>
+</span>
+                </td>
+            <%  }); %>
+              
               </tr>
             </tbody>
           </table>

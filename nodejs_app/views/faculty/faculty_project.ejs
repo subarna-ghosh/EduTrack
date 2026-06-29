@@ -65,6 +65,14 @@
                                     </thead>
 
                                     <tbody>
+                                        <% if(getProjectInfo.length == 0) { %>
+                                            <tr>
+                                                <td colspan="9" style="text-align: center;">
+                                                    ---------- No Data Found -----------
+                                                </td>
+                                            </tr>
+                                        <% } %>
+                                            
                                         <% getProjectInfo.forEach((project, index)=>{%>
                                             <tr>
                                                 <td>
@@ -100,7 +108,7 @@
                                                             class="btn btn-sm btn-info">View</a>
                                                         <a href="/web/faculty/edit/view/<%= project._id %>"
                                                             class="btn btn-sm btn-warning">Edit</a>
-                                                        <a href="/web/delete/faculty/<%= project._id %>"
+                                                        <a href="/web/project/delete/<%= project._id %>"
                                                             class="btn btn-sm btn-danger">Delete</a>
                                                     </div>
                                                 </td>

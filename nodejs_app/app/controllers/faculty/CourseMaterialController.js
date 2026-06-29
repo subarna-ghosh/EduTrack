@@ -213,123 +213,123 @@ console.log("body =", req.body);
         }
     }
 
-    // async viewSingleCourseMaterial(req, res) {
-    //     try {
+    async viewSingleCourseMaterial(req, res) {
+        try {
         
-    //           const materialId = req.params.id;
-    //           const id = req.user.id;
-    //           const profile = await Faculty.findOne({ userId: id });
+              const materialId = req.params.id;
+              const id = req.user.id;
+              const profile = await Faculty.findOne({ userId: id });
         
-    //           // console.log(id);
+              // console.log(id);
         
-    //           const singleCourseMaterial = await CourseMaterial.aggregate([
-    //             {
-    //               $match: {
-    //                 _id: new mongoose.Types.ObjectId(materialId),
-    //                 facultyId: new mongoose.Types.ObjectId(profile._id),
-    //               },
-    //             },
-    //             {
-    //               $lookup: {
-    //                 from: "faculties",
-    //                 localField: "facultyId",
-    //                 foreignField: "_id",
-    //                 as: "facultyList",
-    //               },
-    //             },
-    //             {
-    //               $lookup: {
-    //                 from: "batches",
-    //                 localField: "batchId",
-    //                 foreignField: "_id",
-    //                 as: "batchList",
-    //               },
-    //             },
-    //             {
-    //               $lookup: {
-    //                 from: "courses",
-    //                 localField: "batchList.courseId",
-    //                 foreignField: "_id",
-    //                 as: "courseInfo",
-    //               },
-    //             },
-    //             {
-    //               $lookup: {
-    //                 from: "users",
-    //                 localField: "facultyList.userId",
-    //                 foreignField: "_id",
-    //                 as: "userInfo",
-    //               },
-    //             },
-    //             {
-    //               $lookup: {
-    //                 from: "departments",
-    //                 localField: "facultyList.deptId",
-    //                 foreignField: "_id",
-    //                 as: "departmentInfo",
-    //               },
-    //             },
-    //             {
-    //               $lookup: {
-    //                 from: "students",
-    //                 localField: "batchId",
-    //                 foreignField: "batchId",
-    //                 as: "studentList"
-    //               }
-    //             },
-    //             {
-    //               $lookup: {
-    //                 from: "users",
-    //                 localField: "studentList.userId",
-    //                 foreignField: "_id",
-    //                 as: "studentInfo",
-    //               },
-    //             },
-    //             {
-    //               $unwind: {
-    //                 path: "$facultyList",
-    //                 preserveNullAndEmptyArrays: true,
-    //               },
-    //             },
-    //             {
-    //               $unwind: {
-    //                 path: "$userInfo",
-    //                 preserveNullAndEmptyArrays: true,
-    //               },
-    //             },
-    //             {
-    //               $unwind: {
-    //                 path: "$departmentInfo",
-    //                 preserveNullAndEmptyArrays: true,
-    //               },
-    //             },
-    //             {
-    //               $unwind: {
-    //                 path: "$batchList",
-    //                 preserveNullAndEmptyArrays: true,
-    //               },
-    //             },
-    //             {
-    //               $unwind: {
-    //                 path: "$courseInfo",
-    //                 preserveNullAndEmptyArrays: true,
-    //               },
-    //             },
+              const singleCourseMaterial = await CourseMaterial.aggregate([
+                {
+                  $match: {
+                    _id: new mongoose.Types.ObjectId(materialId),
+                    facultyId: new mongoose.Types.ObjectId(profile._id),
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "faculties",
+                    localField: "facultyId",
+                    foreignField: "_id",
+                    as: "facultyList",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "batches",
+                    localField: "batchId",
+                    foreignField: "_id",
+                    as: "batchList",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "courses",
+                    localField: "batchList.courseId",
+                    foreignField: "_id",
+                    as: "courseInfo",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "facultyList.userId",
+                    foreignField: "_id",
+                    as: "userInfo",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "departments",
+                    localField: "facultyList.deptId",
+                    foreignField: "_id",
+                    as: "departmentInfo",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "students",
+                    localField: "batchId",
+                    foreignField: "batchId",
+                    as: "studentList"
+                  }
+                },
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "studentList.userId",
+                    foreignField: "_id",
+                    as: "studentInfo",
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$facultyList",
+                    preserveNullAndEmptyArrays: true,
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$userInfo",
+                    preserveNullAndEmptyArrays: true,
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$departmentInfo",
+                    preserveNullAndEmptyArrays: true,
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$batchList",
+                    preserveNullAndEmptyArrays: true,
+                  },
+                },
+                {
+                  $unwind: {
+                    path: "$courseInfo",
+                    preserveNullAndEmptyArrays: true,
+                  },
+                },
         
-    //           ]);
+              ]);
         
-    //           console.log(singleCourseMaterial);
-    //           // console.log(singleProject[0].studentList[0].address);
+              console.log(singleCourseMaterial);
+              // console.log(singleProject[0].studentList[0].address);
         
-    //         //   return res.render("faculty/faculty_single_project", { singleProject });
+              return res.render("faculty/faculty_single_coursematerial", { singleCourseMaterial });
         
-    //         } catch (error) {
-    //           console.log(error);
-    //           req.flash("error", "Something went wrong while viewing coursematerial");
+            } catch (error) {
+              console.log(error);
+              req.flash("error", "Something went wrong while viewing coursematerial");
         
-    //           return res.redirect("/web/view/add/faculty/list");
-    //         }
-    // }
+              return res.redirect("/web/view/add/faculty/list");
+            }
+    }
 }
 
 module.exports = new courseMaterialController()

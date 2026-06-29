@@ -240,14 +240,14 @@
         <!-- STATS -->
 
         <div class="row g-4 mb-4">
-          <div class="col-lg-3 col-md-6">
+          <!-- <div class="col-lg-3 col-md-6">
             <div class="stats-card blue">
               <h6>Assigned Batches</h6>
               <h2>8</h2>
             </div>
-          </div>
+          </div> -->
 
-          <div class="col-lg-3 col-md-6">
+          <!-- <div class="col-lg-3 col-md-6">
             <div class="stats-card green">
               <h6>Today's Classes</h6>
               <h2>4</h2>
@@ -267,7 +267,7 @@
               <h2>12</h2>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- SCHEDULE + ATTENDANCE -->
 
@@ -327,7 +327,7 @@
           <div class="d-flex justify-content-between mb-3">
             <h5>Assigned Batches</h5>
 
-            <button class="btn btn-sm btn-outline-primary">Manage</button>
+            
           </div>
 
           <% if (findBatch && findBatch.length> 0) { %>
@@ -366,7 +366,9 @@
                 </td>
 
                 <td>
-                  <span class="badge bg-success"><%= batch.status %></span>
+                 <span class="badge <%= batch.status === 'active' ? 'bg-success' : 'bg-danger' %>">
+    <%= batch.status %>
+</span>
                 </td>
 
                 <td>

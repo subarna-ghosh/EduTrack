@@ -6,9 +6,7 @@ const Faculty = require("../../models/FacultyProfile");
 class announcementController {
 
   async showAnnouncement(req, res) {
-
-    // userId from token
-
+    
     const faculty = await Faculty.findOne({ userId: req.user.id });
 
     const announcementsMade = await Announcement.find({
@@ -20,7 +18,7 @@ class announcementController {
       ],
     }).sort({ createdAt: -1 });
 
-    return res.render("student/show_announcement", { announcementsMade });
+    return res.render("faculty/show_announcement", { announcementsMade });
   }
 }
 

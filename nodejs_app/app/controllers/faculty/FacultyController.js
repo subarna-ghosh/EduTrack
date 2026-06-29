@@ -1,31 +1,104 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Faculty = require("../../models/FacultyProfile");
 const Batch = require("../../models/Batch");
 
 class FacultyController {
-
   async viewFacultyDashboard(req, res) {
     try {
       const profile = await Faculty.findOne({ userId: req.user.id });
+      // const totalStudent = await Student8.countDocuments();
+      // const totalFaculty = await Faculty.countDocuments();
+      // const totalCourse = await Course.countDocuments();
 
-      // console.log(profile);
+      // const totalActiveBatch = await Batch.countDocuments({ status: "active" });
+
+      const totalActiveBatch = await Faculty.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(profile._id),
+          },
+        },
+        {
+          $lookup: {
+            from: "batches",
+            localField: "_id",
+            foreignField: "facultyId",
+            as: "batchList",
+          },
+        },
+        {
+          $unwind: {
+            path: "$batchList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: "courses",
+            localField: "batchList.courseId",
+            foreignField: "_id",
+            as: "courseList",
+          },
+        },
+        {
+          $unwind: {
+            path: "$courseList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "batchList._id",
+            foreignField: "batchId",
+            as: "studentList",
+          },
+        },
+        {
+          $unwind: {
+            path: "$studentList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+  $group: {
+    _id: "$batchList._id",
+    batchName: { $first: "$batchList.batchName" },
+    courseName: { $first: "$courseList.courseName" },
+    status: { $first: "$batchList.status" },
+    studentCount: {
+      $sum: {
+        $cond: [
+          { $ifNull: ["$studentList._id", false] },
+          1,
+          0
+        ]
+      }
+    }
+  }
+}
+      ]);
+
+      console.log(totalActiveBatch);
 
       return res.render("faculty/faculty_dashboard", {
-        profile
+        profile,
+        totalActiveBatch
       });
     } catch (error) {
       console.log(error.message);
-
+      req.flash(
+        "error",
+        "Something went wrong while viewing faculty dashboard",
+      );
       return res.redirect("/web/view/login");
     }
-
   }
 
   async facultyProfile(req, res) {
     try {
-
       const id = req.params.id;
       const showFacultyProfile = await Faculty.aggregate([
         {
@@ -52,11 +125,11 @@ class FacultyController {
         { $unwind: "$userInfo" },
         { $unwind: "$deptInfo" },
       ]);
+
       return res.render("faculty/faculty_profile", { showFacultyProfile });
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while viewing faculty");
-
       return res.redirect("/web/view/login");
     }
   }
@@ -92,7 +165,7 @@ class FacultyController {
       ]);
 
       return res.render("faculty/faculty_dashboard", {
-        getFacultyInfo
+        getFacultyInfo,
       });
     } catch (error) {
       console.log(error);
@@ -100,162 +173,5 @@ class FacultyController {
       return res.redirect("/web/view/login");
     }
   }
-
-  async viewFacultyBatch(req, res) {
-    try {
-
-      // console.log("Starting");
-      const id = req.user.id;
-      const profile = await Faculty.findOne({ userId: id });
-
-      // console.log(id);
-
-      const findBatch = await Batch.aggregate([
-        {
-          $lookup: {
-            from: "courses",
-            localField: "courseId",
-            foreignField: "_id",
-            as: "courseList",
-          },
-        },
-        {
-          $lookup: {
-            from: "faculties",
-            localField: "facultyId",
-            foreignField: "_id",
-            as: "facultyList",
-          },
-        },
-        {
-          $lookup: {
-            from: "users",
-            localField: "facultyList.userId",
-            foreignField: "_id",
-            as: "userInfo",
-          },
-        },
-        {
-          $match: {
-            "facultyList.userId": new mongoose.Types.ObjectId(id),
-          },
-        },
-
-        {
-          $unwind: {
-            path: "$courseList",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
-            path: "$facultyList",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
-            path: "$userInfo",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-      ]);
-
-
-      // console.log(JSON.stringify(findBatch, null, 2));
-      // console.log(findBatch);
-
-      return res.render("faculty/faculty_batch", { findBatch, profile });
-    } catch (error) {
-      req.flash("error", "Something went wrong while listing batch");
-      return res.redirect("/web/view/faculty/dashboard");
-    }
-  }
-
-  async viewFacultySingleBatch(req, res) {
-    try {
-      const batchId = req.params.id;
-      const id = req.user.id;
-      const profile = await Faculty.findOne({ userId: id });
-
-      // console.log(id);
-
-      const singleBatch = await Batch.aggregate([
-        {
-          $match: {
-            _id: new mongoose.Types.ObjectId(batchId),
-            facultyId: new mongoose.Types.ObjectId(profile._id),
-          },
-        },
-        {
-          $lookup: {
-            from: "faculties",
-            localField: "facultyId",
-            foreignField: "_id",
-            as: "facultyList",
-          },
-        },
-        {
-          $lookup: {
-            from: "courses",
-            localField: "courseId",
-            foreignField: "_id",
-            as: "courseList",
-          },
-        },
-        {
-          $lookup: {
-            from: "users",
-            localField: "facultyList.userId",
-            foreignField: "_id",
-            as: "userInfo",
-          },
-        },
-        {
-          $lookup: {
-            from: "departments",
-            localField: "facultyList.deptId",
-            foreignField: "_id",
-            as: "departmentInfo",
-          },
-        },
-        {
-          $unwind: {
-            path: "$facultyList",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
-            path: "$userInfo",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
-            path: "$departmentInfo",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
-            path: "$courseList",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-      ]);
-
-      // console.log(singleBatch);
-      
-      return res.render("faculty/faculty_single_batch", { singleBatch });
-
-    } catch (error) {
-      console.log(error);
-      req.flash("error", "Something went wrong while viewing faculty");
-
-      return res.redirect("/web/view/add/faculty/list");
-    }
-  }
-  
 }
 module.exports = new FacultyController();
