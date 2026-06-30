@@ -16,12 +16,17 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
     <link rel="stylesheet" href="/assets/css/student.css">
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
   </head>
 
   <body>
     <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
+      <div class="row">
+
+        <!-- SIDEBAR -->
+        <%-include('../layouts/admin_sidebar')%>
+
+        <div class="col-lg-8 main-content">
           <div class="card form-card">
             <!-- Header -->
 

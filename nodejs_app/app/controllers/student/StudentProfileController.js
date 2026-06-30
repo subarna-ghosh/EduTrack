@@ -54,7 +54,9 @@ class StudentProfileController {
       ]);
 
       return res.render("student/student_profile", {
+        student: req.user,
         myProfile,
+        navValue: "Profile",
       });
     } catch (err) {
       console.error(err);
@@ -93,7 +95,11 @@ class StudentProfileController {
         $unwind: "$batchInfo",
       },
     ]);
-    return res.render("student/student_edit_profile", { myProfile });
+    return res.render("student/student_edit_profile", {
+      myProfile,
+      student: req.user,
+      navValue: "Edit Profile",
+    });
   }
 
   async updateMyProfile(req, res) {
@@ -140,7 +146,10 @@ class StudentProfileController {
   }
 
   viewStudentChangePassword(req, res) {
-    return res.render("student/student_change_password");
+    return res.render("student/student_change_password", {
+      student: req.user,
+      navValue: "Change Password",
+    });
   }
 
   async changePassword(req, res) {

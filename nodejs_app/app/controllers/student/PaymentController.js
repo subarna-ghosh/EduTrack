@@ -12,7 +12,7 @@ class PaymentController {
         {
           $match: {
             studentId: findStudent._id,
-            paymentStatus: "approved", // only approved payments
+            paymentStatus: "paid",
           },
         },
         {
@@ -30,6 +30,8 @@ class PaymentController {
         findPayment,
         totalPaid,
         totalTransactions,
+        student: req.user,
+        navValue: "Payment History",
       });
     } catch (err) {
       console.log(err);

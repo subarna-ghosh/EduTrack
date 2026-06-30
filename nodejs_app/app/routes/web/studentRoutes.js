@@ -5,14 +5,17 @@ const AnnouncementController = require("../../controllers/student/AnnouncementCo
 const StudentProfileController = require("../../controllers/student/StudentProfileController");
 const StudentBatchController = require("../../controllers/student/StudentBatchController");
 const PaymentController = require("../../controllers/student/PaymentController");
+const StudentProjectSubmission = require("../../controllers/student/StudentProjectSubmission");
 const authCheck = require("../../middlewares/authCheck");
 const roleCheck = require("../../middlewares/allowRole");
 const validateWeb = require("../../middlewares/validateWebMiddleware");
-const upload=require("../../utils/uploadImage")
+const uploadProjectImage = require("../../utils/uploadImage");
+const upload = require("../../utils/uploadImage");
 const {
   paymentSchema,
   changePasswordValidation,
   updateProfileValidation,
+  projectSubmissionValidation,
 } = require("../../validations/paymentValidation");
 
 // =========================================
@@ -78,6 +81,33 @@ Router.post(
   roleCheck("student"),
   validateWeb(changePasswordValidation, "/web/view/student/profile"),
   StudentProfileController.changePassword,
+);
+
+// shown below are student project submission
+Router.get(
+  "/view/student/project/submission",
+  authCheck,
+  roleCheck("student"),
+  StudentProjectSubmission.viewProjectSubmission,
+);
+
+Router.get(
+  "/view/student/material",
+  authCheck,
+  roleCheck("student"),
+  StudentProjectSubmission.viewStudentMaterial,
+);
+
+Router.post(
+  "/student/project/submit",
+  authCheck,
+  roleCheck("student"),
+  uploadProjectImage.single("submissionFile"),
+  validateWeb(
+    projectSubmissionValidation,
+    "/web/view/student/project/submission",
+  ),
+  StudentProjectSubmission.submitProject,
 );
 
 // shown below are student's batch apis

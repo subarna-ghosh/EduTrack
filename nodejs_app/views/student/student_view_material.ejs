@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Course Materials</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/sidebar.css" />
+    <link rel="stylesheet" href="/assets/css/student_navbar.css" />
+
+    <style>
+      body {
+        background: #f5f7fb;
+        font-family: Arial, sans-serif;
+      }
+
+      .page-wrapper {
+        padding: 40px;
+      }
+
+      .page-title {
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 25px;
+      }
+
+      /* CARD STYLE */
+      .material-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: 0.3s;
+        background: #fff;
+        height: 100%;
+      }
+
+      .material-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .material-card img {
+        height: 180px;
+        object-fit: cover;
+        width: 100%;
+      }
+
+      .card-body {
+        padding: 18px;
+      }
+
+      .card-title {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .meta {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 6px;
+      }
+
+      .badge-file {
+        font-size: 12px;
+        padding: 5px 10px;
+      }
+
+      .btn-group-custom {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn-group-custom button,
+      .btn-group-custom a {
+        flex: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+        <%-include('../layouts/student_sidebar')%>
+        <div class="col-lg-10 main-content">
+          <!-- TOPBAR -->
+          <%-include('../layouts/student_navbar')%>
+          <div>
+
+            <div class="row g-4">
+              <!-- CARD 1 -->
+              <div class="col-lg-4 col-md-6">
+                <div class="material-card">
+                  <img src="https://placehold.co/600x350?text=NumPy" />
+
+                  <div class="card-body">
+                    <div class="card-title">NumPy Presentation</div>
+                    <div class="meta"><b>Faculty:</b> Sneha Das</div>
+                    <div class="meta"><b>Uploaded:</b> 22-06-2026</div>
+                    <div class="meta">
+                      <b>Type:</b>
+                      <span class="badge bg-warning text-dark badge-file"
+                        >PPT</span
+                      >
+                    </div>
+
+                    <div class="btn-group-custom">
+                      <button
+                        class="btn btn-outline-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#materialModal"
+                        data-title="NumPy Presentation"
+                        data-description="Complete NumPy PPT with examples and practice questions."
+                        data-faculty="Sneha Das"
+                        data-date="22-06-2026"
+                        data-type="PPT"
+                      >
+                        Details
+                      </button>
+
+                      <a href="#" class="btn btn-primary" download>
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="materialModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="fw-bold" id="modal-title"></h4>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <p><b>Description:</b></p>
+            <p id="modal-description"></p>
+
+            <hr />
+
+            <p><b>Faculty:</b> <span id="modal-faculty"></span></p>
+            <p><b>Uploaded:</b> <span id="modal-date"></span></p>
+            <p><b>Type:</b> <span id="modal-type"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById("materialModal");
+
+      modal.addEventListener("show.bs.modal", function (event) {
+        const btn = event.relatedTarget;
+
+        document.getElementById("modal-title").textContent =
+          btn.getAttribute("data-title");
+
+        document.getElementById("modal-description").textContent =
+          btn.getAttribute("data-description");
+
+        document.getElementById("modal-faculty").textContent =
+          btn.getAttribute("data-faculty");
+
+        document.getElementById("modal-date").textContent =
+          btn.getAttribute("data-date");
+
+        document.getElementById("modal-type").textContent =
+          btn.getAttribute("data-type");
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

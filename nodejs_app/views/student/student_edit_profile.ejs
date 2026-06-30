@@ -15,67 +15,22 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
-
-    <style>
-      body {
-        background: #f4f6f9;
-      }
-
-      .profile-card {
-        border: none;
-        border-radius: 18px;
-        box-shadow: 0 0.15rem 1.75rem rgba(58, 59, 69, 0.15);
-      }
-
-      .page-title {
-        font-weight: 700;
-        color: #343a40;
-      }
-
-      .form-label {
-        font-weight: 600;
-      }
-
-      .image-preview {
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        overflow: hidden;
-        border: 3px solid #dee2e6;
-        margin: auto;
-        position: relative;
-        background: #fff;
-      }
-
-      .image-preview img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .image-preview i {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 50px;
-        color: #adb5bd;
-      }
-
-      .readonly-box {
-        background: #f8f9fa;
-      }
-    </style>
+    <link rel="stylesheet" href="/assets/css/sidebar.css" />
+    <link rel="stylesheet" href="/assets/css/student_profile_edit.css" />
+    <link rel="stylesheet" href="/assets/css/student_navbar.css" />
   </head>
 
   <body>
-    <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+        <%-include('../layouts/student_sidebar')%>
+        <div class="col-lg-10 main-content">
+          <!-- TOPBAR -->
+          <%-include('../layouts/student_navbar')%>
           <div class="card profile-card">
             <div class="card-header bg-white py-3">
-              <div class="d-flex justify-content-between align-items-center">
-                <h3 class="page-title mb-0">Edit Profile</h3>
+              <div class="d-flex justify-content-end align-items-center">
 
                 <a href="/web/view/student/profile" class="btn btn-secondary">
                   <i class="fa-solid fa-arrow-left me-2"></i>
@@ -147,7 +102,9 @@
                     rows="4"
                     class="form-control"
                     required
-                  ><%=myProfile[0].address%></textarea>
+                  >
+<%=myProfile[0].address%></textarea
+                  >
                 </div>
 
                 <hr class="my-4" />
@@ -212,6 +169,11 @@
         </div>
       </div>
     </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
 
     <script>
       function preview(event) {

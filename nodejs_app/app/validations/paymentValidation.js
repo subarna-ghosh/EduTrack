@@ -44,8 +44,26 @@ const updateProfileValidation = Joi.object({
   }),
 });
 
+const projectSubmissionValidation = Joi.object({
+  projectId: Joi.string().hex().length(24).required().messages({
+    "string.empty": "Project ID is required.",
+    "string.hex": "Invalid Project ID.",
+    "string.length": "Invalid Project ID.",
+    "any.required": "Project ID is required.",
+  }),
+
+  githubLink: Joi.string().uri().allow("", null).messages({
+    "string.uri": "Please enter a valid GitHub repository URL.",
+  }),
+
+  remarks: Joi.string().trim().max(500).allow("", null).messages({
+    "string.max": "Remarks cannot exceed 500 characters.",
+  }),
+});
+
 module.exports = {
   paymentSchema,
   changePasswordValidation,
   updateProfileValidation,
+  projectSubmissionValidation,
 };

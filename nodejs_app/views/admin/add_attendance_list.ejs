@@ -14,10 +14,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/assets/css/attendance.css" />
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
   </head>
 
   <body>
-    <div class="page-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+        <%-include('../layouts/admin_sidebar')%>
+        <div class="col-lg-8 main-content">
+          <div>
       <h2 class="page-title">Attendance List</h2>
 
       <div class="attendance-card">
@@ -34,9 +40,6 @@
           </form>
 
           <div class="d-flex gap-2">
-            <a href="/web/view/admin/dashboard" class="btn btn-secondary"
-              ><i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard</a
-            >
             <a href="/web/view/mark/attendance" class="btn btn-primary"> + Mark Attendance </a>
           </div>
 
@@ -186,6 +189,9 @@
           </nav>
         </div>
 
+      </div>
+    </div>
+        </div>
       </div>
     </div>
      <script>

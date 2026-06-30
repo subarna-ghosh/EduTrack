@@ -87,7 +87,12 @@ class StudentBatchController {
     const todayClass = showSchedule.find(
       (item) => item.scheduleInfo.day === today,
     );
-    return res.render("student/my_batch", { showSchedule, todayClass });
+    return res.render("student/my_batch", {
+      showSchedule,
+      todayClass,
+      student: req.user,
+      navValue: "Batch",
+    });
   }
 }
 module.exports = new StudentBatchController();

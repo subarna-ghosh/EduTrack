@@ -6,6 +6,7 @@ const User = require("../../models/User");
 const Fee = require("../../models/Fee");
 const Payment = require("../../models/Payment");
 const Batch = require("../../models/Batch");
+const Announcement = require("../../models/Announcement");
 class StudentController {
   async viewStudentDashboard(req, res) {
     const personalInfo = await Student.aggregate([
@@ -139,19 +140,39 @@ class StudentController {
       //   },
       // },
     ]);
-    const paymentSummary = await Fee.findOne({});
+
+    const student = await Student.findOne({
+      userId: req.user.id,
+    });
+
+    const listFees = await Fee.findOne({
+      studentId: student._id,
+    });
+
+    const announcementsMade = await Announcement.find({
+      status: "active",
+      $or: [
+        { announcementType: "global" },
+        { announcementType: "student" },
+        { announcementType: "batch", batchId: student.batchId },
+      ],
+    }).sort({ createdAt: -1 });
+
     return res.render("student/student_dashboard", {
       student: req.user,
       personalInfo,
       batchAllotment,
       showSchedule,
+      listFees,
+      announcementsMade,
+      navValue: "Dashboard",
     });
   }
 
   async viewStudentPayNow(req, res) {
     // Get the student's profile using the logged-in user's ID
     const student = await Student.findOne({
-      userId: req.user.id,
+      userId: req.user.id,   
     });
 
     if (!student) {
@@ -171,10 +192,11 @@ class StudentController {
 
     return res.render("student/student_pay_now", {
       listFees,
+      student: req.user,
+      navValue: "Pay Now",
     });
   }
 
-  
   async savePayment(req, res) {
     try {
       const { amount, paymentMethod } = req.body;

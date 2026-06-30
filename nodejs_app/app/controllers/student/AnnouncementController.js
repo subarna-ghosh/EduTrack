@@ -16,7 +16,11 @@ class AnnouncementController {
       ],
     }).sort({ createdAt: -1 });
 
-    return res.render("student/show_announcement", { announcementsMade });
+    return res.render("student/show_announcement", {
+      announcementsMade,
+      student: req.user,
+      navValue: "Announcements",
+    });
   }
 }
 module.exports = new AnnouncementController();

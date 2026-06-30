@@ -14,10 +14,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="/assets/css/admin_schedule_class.css" />
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
   </head>
 
   <body>
-    <div class="page-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+        <%-include('../layouts/admin_sidebar')%>
+        <div class="col-lg-8 main-content">
+          <div>
       <h2 class="page-title">Batch Schedule List</h2>
 
       <div class="schedule-card">
@@ -37,9 +43,6 @@
           </form>
 
           <div class="d-flex gap-2">
-            <a href="/web/view/admin/dashboard" class="btn btn-secondary">
-              ← Back to Dashboard
-            </a>
 
             <a href="/web/view/create/schedule" class="btn btn-primary">
               + Create Schedule
@@ -94,8 +97,8 @@
                 <td><%=new Date(val.createdAt).toLocaleDateString("en-GB")%></td>
                 <td>
                   <div class="action-btns">
-                    <a href="/web/batch/schedule/edit/<%=val._id %>" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i>Edit</a>
-                    <a href="/web/batch/schedule/delete/<%=val._id %>" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>Delete</a>
+                    <a href="/web/batch/schedule/edit/<%=val._id %>" class="btn btn-sm btn-warning"></i>Edit</a>
+                    <a href="/web/batch/schedule/delete/<%=val._id %>" class="btn btn-sm btn-danger"></i>Delete</a>
                   </div>
                 </td>
               </tr>
@@ -127,6 +130,9 @@
           </nav>
         </div> 
 
+      </div>
+    </div>
+        </div>
       </div>
     </div>
     <script>

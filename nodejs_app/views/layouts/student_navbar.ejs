@@ -1,0 +1,51 @@
+<nav class="topbar">
+  <div>
+    <h2 class="page-title"><%=navValue%></h2>
+    <p class="page-subtitle">Welcome back, <%=student.name%></p>
+  </div>
+
+  <div class="top-right">
+    <button class="top-btn notification-btn">
+      <i class="fa-regular fa-bell"></i>
+      <span class="notification-count">2</span>
+    </button>
+
+    <a href="#" class="top-btn">
+      <i class="fa-regular fa-circle-question"></i>
+      Help Center
+    </a>
+
+    <a href="/web/view/student/pay/now" class="pay-btn">
+      <i class="fa-solid fa-indian-rupee-sign"></i>
+      Pay Now
+    </a>
+
+    <div class="dropdown">
+      <button
+        type="button"
+        class="profile-dropdown dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="fa-solid fa-user-graduate me-2"></i>
+        <%=student.name%>
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" href="#"> Profile </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item" href="#"> Settings </a>
+        </li>
+
+        <li><hr class="dropdown-divider" /></li>
+
+        <li>
+          <a class="dropdown-item text-danger" href="/web/logout"> Logout </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

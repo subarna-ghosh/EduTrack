@@ -14,10 +14,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/assets/css/attendance.css" />
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
   </head>
 
   <body>
-    <div class="page-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+        <%-include('../layouts/admin_sidebar')%>
+        <div class="col-lg-8 main-content">
+          <div >
       <h2 class="page-title">Mark Attendance</h2>
 
       <div class="attendance-card">
@@ -146,6 +152,9 @@
         <%}%>
 
 
+      </div>
+    </div>
+        </div>
       </div>
     </div>
   </body>
