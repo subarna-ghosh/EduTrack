@@ -3,16 +3,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Faculty = require("../../models/FacultyProfile");
 const Batch = require("../../models/Batch");
+const Batchschedule = require('../../models/BatchSchedule');
+const Announcement = require('../../models/Announcement');
+const Project = require("../../models/Project");
 
 class FacultyController {
+  
   async viewFacultyDashboard(req, res) {
     try {
       const profile = await Faculty.findOne({ userId: req.user.id });
-      // const totalStudent = await Student8.countDocuments();
-      // const totalFaculty = await Faculty.countDocuments();
-      // const totalCourse = await Course.countDocuments();
-
-      // const totalActiveBatch = await Batch.countDocuments({ status: "active" });
 
       const totalActiveBatch = await Faculty.aggregate([
         {
@@ -63,29 +62,158 @@ class FacultyController {
           },
         },
         {
-  $group: {
-    _id: "$batchList._id",
-    batchName: { $first: "$batchList.batchName" },
-    courseName: { $first: "$courseList.courseName" },
-    status: { $first: "$batchList.status" },
-    studentCount: {
-      $sum: {
-        $cond: [
-          { $ifNull: ["$studentList._id", false] },
-          1,
-          0
-        ]
-      }
-    }
-  }
-}
+          $group: {
+            _id: "$batchList._id",
+            batchName: { $first: "$batchList.batchName" },
+            courseName: { $first: "$courseList.courseName" },
+            status: { $first: "$batchList.status" },
+            studentCount: {
+              $sum: {
+                $cond: [
+                  { $ifNull: ["$studentList._id", false] },
+                  1,
+                  0
+                ]
+              }
+            }
+          }
+        }
       ]);
 
-      console.log(totalActiveBatch);
+      const facultyProfile = await Faculty.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(profile._id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userList",
+          },
+        },
+        {
+          $unwind: {
+            path: "$userList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+
+      ])
+      // console.log(totalActiveBatch);
+
+      // console.log(facultyProfile);
+
+      const today = new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+      });
+
+      // Example: "Monday", "Tuesday", etc.
+      // console.log(today);
+
+      const todaySchedule = await Batchschedule.aggregate([
+        {
+          $match: {
+            facultyId: profile._id,
+            day: today,
+          },
+        },
+        {
+          $lookup: {
+            from: "batches",
+            localField: "batchId",
+            foreignField: "_id",
+            as: "batch"
+          }
+        },
+        {
+          $unwind: "$batch"
+        },
+        {
+          $lookup: {
+            from: "courses",
+            localField: "batch.courseId",
+            foreignField: "_id",
+            as: "course"
+          }
+        },
+        {
+          $unwind: "$course"
+        },
+        {
+          $sort: {
+            startTime: 1
+          }
+        }
+      ]);
+
+      // console.log(todaySchedule);
+
+      //  const batches = await Batch.find({
+      //       facultyId: profile._id,
+      //       isDeleted: false
+      //   }).select("_id");
+
+      // const batchIds = batches.map(batch => batch._id);
+
+      const announcements = await Announcement.find({
+        status: "active",
+        $or: [
+          { announcementType: "global" },
+          {
+            announcementType: "batch",
+          },
+          {
+            announcementType: "faculty",
+          }
+        ]
+      }).sort({ createdAt: -1 });
+
+      // console.log(announcements);
+
+      const allProject = await Project.aggregate([
+        {
+          $match: {
+            facultyId: profile._id,
+
+          },
+        },
+        {
+          $lookup: {
+            from: "batches",
+            localField: "batchId",
+            foreignField: "_id",
+            as: "batch"
+          }
+        },
+        {
+          $unwind: "$batch"
+        },
+        {
+          $lookup: {
+            from: "courses",
+            localField: "batch.courseId",
+            foreignField: "_id",
+            as: "course"
+          }
+        },
+        {
+          $unwind: "$course"
+        },
+
+      ]);
+
+      // console.log(facultyProfile);
 
       return res.render("faculty/faculty_dashboard", {
-        profile,
-        totalActiveBatch
+        // profile,
+        facultyProfile,
+        totalActiveBatch,
+        todaySchedule,
+        announcements,
+        allProject
       });
     } catch (error) {
       console.log(error.message);
@@ -94,6 +222,7 @@ class FacultyController {
         "Something went wrong while viewing faculty dashboard",
       );
       return res.redirect("/web/view/login");
+    
     }
   }
 

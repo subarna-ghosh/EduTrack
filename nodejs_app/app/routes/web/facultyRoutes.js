@@ -5,11 +5,13 @@ const ProjectController = require("../../controllers/faculty/ProjectController")
 const AuthCheck = require("../../middlewares/authCheck");
 const RoleCheck = require("../../middlewares/allowRole");
 const { projectSchema } = require("../../validations/projectValidation");
+const { coursematerialSchema } = require("../../validations/coursematerialvalidation");
 const uploadProjectImage = require("../../utils/uploadImage");
 const validateWeb = require("../../middlewares/validateWebMiddleware");
 const coursematerialController = require("../../controllers/faculty/CourseMaterialController");
 const AnnouncementController = require("../../controllers/faculty/AnnouncementController");
 const BatchController = require("../../controllers/faculty/BatchController");
+const CalenderController = require("../../controllers/faculty/CalenderController");
 
 router.get("/view/faculty/dashboard", AuthCheck, RoleCheck('faculty'), FacultyController.viewFacultyDashboard);
 
@@ -114,27 +116,69 @@ router.get(
 
 
 router.get(
-  "/faculty/view/allcoursematerial",
+  "/view/coursematerial/list",
   AuthCheck,
   RoleCheck("faculty"),
   coursematerialController.viewAllCourseMaterial
 )
 
 router.get(
-  "/faculty/coursematerial/view",
+  "/view/add/coursematerial",
   AuthCheck,
   RoleCheck("faculty"),
   coursematerialController.viewCourseMaterialUpload
 )
 
 router.post(
-  "/faculty/coursematerial/create",
+  "/coursematerial/save",
+  AuthCheck,
+  RoleCheck("faculty"),
+  validateWeb(coursematerialSchema, "/web/view/add/coursematerial"),
+  uploadProjectImage.single("materialImage"),
+  coursematerialController.saveCourseMaterial
+)
+
+router.get(
+  "/view/singlecoursematerial/:id",
+  AuthCheck,
+  RoleCheck("faculty"),
+  coursematerialController.viewSingleCourseMaterial
+)
+
+router.get(
+  "/view/edit/singlecoursematerial/:id",
+  AuthCheck,
+  RoleCheck("faculty"),
+  coursematerialController.viewCourseMaterialEdit
+)
+
+router.post(
+  "/update/singlecoursematerial/:id",
   AuthCheck,
   RoleCheck("faculty"),
   uploadProjectImage.single("materialImage"),
-  coursematerialController.addCourseMaterial
+  coursematerialController.courseMaterialUpdate
 )
 
+router.get(
+  "/coursematerial/delete/:id",
+  AuthCheck,
+  RoleCheck("faculty"),
+  uploadProjectImage.single("materialImage"),
+  coursematerialController.courseMaterialDelete
+);
+
+
+
+router.get(
+  "/view/calender",
+  AuthCheck,
+  RoleCheck("faculty"),
+ CalenderController.calender
+);
+
+
+// announcement
 
 router.get(
   "/view/show/announcement",
@@ -142,14 +186,5 @@ router.get(
   RoleCheck("faculty"),
   AnnouncementController.showAnnouncement
 );
-
-
-router.get(
-  "/faculty/view/singlecoursematerial/:id",
-  AuthCheck,
-  RoleCheck("faculty"),
-  coursematerialController.viewSingleCourseMaterial
-)
-
 
 module.exports = router;

@@ -146,14 +146,14 @@ class ProjectController {
 
       const profile = await Faculty.findOne({ userId: req.user.id });
 
-      const profileId = profile.id;
+      // const profileId = profile.id;
 
       const page = parseInt(req.query.page) || 1;
-      const limit = 5;
+      const limit = 1;
       const skip = (page - 1) * limit;
 
       const totalProjects = await Project.countDocuments({
-        facultyId: profileId,
+        facultyId: profile._id,
       });
 
       const totalPages = Math.ceil(totalProjects / limit);
@@ -161,7 +161,7 @@ class ProjectController {
       const getProjectInfo = await Project.aggregate([
         {
           $match: {
-            facultyId: new mongoose.Types.ObjectId(profileId),
+            facultyId: new mongoose.Types.ObjectId(profile._id),
           },
         },
         {
@@ -199,15 +199,40 @@ class ProjectController {
         },
       ]);
 
+      const facultyProfile = await Faculty.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(profile._id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userList",
+          },
+        },
+        {
+          $unwind: {
+            path: "$userList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+
+      ])
+
+
       return res.render("faculty/faculty_project", {
         getProjectInfo,
         profile,
         currentPage: page,
         totalPages,
+        facultyProfile
       });
     } catch (error) {
       console.log(error);
-      req.flash("error", "Unable to load faculty list");
+      req.flash("error", "Unable to project list");
       return res.redirect("/web/view/login");
     }
   }
@@ -384,10 +409,34 @@ class ProjectController {
         },
       ]);
 
+
+      const facultyProfile = await Faculty.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(profile._id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userList",
+          },
+        },
+        {
+          $unwind: {
+            path: "$userList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+
+      ])
+
       // console.log(singleProject);
       // console.log(singleProject[0].studentList[0].address);
 
-      return res.render("faculty/faculty_single_project", { singleProject });
+      return res.render("faculty/faculty_single_project", { singleProject, facultyProfile });
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while viewing faculty");
@@ -538,7 +587,7 @@ class ProjectController {
 
       req.flash("success", "Project deleted successfully");
       return res.redirect("/web/faculty/allproject/view");
-      
+
     } catch (error) {
       console.log(error);
 

@@ -1,0 +1,260 @@
+body {
+    background: #f5f7fb;
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    min-height: 100vh;
+    background: rgb(22, 39, 67);
+    color: white;
+    border-right: 1px solid #e5e7eb;
+    padding: 25px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.nav-link {
+    color: #8c98ab;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    /* background: #011b4e;` */
+    /* color: #2563eb; */
+    color: white;
+}
+
+.nav-link i {
+    margin-right: 10px;
+}
+
+.main-content {
+    padding: 30px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    background: rgb(22, 39, 67);
+}
+
+.search-box {
+    width: 50%;
+    height: 50px;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-btn {
+    width: 45px;
+    height: 45px;
+    border: none;
+    background: #fff;
+    border-radius: 12px;
+}
+
+.profile {
+    background: #fff;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.page-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-right: 40px;
+}
+
+.page-title p {
+    color: #64748b;
+}
+
+.stats-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.stats-card h6 {
+    color: #64748b;
+}
+
+.stats-card h2 {
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.blue {
+    border-left: 5px solid #2563eb;
+}
+
+.green {
+    border-left: 5px solid #16a34a;
+}
+
+.orange {
+    border-left: 5px solid #f59e0b;
+}
+
+.red {
+    border-left: 5px solid #ef4444;
+}
+
+.dashboard-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    margin-left: 20px;
+    width: 90%;
+}
+
+.dashboard-cardone{
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+   
+    width: 90%;
+}
+.attendance {
+    font-size: 60px;
+    font-weight: 700;
+    color: #16a34a;
+}
+
+.announcement {
+    padding: 15px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.calendardiv {
+    display: flex;
+    justify-content: center;
+}
+
+#calendar {
+    padding: 10px;
+    width: 1200px;
+    background-color: #eaedf4;
+    border-radius: 10px;
+    color: black;
+}
+
+.fc .fc-toolbar-title,
+.fc .fc-col-header-cell-cushion,
+.fc .fc-daygrid-day-number {
+    color: black !important;
+    text-decoration: none;
+
+}
+
+.fc-daygrid-day-number {
+    font-size: 17px !important;
+}
+
+.fc-day-today {
+
+    background-color: #7dd8ff !important;
+    /* Yellow */
+
+}
+
+.main-content {
+    background: #f5f7fb;
+    min-height: 100vh;
+    padding: 30px;
+}
+
+.topbar {
+    width: 100%;
+    height: 70px;
+    background: #1d2f53;
+    /* Blue */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.topbar h2 {
+    color: #fff;
+    font-size: 32px;
+    margin: 0;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-btn {
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 12px;
+    background: #fff;
+    color: #1d2f53;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile {
+    background: #fff;
+    color: #1d2f53;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.top-navbar {
+    width: 100%;
+    background: #1d2f53;
+    /* Blue */
+    min-height: 80px;
+    padding: 12px 20px;
+    margin: 0;
+    border-radius: 0;
+    /* Remove rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+    margin-bottom: 20px;
+}
+
+.main-content {
+    padding: 0;
+}
+.announcementdiv{
+    display: flex;
+    justify-content: space-between;
+}
+
+.view-btn{
+    /* border: 2px solid #2563eb; */
+    border-radius: 5px;
+}

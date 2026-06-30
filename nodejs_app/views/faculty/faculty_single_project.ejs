@@ -9,154 +9,239 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/faculty.css">
+
+  <link rel="stylesheet" href="/assets/css/style.css" />
+
+  <link rel="stylesheet" href="/assets/css/faculty.css">
+
 </head>
 
 <body>
-  <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3>Single Project Details</h3>
+  <div class="container-fluid">
 
-      <a href="/web/faculty/allproject/view" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left me-1"></i> Back
-      </a>
-    </div>
+    <div class="row">
+      <div class="col-lg-2 sidebar">
+        <div class="logo"><i class="fa-solid fa-graduation-cap me-3"></i>Faculty Panel</div>
 
-    <div class="card profile-card p-4">
-    
-      <div class="row">
+        <ul class="nav flex-column">
+          <li>
+            <a href="/web/view/faculty/dashboard" class="nav-link">
+              <i class="fa-solid fa-chart-line"></i>
+              Dashboard
+            </a>
+          </li>
 
-        <% singleProject.forEach( project => { %>
+          <li>
+            <a href="/web/faculty/batch/view" class="nav-link">
+              <i class="fa-solid fa-users"></i>
+              My Batches
+            </a>
+          </li>
 
-          <div class="text-center mb-4 ms-5 mt-2">
-          <img src="<%=project.projectImage%>" class="project-img" />
-          
-          
-        </div>
-        <div class="col-md-6 mb-3">
-          <div class="label">Department Name</div>
-          <div class="value">
-            <%= singleProject[0].departmentInfo.deptName %>
-          </div>
-        </div>
+          <li>
+            <a href="/web/faculty/allproject/view" class="nav-link active">
+              <i class="fa-solid fa-code"></i>
+              Projects
+            </a>
+          </li>
 
-          <div class="col-6 mb-3">
-            <div class="label">Batch Name</div>
-            <div class="value">
+          <li>
+            <a href="/web/view/coursematerial/list" class="nav-link">
+              <i class="fa-solid fa-book-open"></i>
+              Course Materials
+            </a>
+          </li>
 
-              <%= project.batchList.batchName %>
+          <li>
+            <a href="/web/view/show/announcement" class="nav-link">
+              <i class="fa-solid fa-bullhorn"></i>
+              Announcements
+            </a>
+          </li>
+          <li>
+            <a href="/web/view/calender" class="nav-link">
+              <i class="fa-solid fa-calendar"></i>
+              Calender
+            </a>
+          </li>
 
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <div class="label">Course Name</div>
-            <div class="value">
-              <%= project.courseInfo.courseName %>
-            </div>
-          </div>
-          
-
-          <div class="col-md-6 mb-3">
-            <div class="label">Project Name</div>
-            <div class="value">
-              <%= project.title %>
-            </div>
-          </div>
-
-          <div class="col-12 mb-3">
-            <div class="label">Description</div>
-            <div class="value">
-              <%= project.description %>
-
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <div class="label">Start Date</div>
-            <div class="value">
-              <span class="status-active">
-                <%= new Date(project.startDate).toDateString() %>
-              </span>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <div class="label">Submission Date</div>
-            <div class="value">
-              <span class="status-active bg-danger">
-                <%= new Date(project.dueDate).toDateString() %>
-              </span>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <div class="label">Status</div>
-            <div class="value">
-              <span class="status-active">
-                <%= project.status%>
-              </span>
-            </div>
-          </div>
-
-          <div class="col-md-12 mb-3">
-            <div class="label mb-3">Assigned Students</div>
-            
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th>Sl.no</th>
-                    <th>Name</th>
-                  
-                   
-                    <th>studentCode</th>
-                    <th>status</th>
-                    <th width="180">Action</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <% project.studentInfo.forEach((student, index)=>{%>
-                    <tr>
-                      <td>
-                        <%= index + 1 %>
-                      </td>
-                      <td>
-                        <%= student.name %>
-                      </td>
-
-                      <td>
-                        <%= student._id %>
-                      </td>
-                       <td>
-                        <span class="status-active">
-                          <%= student.status %>
-                        </span>
-                      </td>
-
-                      <td>
-                        <div class="action-btns">
-                          <span class="status-active">
-                          Submitted
-                        </span>
-                        </div>
-                      </td>
-                    </tr>
-
-                      <%})%>
-  
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-
-          <% }) %>
-
-
+          <li>
+            <a href="/web/logout" class="nav-link">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Logout
+            </a>
+          </li>
+        </ul>
       </div>
-    </div>
-  </div>
+
+      <!-- <div class="page-wrapper"> -->
+      <div class="col-lg-10 main-content">
+        <nav class="navbar navbar-expand-lg top-navbar">
+          <div class="container-fluid">
+
+            <h2 class="text-white mb-0">Project</h2>
+
+            <div class="ms-auto d-flex align-items-center gap-3">
+              <!-- <button class="btn btn-light rounded-circle"> -->
+              <!-- <i class="fa-regular fa-bell"></i> -->
+              <!-- </button> -->
+
+              <button class="btn btn-light rounded-circle">
+                <i class="fa-regular fa-moon"></i>
+              </button>
+
+              <button class="btn btn-light fw-semibold">
+                <%= facultyProfile[0].userList.name %>
+              </button>
+            </div>
+
+          </div>
+        </nav>
+        <div class="container py-3">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Project Details</h3>
+
+            <a href="/web/faculty/allproject/view" class="btn btn-secondary">
+              <i class="fa-solid fa-arrow-left me-1"></i> Back
+            </a>
+          </div>
+
+          <div class="card profile-card p-4">
+
+            <div class="row ms-3">
+
+              <% singleProject.forEach( project=> { %>
+
+                <div class="col-md-12 mb-3 mb-4 mt-2">
+                  <img src="<%=project.projectImage%>" class="project-img" />
+
+                </div>
+
+                <div class="col-6 mb-3">
+                  <div class="label">Batch Name</div>
+                  <div class="value">
+
+                    <%= project.batchList.batchName %>
+
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <div class="label">Course Name</div>
+                  <div class="value">
+                    <%= project.courseInfo.courseName %>
+                  </div>
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+                  <div class="label">Project Name</div>
+                  <div class="value">
+                    <%= project.title %>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <div class="label">Description</div>
+                  <div class="value">
+                    <%= project.description %>
+
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <div class="label">Start Date</div>
+                  <div class="value">
+                    <span class="status-active">
+                      <%= new Date(project.startDate).toDateString() %>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <div class="label">Submission Date</div>
+                  <div class="value">
+                    <span class="status-active bg-danger">
+                      <%= new Date(project.dueDate).toDateString() %>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <div class="label">Status</div>
+                  <div class="value">
+                    <span class="status-active">
+                      <%= project.status%>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                  <div class="label mb-3">Assigned Students</div>
+
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>Sl.no</th>
+                          <th>Name</th>
+
+
+                          <th>studentCode</th>
+                          <th>status</th>
+                          <th width="180">Action</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <% project.studentInfo.forEach((student, index)=>{%>
+                          <tr>
+                            <td>
+                              <%= index + 1 %>
+                            </td>
+                            <td>
+                              <%= student.name %>
+                            </td>
+
+                            <td>
+                              <%= student._id %>
+                            </td>
+                            <td>
+                              <span class="status-active">
+                                <%= student.status %>
+                              </span>
+                            </td>
+
+                            <td>
+                              <div class="action-btns">
+                                <span class="status-active">
+                                  Submitted
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%})%>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+                <div class="gap-2">
+
+                  <a href="/web/faculty/edit/view/<%= project._id %>" class="btn btn-sm btn-warning"><i
+                      class="fa-solid fa-pen-to-square"></i></a>
+                  <a href="/web/project/delete/<%= project._id %>" class="btn btn-sm btn-danger"><i
+                      class="fa-solid fa-trash"></i></a>
+
+                </div>
+              <% }) %>
+
+            </div>
+          </div>
+        </div>
+      </div>
 </body>
 
 </html>

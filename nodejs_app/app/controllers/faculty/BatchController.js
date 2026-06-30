@@ -3,6 +3,7 @@ const Faculty = require("../../models/FacultyProfile");
 const Batch = require("../../models/Batch");
 const Student = require("../../models/StudentProfile");
 
+
 class FacultyController {
 
   async viewFacultyBatch(req, res) {
@@ -11,10 +12,33 @@ class FacultyController {
       const id = req.user.id;
       const profile = await Faculty.findOne({ userId: id });
 
-    //   const students = await Student.find({batchId: profile.batchId});
+      //   const students = await Student.find({batchId: profile.batchId});
 
-    //   console.log(students);
-      
+      //   console.log(students);
+
+      const facultyProfile = await Faculty.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(profile._id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userList",
+          },
+        },
+        {
+          $unwind: {
+            path: "$userList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+
+      ])
+
       const findBatch = await Batch.aggregate([
         {
           $lookup: {
@@ -89,8 +113,8 @@ class FacultyController {
         },
       ]);
 
-      console.log(findBatch);
-      return res.render("faculty/faculty_batch", { findBatch, profile });
+      // console.log(findBatch);
+      return res.render("faculty/faculty_batch", { findBatch, profile, facultyProfile });
 
     } catch (error) {
       req.flash("error", "Something went wrong while listing batch");
@@ -103,6 +127,7 @@ class FacultyController {
       const batchId = req.params.id;
       const id = req.user.id;
       const profile = await Faculty.findOne({ userId: id });
+
 
       const singleBatch = await Batch.aggregate([
         {
@@ -168,14 +193,40 @@ class FacultyController {
           },
         },
       ]);
-      
-      return res.render("faculty/faculty_single_batch", { singleBatch });
+
+      const facultyProfile = await Faculty.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(profile._id),
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userList",
+          },
+        },
+        {
+          $unwind: {
+            path: "$userList",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+
+      ])
+
+      // console.log(facultyProfile);
+
+      return res.render("faculty/faculty_single_batch", { singleBatch, facultyProfile });
 
     } catch (error) {
       console.log(error);
-      return res.render("error");
+      req.flash("error", "Something went wrong while listing batch");
+      return res.redirect("/web/view/faculty/dashboard");
     }
   }
-  
+
 }
 module.exports = new FacultyController();

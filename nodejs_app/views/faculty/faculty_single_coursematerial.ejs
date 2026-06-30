@@ -4,24 +4,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Single Project Details</title>
+  <title>Single Coursematerial Details</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/faculty.css">
+
+  <link rel="stylesheet" href="/assets/css/style.css" />
+
+  <link rel="stylesheet" href="/assets/css/faculty.css">
+
 </head>
 
 <body>
-  <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3>Single Course Material Details</h3>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-2 sidebar">
+        <div class="logo"><i class="fa-solid fa-graduation-cap me-3"></i>Faculty Panel</div>
 
-      <a href="/web/faculty/view/allcoursematerial" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left me-1"></i> Back
-      </a>
-    </div>
+        <ul class="nav flex-column">
+          <li>
+            <a href="/web/view/faculty/dashboard" class="nav-link">
+              <i class="fa-solid fa-chart-line"></i>
+              Dashboard
+            </a>
+          </li>
 
-    <div class="card profile-card p-4">
+          <li>
+            <a href="/web/faculty/batch/view" class="nav-link">
+              <i class="fa-solid fa-users"></i>
+              My Batches
+            </a>
+          </li>
+
+          <li>
+            <a href="/web/faculty/allproject/view" class="nav-link">
+              <i class="fa-solid fa-code"></i>
+              Projects
+            </a>
+          </li>
+
+          <li>
+            <a href="/web/view/coursematerial/list" class="nav-link active">
+              <i class="fa-solid fa-book-open"></i>
+              Course Materials
+            </a>
+          </li>
+
+          <li>
+            <a href="/web/view/show/announcement" class="nav-link">
+              <i class="fa-solid fa-bullhorn"></i>
+              Announcements
+            </a>
+          </li>
+          <li>
+            <a href="/web/view/calender" class="nav-link">
+              <i class="fa-solid fa-calendar"></i>
+              Calender
+            </a>
+          </li>
+
+          <li>
+            <a href="/web/logout" class="nav-link">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-lg-10 main-content">
+        
+        <nav class="navbar navbar-expand-lg top-navbar">
+          <div class="container-fluid">
+
+            <h2 class="text-white mb-0">Course Material</h2>
+
+            <div class="ms-auto d-flex align-items-center gap-3">
+              <!-- <button class="btn btn-light rounded-circle"> -->
+              <!-- <i class="fa-regular fa-bell"></i> -->
+              <!-- </button> -->
+
+              <button class="btn btn-light rounded-circle">
+                <i class="fa-regular fa-moon"></i>
+              </button>
+
+              <button class="btn btn-light fw-semibold">
+                <%= facultyProfile[0].userList.name %>
+              </button>
+            </div>
+
+          </div>
+        </nav>
+        <div class="container py-3">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Course Material Details</h3>
+
+            <a href="/web/view/coursematerial/list" class="btn btn-secondary">
+              <i class="fa-solid fa-arrow-left me-1"></i> Back
+            </a>
+          </div>
+      </div>
+  
+
+    <div class="card profile-card p-4 m-5">
 
       <div class="row">
 
@@ -39,6 +125,13 @@
             <div class="label">Course Name</div>
             <div class="value">
               <%= courseMaterial.courseInfo.courseName %>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <div class="label">Batch Name</div>
+            <div class="value">
+              <%= courseMaterial.batchList.batchName %>
             </div>
           </div>
 
@@ -77,10 +170,10 @@
           </div>
 
           <div class="col-md-12 mb-3">
-            
 
-            
-                <!-- <thead>
+
+
+            <!-- <thead>
                   <tr>
                     <th>Sl.no</th>
                     <th>Name</th>
@@ -92,76 +185,74 @@
                   </tr>
                 </thead> -->
 
-                <div class="col-md-12 mb-3">
-                  <div class="label mb-3">Assigned Students</div>
+            <div class="col-md-12 mb-3">
+              <div class="label mb-3">Assigned Students</div>
 
-                  <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                      <thead>
-                        <tr>
-                          <th>Sl.no</th>
-                          <th>Name</th>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>Sl.no</th>
+                      <th>Name</th>
 
 
-                          <th>studentCode</th>
-                          <th>status</th>
-                          
-                        </tr>
-                      </thead>
+                      <th>studentCode</th>
+                      <th>status</th>
 
-                      <tbody>
-                        <% courseMaterial.studentInfo.forEach((student, index)=>{%>
-                          <tr>
-                            <td>
-                              <%= index + 1 %>
-                            </td>
-                            <td>
-                              <%= student.name %>
-                            </td>
+                    </tr>
+                  </thead>
 
-                            <td>
-                              <%= student._id %>
-                            </td>
-                            <td>
-                              <span class="status-active">
-                                <%= student.status %>
-                              </span>
-                            </td>
+                  <tbody>
+                    <% courseMaterial.studentInfo.forEach((student, index)=>{%>
+                      <tr>
+                        <td>
+                          <%= index + 1 %>
+                        </td>
+                        <td>
+                          <%= student.name %>
+                        </td>
 
-                            
-                          </tr>
+                        <td>
+                          <%= student._id %>
+                        </td>
+                        <td>
+                          <span class="status-active">
+                            <%= student.status %>
+                          </span>
+                        </td>
 
-                          <%})%>
 
-                      </tbody>
-                    </table>
-                  </div>
+                      </tr>
 
-                </div>
+                      <%})%>
 
-                <td>
-                              <div class="action-btns">
-                                <a href="/web/faculty/allproject/view %>" class="btn btn-sm btn-info">Back</a>
-                                <a href="/web/edit/faculty/view/<%= courseMaterial._id %>"
-                                  class="btn btn-sm btn-warning">Edit</a>
-                                <a href="/web/delete/faculty/<%= courseMaterial._id %>"
-                                  class="btn btn-sm btn-danger">Delete</a>
-                              </div>
-                            </td>
+                  </tbody>
+                </table>
+              </div>
 
-                <% }) %>
+            </div>
+
+            <td>
+              <div class="action-btns">
+
+                <a href="/web/view/edit/singlecoursematerial/<%= courseMaterial._id %>" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="/web/coursematerial/delete/<%= courseMaterial._id %>" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
+              </div>
+            </td>
+
+            <% }) %>
 
 
 
               </table>
-            </div>
-
           </div>
 
-
-
       </div>
+
+
+
     </div>
+  </div>
   </div>
 </body>
 

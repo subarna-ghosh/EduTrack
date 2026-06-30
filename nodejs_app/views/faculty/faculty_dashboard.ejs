@@ -13,176 +13,9 @@
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
-  
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background: #f5f7fb;
-      font-family: Arial, sans-serif;
-    }
 
-    .sidebar {
-      min-height: 100vh;
-      background: #ffffff;
-      border-right: 1px solid #e5e7eb;
-      padding: 25px;
-    }
+  <link rel="stylesheet" href="/assets/css/style.css" />
 
-    .logo {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 40px;
-    }
-
-    .nav-link {
-      color: #64748b;
-      padding: 12px;
-      border-radius: 12px;
-      margin-bottom: 8px;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-      background: #eef4ff;
-      color: #2563eb;
-    }
-
-    .nav-link i {
-      margin-right: 10px;
-    }
-
-    .main-content {
-      padding: 30px;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-
-    .search-box {
-      width: 50%;
-      height: 50px;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .icon-btn {
-      width: 45px;
-      height: 45px;
-      border: none;
-      background: #fff;
-      border-radius: 12px;
-    }
-
-    .profile {
-      background: #fff;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-weight: 600;
-    }
-
-    .page-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-
-    .page-title p {
-      color: #64748b;
-    }
-
-    .stats-card {
-      background: #fff;
-      padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .stats-card h6 {
-      color: #64748b;
-    }
-
-    .stats-card h2 {
-      font-weight: 700;
-      margin-top: 10px;
-    }
-
-    .blue {
-      border-left: 5px solid #2563eb;
-    }
-
-    .green {
-      border-left: 5px solid #16a34a;
-    }
-
-    .orange {
-      border-left: 5px solid #f59e0b;
-    }
-
-    .red {
-      border-left: 5px solid #ef4444;
-    }
-
-    .dashboard-card {
-      background: #fff;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .attendance {
-      font-size: 60px;
-      font-weight: 700;
-      color: #16a34a;
-    }
-
-    .announcement {
-      padding: 15px 0;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .table {
-      margin-bottom: 0;
-    }
-
-    .calendardiv{
-      display: flex;
-      justify-content: center;
-    }
-    
-    #calendar{
-      padding: 10px;
-      width: 1200px;
-      background-color: #eaedf4;
-      border-radius: 10px;
-      color: black;
-    }
-
-    .fc .fc-toolbar-title,
-.fc .fc-col-header-cell-cushion,
-.fc .fc-daygrid-day-number {
-    color: black !important;
-    text-decoration: none;
-    
-}
-
-.fc-daygrid-day-number {
-    font-size: 17px !important;
-}
-.fc-day-today {
-
-background-color: #7dd8ff !important; /* Yellow */
-
-}
-  </style>
 </head>
 
 <body>
@@ -191,7 +24,7 @@ background-color: #7dd8ff !important; /* Yellow */
       <!-- SIDEBAR -->
 
       <div class="col-lg-2 sidebar">
-        <div class="logo">Faculty Panel</div>
+        <div class="logo"><i class="fa-solid fa-graduation-cap me-3"></i>Faculty Panel</div>
 
         <ul class="nav flex-column">
           <li>
@@ -216,7 +49,7 @@ background-color: #7dd8ff !important; /* Yellow */
           </li>
 
           <li>
-            <a href="/web/faculty/view/allcoursematerial" class="nav-link">
+            <a href="/web/view/coursematerial/list" class="nav-link">
               <i class="fa-solid fa-book-open"></i>
               Course Materials
             </a>
@@ -230,6 +63,13 @@ background-color: #7dd8ff !important; /* Yellow */
           </li>
 
           <li>
+            <a href="/web/view/calender" class="nav-link">
+              <i class="fa-solid fa-calendar"></i>
+              Calender
+            </a>
+          </li>
+
+          <li>
             <a href="/web/logout" class="nav-link">
               <i class="fa-solid fa-right-from-bracket"></i>
               Logout
@@ -238,42 +78,49 @@ background-color: #7dd8ff !important; /* Yellow */
         </ul>
       </div>
 
+
       <!-- MAIN CONTENT -->
 
       <div class="col-lg-10 main-content">
         <!-- TOPBAR -->
 
-        <div class="topbar">
-          <input type="text" class="form-control search-box" placeholder="Search batches, students..." />
+        <nav class="navbar navbar-expand-lg top-navbar">
+          <div class="container-fluid">
 
-          <div class="top-actions">
-            <button class="icon-btn">
-              <i class="fa-regular fa-bell"></i>
-            </button>
+            <h2 class="text-white mb-0">Dashboard</h2>
 
-            <button class="icon-btn">
-              <i class="fa-regular fa-moon"></i>
-            </button>
+            <div class="ms-auto d-flex align-items-center gap-3">
+              <!-- <button class="btn btn-light rounded-circle"> -->
+              <!-- <i class="fa-regular fa-bell"></i> -->
+              <!-- </button> -->
 
-            <div class="profile">Faculty</div>
+              <button class="btn btn-light rounded-circle">
+                <i class="fa-regular fa-moon"></i>
+              </button>
+
+              <button class="btn btn-light fw-semibold">
+                <%= facultyProfile[0].userList.name %>
+              </button>
+            </div>
+
           </div>
-        </div>
+        </nav>
 
         <!-- PAGE TITLE -->
 
         <div class="page-title">
-          <div>
+          <div class="ms-4">
             <h2>Welcome Back, Faculty</h2>
-            <p>Manage your classes, batches and students.</p>
+            <p>See your classes, batches and students.</p>
           </div>
-          <a href="/web/view/faculty/profile/<%- profile._id %>">
+          <a href="/web/view/faculty/profile/<%- facultyProfile[0]._id %>">
             <button class="btn btn-primary">My Profile</button>
           </a>
         </div>
 
         <!-- STATS -->
 
-        <div class="row g-4 mb-4">
+        <div class="row g-4 mb-4 ms-1">
           <div class="col-lg-3 col-md-6">
             <div class="stats-card blue">
               <h6>Assigned Batches</h6>
@@ -284,66 +131,90 @@ background-color: #7dd8ff !important; /* Yellow */
           <div class="col-lg-3 col-md-6">
             <div class="stats-card green">
               <h6>Today's Classes</h6>
-              <h2>4</h2>
+              <h2><%- todaySchedule.length %></h2>
             </div>
           </div>
-
-          <!-- <div class="col-lg-3 col-md-6">
+          <div class="col-lg-3 col-md-6">
             <div class="stats-card orange">
-              <h6>Total Students</h6>
-              <h2>210</h2>
+              <h6>Announcements</h6>
+              <% if(announcements.length !==0){ %>
+              <h2><%- announcements.length %></h2>
+              <% } else { %>
+                <h2>0</h2>
+              <% } %>
             </div>
-          </div> -->
-<!-- 
+          </div>
+          
           <div class="col-lg-3 col-md-6">
             <div class="stats-card red">
-              <h6>Pending Reviews</h6>
-              <h2>12</h2>
+              <h6>Project</h6>
+              <% if(allProject.length !==0){ %>
+              <h2><%- allProject.length %></h2>
+              <% } else { %>
+                <h2>0</h2>
+              <% } %>
             </div>
-          </div> -->
+          </div> 
         </div>
 
         <!-- SCHEDULE + ATTENDANCE -->
 
-        <div class="row g-4 mb-4">
-          <div class="col-lg-8">
+        <div class="row g-4 mb-6">
+          <div class="col-lg-10 mb-3">
             <div class="dashboard-card">
               <div class="d-flex justify-content-between mb-3">
                 <h5>Today's Schedule</h5>
-
-                <button class="btn btn-sm btn-outline-primary">
-                  View All
-                </button>
               </div>
 
               <table class="table align-middle">
                 <thead>
                   <tr>
-                    <th>Course</th>
-                    <th>Batch</th>
                     <th>Time</th>
+                    <th>Batch</th>
+                    <th>Course</th>
+                    <th>Topic</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  <tr>
-                    <td>Node JS</td>
-                    <td>WA-481</td>
-                    <td>10:00 AM</td>
-                  </tr>
+                  <% if(todaySchedule.length==0){ %>
+                    <tr>
+                      <td colspan="4" class="text-center text-muted">
+                        No Batch Scheduled Today
+                      </td>
+                    </tr>
 
-                  <tr>
-                    <td>React JS</td>
-                    <td>WA-500</td>
-                    <td>02:00 PM</td>
-                  </tr>
+                    <% } %>
+
+                      <% todaySchedule.forEach(item=> { %>
+
+                        <tr>
+                          <td>
+                            <%= item.startTime %> - <%= item.endTime %>
+                          </td>
+
+                          <td>
+                            <%= item.batch.batchName %>
+                          </td>
+
+                          <td>
+                            <%= item.course.courseName %>
+                          </td>
+
+                          <td>
+                            <%= item.topic %>
+                          </td>
+
+                        </tr>
+
+                        <% }) %>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <div class="col-lg-4">
-            <div class="dashboard-card">
+          <!-- <div class="col-lg-4">
+            <div class="dashboard-cardone">
               <h5 class="mb-3">Attendance Summary</h5>
 
               <h1 class="attendance">92%</h1>
@@ -352,7 +223,7 @@ background-color: #7dd8ff !important; /* Yellow */
 
               <span class="badge bg-success"> Excellent Performance </span>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- ASSIGNED BATCHES -->
@@ -360,8 +231,8 @@ background-color: #7dd8ff !important; /* Yellow */
         <div class="dashboard-card mb-4">
           <div class="d-flex justify-content-between mb-3">
             <h5>Assigned Batches</h5>
-
-            <!-- <button class="btn btn-sm btn-outline-primary">Manage</button> -->
+            <a href="/web/faculty/batch/view"><button class="btn btn-sm btn-outline-primary">View</button></a>
+            
           </div>
 
           <table class="table">
@@ -375,68 +246,79 @@ background-color: #7dd8ff !important; /* Yellow */
             </thead>
 
             <tbody>
-              <% totalActiveBatch.forEach(batch => { %>
-<tr>
+              <% totalActiveBatch.forEach(batch=> { %>
+                <tr>
 
-  <td>
-                  <%= batch.batchName %>
-                </td>
-                 
-                <td>
-                  <%= batch.courseName %>
-                </td>
+                  <td>
+                    <%= batch.batchName %>
+                  </td>
 
-                <td>
-                  <%= batch.studentCount %>
-                </td>
-                
-                <td>
-                  <span class="badge <%= batch.status === 'active' ? 'bg-success' : 'bg-danger' %>">
-    <%= batch.status %>
-</span>
-                </td>
-            <%  }); %>
-              
-              </tr>
+                  <td>
+                    <%= batch.courseName %>
+                  </td>
+
+                  <td>
+                    <%= batch.studentCount %>
+                  </td>
+
+                  <td>
+                    <span class="badge <%= batch.status === 'upcoming' ? 'bg-secondary' : 'bg-success' %>">
+                      <%= batch.status %>
+                    </span>
+                  </td>
+                  <% }); %>
+
+                </tr>
             </tbody>
           </table>
         </div>
 
         <!-- REVIEWS + ANNOUNCEMENTS -->
 
-        <div class="row g-4">
+        <div class="row g-4 mb-3">
           <div class="col-lg-7">
+            
             <div class="dashboard-card">
-              <h5 class="mb-3">Pending Project Reviews</h5>
-
+              <div class="d-flex justify-content-between mb-3">
+              
+              <h5 class="mb-3">Projects</h5>
+              <a href="/web/faculty/allproject/view"><button class="btn btn-sm btn-outline-primary">View</button></a>
+              </div>
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Student</th>
+                    
                     <th>Project</th>
+                    <th>Batch</th>
+                    <th>Deadline</th>
                     <th>Status</th>
+                    
                   </tr>
                 </thead>
 
                 <tbody>
-                  <tr>
-                    <td>Subarna Ghosh</td>
-                    <td>E-Commerce API</td>
-                    <td>
-                      <span class="badge bg-warning text-dark">
-                        Pending
-                      </span>
-                    </td>
-                  </tr>
+                  <% allProject.forEach(project => { %>
+                <tr>
 
-                  <tr>
-                    <td>Rahul Das</td>
-                    <td>Portfolio Website</td>
-                    <td>
-                      <span class="badge bg-warning text-dark">
-                        Pending
-                      </span>
-                    </td>
+                  <td>
+                    <%= project.title %>
+                  </td>
+
+                  <td>
+                    <%= project.batch.batchName %>
+                  </td>
+
+                 <td>
+                    <%= project.dueDate.toISOString().split("T")[0] %>
+                  </td>
+
+                  <td>
+                    <span class="badge bg-success">
+                      <%= project.status %>
+                    </span>
+                  </td>
+                  <% }); %>
+
                   </tr>
                 </tbody>
               </table>
@@ -445,53 +327,51 @@ background-color: #7dd8ff !important; /* Yellow */
 
           <div class="col-lg-5">
             <div class="dashboard-card">
+              <div class="d-flex justify-content-between mb-3">
               <h5 class="mb-4">Recent Announcements</h5>
+              <a href="/web/view/show/announcement"><button class="btn btn-sm btn-outline-primary">View</button></a>
+                          </div>
 
-              <div class="announcement">New React Assignment Uploaded</div>
-
-              <div class="announcement">Batch WA-481 Schedule Updated</div>
-
-              <div class="announcement">
-                Project Submission Deadline Extended
-              </div>
+              <% announcements.forEach(announcement=> { %>
+                <div class="announcement announcementdiv">
+                  <%= announcement.title %>
+                </div>
+                <% }); %>
             </div>
-          </div>
-          <div class="calendardiv">
-             <div id="calendar"></div>
           </div>
 
         </div>
       </div>
-      
+
     </div>
-    
+
   </div>
 
   <script>
- document.addEventListener('DOMContentLoaded', function () {
-  var calendarEl = document.getElementById('calendar');
+    document.addEventListener('DOMContentLoaded', function () {
+      var calendarEl = document.getElementById('calendar');
 
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    
-    initialView: 'dayGridMonth',
-    eventTextColor: '#495057',
-    height: 600,
-    events: [
-      
-      // {
-      //   title: 'Meeting',
-      //   start: '2026-06-21'
-      // },
-      // {
-      //   title: 'Exam',
-      //   start: '2026-06-25'
-      // }
-    ]
-  });
+      var calendar = new FullCalendar.Calendar(calendarEl, {
 
-  calendar.render();
-});
-</script>
+        initialView: 'dayGridMonth',
+        eventTextColor: '#495057',
+        height: 600,
+        events: [
+
+          // {
+          //   title: 'Meeting',
+          //   start: '2026-06-21'
+          // },
+          // {
+          //   title: 'Exam',
+          //   start: '2026-06-25'
+          // }
+        ]
+      });
+
+      calendar.render();
+    });
+  </script>
 
 </body>
 

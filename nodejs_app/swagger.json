@@ -4,7 +4,7 @@
     "info": {
       "title": "Test API",
       "version": "1.0.0",
-      "description": "Student API documentation"
+      "description": "Edu Track API documentation"
     },
     "servers": [
       {

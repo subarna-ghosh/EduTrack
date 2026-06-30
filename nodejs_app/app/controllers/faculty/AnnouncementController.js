@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const Announcement = require("../../models/Announcement");
 const Batch = require("../../models/Batch");
 const User = require("../../models/User");
@@ -14,11 +16,37 @@ class announcementController {
       $or: [
         { announcementType: "global" },
         { announcementType: "faculty" },
-        { announcementType: "batch", batchId: faculty.batchId },
+        { announcementType: "batch" },
       ],
     }).sort({ createdAt: -1 });
 
-    return res.render("faculty/show_announcement", { announcementsMade });
+     const facultyProfile = await Faculty.aggregate([
+            {
+              $match: {
+                _id: new mongoose.Types.ObjectId(faculty._id),
+              },
+            },
+            {
+              $lookup: {
+                from: "users",
+                localField: "userId",
+                foreignField: "_id",
+                as: "userList",
+              },
+            },
+            {
+              $unwind: {
+                path: "$userList",
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+    
+          ])
+    
+
+    // console.log(announcementsMade);
+    
+    return res.render("faculty/show_announcement", { announcementsMade, facultyProfile });
   }
 }
 
