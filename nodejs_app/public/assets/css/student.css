@@ -4,14 +4,15 @@
   box-sizing: border-box;
 }
 /* student list design */
-.page-wrapper {
+/* .page-wrapper {
   padding: 40px;
-}
+} */
 
 .page-title {
   font-size: 30px;
   font-weight: 700;
   margin-bottom: 25px;
+  padding: 10px;
 }
 
 .student-card {

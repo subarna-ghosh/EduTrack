@@ -16,12 +16,15 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
     <link rel="stylesheet" href="/assets/css/admin_assign_fee.css">
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
   </head>
 
   <body>
     <div class="container py-5">
       <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <!-- SIDEBAR -->
+        <%-include('../layouts/admin_sidebar')%>
+        <div class="col-lg-8 main-content">
           <div class="card form-card">
             <div class="card-header bg-white py-3">
               <h3 class="page-title mb-0">Assign Student Fee</h3>
@@ -44,7 +47,7 @@
                   <select name="studentId" class="form-select" required>
                     <option value="">Select Student</option>
                     <%listStudents.forEach((val)=>{%>
-                    <option value="<%=val.userInfo._id%>"><%=val.userInfo.name%> (<%=val.courseInfo.courseName%>)</option>
+                    <option value="<%=val._id%>"><%=val.userInfo.name%> (<%=val.courseInfo.courseName%>)</option>
                     <%})%>
                   </select>
                 </div>

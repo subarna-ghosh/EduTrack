@@ -59,6 +59,16 @@ class AdminController {
       const dueAmount =
         dueAmountResult.length > 0 ? dueAmountResult[0].totalDue : 0;
 
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+
       const listBatch = await BatchSchedule.aggregate([
         {
           $lookup: {
@@ -97,8 +107,39 @@ class AdminController {
         },
         { $unwind: "$userInfo" },
       ]);
+      
+      const todayIndex = new Date().getDay(); // 0 = Sunday
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
+      listBatch.forEach((item) => {
+        const classDayIndex = days.indexOf(item.day);
+
+        const [startHour, startMinute] = item.startTime.split(":").map(Number);
+        const [endHour, endMinute] = item.endTime.split(":").map(Number);
+
+        const startMinutes = startHour * 60 + startMinute;
+        const endMinutes = endHour * 60 + endMinute;
+
+        if (classDayIndex > todayIndex) {
+          // Future day this week
+          item.status = "Upcoming";
+        } else if (classDayIndex < todayIndex) {
+          // Day has already passed this week
+          item.status = "Completed";
+        } else {
+          // Today
+          if (currentMinutes < startMinutes) {
+            item.status = "Upcoming";
+          } else if (currentMinutes <= endMinutes) {
+            item.status = "Ongoing";
+          } else {
+            item.status = "Completed";
+          }
+        }
+      });
       return res.render("admin/admin_dashboard", {
+        admin: req.user,
         totalStudent,
         totalFaculty,
         totalCourse,

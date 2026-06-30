@@ -4,20 +4,27 @@ const Fee = require("../../models/Fee");
 const Payment = require("../../models/Payment");
 class FeeManagementController {
   async viewAssignedFee(req, res) {
-    // Pagination
     const page = Number(req.query.page) || 1;
     const limit = 3;
     const skip = (page - 1) * limit;
-
-    // Search
     const search = req.query.search || "";
 
-    // Data
-    const listFee = await Fee.aggregate([
+    const pipeline = [
+      {
+        $lookup: {
+          from: "students",
+          localField: "studentId",
+          foreignField: "_id",
+          as: "studentInfo",
+        },
+      },
+      {
+        $unwind: "$studentInfo",
+      },
       {
         $lookup: {
           from: "users",
-          localField: "studentId",
+          localField: "studentInfo.userId",
           foreignField: "_id",
           as: "userInfo",
         },
@@ -33,35 +40,16 @@ class FeeManagementController {
           },
         },
       },
-      {
-        $skip: skip,
-      },
-      {
-        $limit: limit,
-      },
+    ];
+
+    const listFee = await Fee.aggregate([
+      ...pipeline,
+      { $skip: skip },
+      { $limit: limit },
     ]);
 
-    // Count
     const totalFeeAssigned = await Fee.aggregate([
-      {
-        $lookup: {
-          from: "users",
-          localField: "studentId",
-          foreignField: "_id",
-          as: "userInfo",
-        },
-      },
-      {
-        $unwind: "$userInfo",
-      },
-      {
-        $match: {
-          "userInfo.name": {
-            $regex: search,
-            $options: "i",
-          },
-        },
-      },
+      ...pipeline,
       {
         $count: "total",
       },

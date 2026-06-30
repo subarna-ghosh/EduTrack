@@ -1,0 +1,69 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f4f6f9;
+}
+
+.profile-card {
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 0.15rem 1.75rem rgba(58, 59, 69, 0.15);
+}
+
+.profile-header {
+  background: linear-gradient(135deg, #0d6efd, #4f8cff);
+  border-radius: 18px 18px 0 0;
+  color: white;
+  padding: 40px;
+}
+
+.profile-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid white;
+  background: white;
+}
+
+.student-name {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.student-code {
+  opacity: 0.9;
+}
+
+.info-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  height: 100%;
+}
+
+.info-label {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.info-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #212529;
+}
+
+.section-title {
+  font-weight: 700;
+  color: #343a40;
+}
+
+.btn-custom {
+  height: 45px;
+}

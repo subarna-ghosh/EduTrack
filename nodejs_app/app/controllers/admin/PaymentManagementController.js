@@ -8,23 +8,31 @@ const Payment = require("../../models/Payment");
 class PaymentManagementController {
   async viewPaymentPage(req, res) {
     // console.log(req.query);
-    const { search, paymentMethod, date } = req.query;
+    // const { search, paymentMethod, date } = req.query;
     const findPayment = await Payment.aggregate([
+      { $match: { paymentStatus: "pending" } },
+      {
+        $lookup: {
+          from: "students",
+          localField: "studentId",
+          foreignField: "_id",
+          as: "studentInfo",
+        },
+      },
+      {
+        $unwind: "$studentInfo",
+      },
       {
         $lookup: {
           from: "users",
-          localField: "studentId",
+          localField: "studentInfo.userId",
           foreignField: "_id",
           as: "userInfo",
         },
       },
       {
-        $unwind: {
-          path: "$userInfo",
-          preserveNullAndEmptyArrays: true,
-        },
+        $unwind: "$userInfo",
       },
-      { $match: { paymentStatus: "pending" } },
     ]);
     const totalAssignedFee = await Fee.aggregate([
       {
@@ -73,6 +81,8 @@ class PaymentManagementController {
       if (item._id === "card") cardCount = item.count;
       if (item._id === "bank") bankCount = item.count;
     });
+    console.log("findPayment sample:", JSON.stringify(findPayment[0], null, 2));
+    console.log("Total results:", findPayment.length);
     return res.render("admin/payment_management", {
       findPayment,
       totalAssignedFee,
@@ -142,30 +152,32 @@ class PaymentManagementController {
   async approvePayment(req, res) {
     try {
       const id = req.params.id;
+
       const payment = await Payment.findByIdAndUpdate(
         id,
-        {
-          paymentStatus: "paid",
-        },
-        {
-          new: true,
-        },
+        { paymentStatus: "paid" },
+        { new: true },
       );
 
       if (!payment) {
-        req.flash("error", "Payment not found");
+        req.flash("error", "Payment not found.");
         return res.redirect("/web/view/payment/management");
       }
 
       const fee = await Fee.findOne({
         studentId: payment.studentId,
       });
-      if (fee) {
-        fee.paidAmount += payment.amount;
-        fee.dueAmount -= payment.amount;
 
-        await fee.save();
+      if (!fee) {
+        req.flash("error", "Fee record not found.");
+        return res.redirect("/web/view/payment/management");
       }
+
+      fee.paidAmount += Number(payment.amount);
+      fee.dueAmount = Math.max(0, fee.dueAmount - Number(payment.amount));
+
+      await fee.save();
+
       req.flash("success", "Payment approved successfully.");
       return res.redirect("/web/view/payment/management");
     } catch (err) {

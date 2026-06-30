@@ -15,12 +15,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/assets/css/batch.css" />
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
   </head>
 
   <body>
-    <div class="container py-5">
+    <div class="container-fluid">
+      <div class="row">
+         <!-- SIDEBAR -->
+        <%-include('../layouts/admin_sidebar')%>
+        <div class="col-lg-8 main-content">
       <!-- Header -->
-
       <div class="d-flex mb-4">
         <div>
           <h2 class="page-title">Batch Management</h2>
@@ -145,9 +149,11 @@
           </nav>
         </div> 
 
-        </div>
+      </div>
 
-        </div>
+      </div>
+      </div>
+    </div>
       </div>
     </div>
     <script>

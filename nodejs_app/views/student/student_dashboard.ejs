@@ -15,138 +15,33 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
       rel="stylesheet"
     />
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
+    <link rel="stylesheet" href="/assets/css/student_navbar.css">
     <link rel="stylesheet" href="/assets/css/student_style.css" />
-    <style></style>
+    
   </head>
 
   <body>
     <div class="container-fluid">
       <div class="row">
         <!-- SIDEBAR -->
-
-        <div class="col-lg-2 sidebar">
-          <div class="logo">EduTrack</div>
-
-          <ul class="nav flex-column">
-            <li>
-              <a href="#" class="nav-link active">
-                <i class="fa-solid fa-house"></i>
-                Dashboard
-              </a>
-            </li>
-
-            <li>
-              <a href="/web/view/student/profile" class="nav-link">
-                <i class="fa-solid fa-user"></i>
-                My Profile
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fa-solid fa-users"></i>
-                Batch
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fa-solid fa-code"></i>
-                Projects
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fa-solid fa-book"></i>
-                Course Materials
-              </a>
-            </li>
-
-            <li>
-              <a href="/web/view/show/announcement" class="nav-link">
-                <i class="fa-solid fa-bullhorn"></i>
-                Announcements
-              </a>
-            </li>
-
-            <li>
-              <a href="/web/view/payment/history" class="nav-link">
-                <i class="fa-solid fa-money-bill"></i>
-                Payment History
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fa-solid fa-certificate"></i>
-                Certificates
-              </a>
-            </li>
-          </ul>
-        </div>
-
+        <%-include('../layouts/student_sidebar')%>
+        
         <!-- MAIN CONTENT -->
         <div class="col-lg-10 main-content">
-
           <!-- TOPBAR -->
-          <nav class="topbar">
-            <div>
-              <h2 class="page-title">Dashboard</h2>
-              <p class="page-subtitle">Welcome back, Subarna Ghosh</p>
-            </div>
-
-            <div class="top-right">
-              <button class="top-btn notification-btn">
-                <i class="fa-regular fa-bell"></i>
-                <span class="notification-count">2</span>
-              </button>
-
-              <a href="#" class="top-btn">
-                <i class="fa-regular fa-circle-question"></i>
-                Help Center
-              </a>
-
-              <a href="/web/view/student/pay/now" class="pay-btn">
-                <i class="fa-solid fa-indian-rupee-sign"></i>
-                Pay Now
-              </a>
-
-              <div class="dropdown">
-                <button
-                  class="profile-dropdown dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                >
-                  <i class="fa-solid fa-user-graduate me-2"></i>
-                  Student
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <a class="dropdown-item" href="#"> Profile </a>
-                  </li>
-
-                  <li>
-                    <a class="dropdown-item" href="#"> Settings </a>
-                  </li>
-
-                  <li><hr class="dropdown-divider" /></li>
-
-                  <li>
-                    <a class="dropdown-item text-danger" href="/web/logout"> Logout </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </nav>
+          <%-include('../layouts/student_navbar')%>
 
           <!-- WELCOME CARD -->
 
           <div class="welcome-card mb-4">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h3>Welcome Back, Subarna Ghosh</h3>
+                <h3>Welcome Back, <%=student.name%></h3>
                 <p class="mb-0">
                   Track your learning journey and upcoming classes.
                 </p>
@@ -156,6 +51,11 @@
             </div>
           </div>
 
+          <% if(success && success.length > 0){ %>
+                <div id="successAlert" class="alert alert-success alert-dismissible fade show">
+                  <%= success[0] %>
+                </div>
+          <% } %>
           <!-- STATS -->
 
           <div class="row g-4 mb-4">
@@ -188,155 +88,225 @@
             </div>
           </div>
 
-          <!-- PERSONAL INFO + CLASSES -->
-
           <div class="row g-4 mb-4">
-            <div class="col-lg-4">
-              <div class="dashboard-card">
-                <h5 class="mb-4">Personal Information</h5>
+            <!-- Personal Information -->
 
-                <p><strong>Name:</strong> Subarna Ghosh</p>
-                <p><strong>Email:</strong> subarna@gmail.com</p>
-                <p><strong>Phone:</strong> 7003358881</p>
-                <p><strong>Course:</strong> Node JS Complete</p>
-                <p><strong>Batch:</strong> WA-481</p>
+            <div class="col-lg-6">
+              <div class="dashboard-card h-100">
+                <div class="d-flex align-items-center mb-4">
+                  <div class="profile-icon">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+
+                  <div class="ms-3">
+                    <h5 class="mb-1">Personal Information</h5>
+                    <small class="text-muted"> Student Details </small>
+                  </div>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="info-box">
+                      <small>Name</small>
+                      <h6><%=personalInfo[0].userInfo.name%></h6>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="info-box">
+                      <small>Email</small>
+                      <h6><%=personalInfo[0].userInfo.email%></h6>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="info-box">
+                      <small>Phone</small>
+                      <h6><%=personalInfo[0].phone%></h6>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="info-box">
+                      <small>Student ID</small>
+                      <h6><%=personalInfo[0].studentCode%></h6>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="col-lg-8">
-              <div class="dashboard-card">
-                <div class="d-flex justify-content-between mb-3">
-                  <h5>Today's Classes</h5>
+            <!-- Calendar -->
 
-                  <span class="badge bg-primary"> 2 Classes </span>
+            <div class="col-lg-6">
+              <div class="dashboard-card h-80">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <h5>
+                    <i class="fa-solid fa-calendar-days me-2"></i>
+                    Calendar
+                  </h5>
+
+                  <span class="badge bg-primary"> June 2026 </span>
                 </div>
 
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Course</th>
-                      <th>Faculty</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr>
-                      <td>Node JS</td>
-                      <td>Raju Kayal</td>
-                      <td>10:00 AM</td>
-                    </tr>
-
-                    <tr>
-                      <td>MongoDB</td>
-                      <td>Amit Roy</td>
-                      <td>02:00 PM</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div id="calendar"></div>
               </div>
             </div>
           </div>
 
-          <!-- BATCH + DOCUMENTS -->
+          <!-- BATCH + PAYMENT -->
 
           <div class="row g-4 mb-4">
-            <div class="col-lg-6">
-              <div class="dashboard-card">
-                <h5 class="mb-4">Batch Details</h5>
+            <!-- batch allotment -->
+            <div class="col-lg-6">             
+              <div class="dashboard-card h-100">
+                <h5 class="card-title">
+                  <i class="fa-solid fa-users me-2"></i>
+                  Batch Allotment
+                </h5>
 
-                <p><strong>Batch:</strong> WA-481</p>
-                <p><strong>Course:</strong> Node JS Complete</p>
-                <p><strong>Faculty:</strong> Raju Kayal</p>
+                <div class="info-item">
+                  <span>Course</span>
+                  <strong><%=batchAllotment[0].courseInfo.courseName%></strong>
+                </div>
 
-                <span class="badge bg-success"> Active </span>
+                <div class="info-item">
+                  <span>Batch</span>
+                  <strong><%=batchAllotment[0].batchInfo.batchName%></strong>
+                </div>
+
+                <div class="info-item">
+                  <span>Faculty</span>
+                  <strong><%=batchAllotment[0].nameOfFaculty.name%></strong>
+                </div>
+
+                <div class="info-item">
+                  <span>Status</span>
+                  <span class="badge bg-success"><%=batchAllotment[0].status%></span>
+                </div>
               </div>
             </div>
 
+            <!-- payment -->
             <div class="col-lg-6">
-              <div class="dashboard-card">
-                <h5 class="mb-4">Document Status</h5>
+              <div class="dashboard-card h-100">
+                <h5 class="card-title">
+                  <i class="fa-solid fa-wallet me-2"></i>
+                  Payment Summary
+                </h5>
 
-                <div class="document-item">
-                  <span>Address Proof</span>
-                  <span class="badge bg-success"> Verified </span>
+                <div class="payment-row">
+                  <span>Total Fee</span>
+                  <strong>₹<%=listFees.totalFee%></strong>
                 </div>
 
-                <div class="document-item">
-                  <span>Educational Documents</span>
-                  <span class="badge bg-warning text-dark"> Under Review </span>
+                <div class="payment-row">
+                  <span>Paid</span>
+                  <strong class="text-success"> ₹<%=listFees.paidAmount%></strong>
                 </div>
 
-                <div class="document-item">
-                  <span>Resume</span>
-                  <span class="badge bg-danger"> Pending </span>
+                <div class="payment-row">
+                  <span>Due</span>
+                  <strong class="text-danger"> ₹<%=listFees.dueAmount%></strong>
                 </div>
+
+                <a href="/web/view/payment/history" class="btn btn-primary w-100 mt-3">
+                  View Payment History
+                </a>
               </div>
             </div>
           </div>
 
-          <!-- PROGRESS + ASSIGNMENTS -->
+          <!-- UPCOMING CLASSES -->
 
-          <div class="row g-4 mb-4">
-            <div class="col-lg-6">
-              <div class="dashboard-card text-center">
-                <h5 class="mb-4">Course Progress</h5>
+          <div class="dashboard-card mb-4">
+            <div class="d-flex justify-content-between mb-3">
+              <h5 class="card-title">
+                <i class="fa-solid fa-clock me-2"></i>
 
-                <div class="progress-circle">75%</div>
-
-                <h6 class="mt-4">Node JS Complete</h6>
-              </div>
+                Upcoming Classes
+              </h5>
             </div>
 
-            <div class="col-lg-6">
-              <div class="dashboard-card">
-                <h5 class="mb-4">Upcoming Assignments</h5>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th>Topic</th>
+                  <th>Faculty</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
 
-                <ul class="list-group">
-                  <li class="list-group-item">API Development Project</li>
-
-                  <li class="list-group-item">MongoDB Aggregation Task</li>
-
-                  <li class="list-group-item">React Dashboard Assignment</li>
-                </ul>
-              </div>
-            </div>
+              <tbody>
+                <%showSchedule.forEach((val)=>{%>
+                <tr>
+                  <td><%=val.scheduleInfo.day%></td>
+                  <td><%=val.scheduleInfo.topic%></td>
+                  <td><%=val.facultyUser.name%></td>
+                  <td><%=val.scheduleInfo.startTime%></td>
+                </tr>
+                <%})%>
+              </tbody>
+            </table>
           </div>
 
-          <!-- ANNOUNCEMENTS + PAYMENT -->
+          <!-- ANNOUNCEMENTS -->
 
-          <div class="row g-4">
-            <div class="col-lg-7">
-              <div class="dashboard-card">
-                <h5 class="mb-4">Announcements</h5>
+          <div class="dashboard-card">
+            <h5 class="card-title mb-4">
+              <i class="fa-solid fa-bullhorn me-2"></i>
 
-                <div class="announcement">
-                  Project Submission Deadline: 15 July
-                </div>
-
-                <div class="announcement">
-                  New React Classes Starting Next Week
-                </div>
-
-                <div class="announcement">Attendance Requirement Updated</div>
-              </div>
+              Announcements
+            </h5>
+            <%announcementsMade.forEach((announcement)=>{%>
+            <div class="announcement-item">
+              📢 <%=announcement.description%>.
             </div>
+            <%})%>
 
-            <div class="col-lg-5">
-              <div class="dashboard-card">
-                <h5 class="mb-4">Payment Summary</h5>
-
-                <p>Total Fee: ₹45,000</p>
-                <p>Paid: ₹35,000</p>
-                <p>Due: ₹10,000</p>
-
-                <button class="btn btn-primary">View Payment History</button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      setTimeout(() => {
+        const alert = document.getElementById("successAlert");
+        if (alert) alert.remove();
+      }, 3000);
+      
+      document.addEventListener("DOMContentLoaded", function () {
+        const calendarEl = document.getElementById("calendar");
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: "dayGridMonth",
+
+          height: 320,
+
+          headerToolbar: {
+            left: "",
+            center: "title",
+            right: "prev,next",
+          },
+
+          events: [
+            // {
+            //   title: "Node JS",
+            //   start: "2026-06-29",
+            // },
+            // {
+            //   title: "React",
+            //   start: "2026-06-30",
+            // },
+          ],
+        });
+
+        calendar.render();
+      });
+    </script>
   </body>
 </html>

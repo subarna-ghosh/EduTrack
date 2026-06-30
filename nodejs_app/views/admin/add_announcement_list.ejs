@@ -18,10 +18,16 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="/assets/css/announcement.css" />
+    <link rel="stylesheet" href="/assets/css/sidebar.css">
   </head>
 
   <body>
-    <div class="page-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+        <%-include('../layouts/admin_sidebar')%>
+        <div class="col-lg-8 main-content">
+          <div>
       <h2 class="page-title">Announcement List</h2>
 
       <div class="announcement-card">
@@ -45,10 +51,6 @@
           </form>
 
           <div class="d-flex gap-2">
-            <a href="/web/view/admin/dashboard" class="btn btn-secondary">
-              ← Back to Dashboard
-            </a>
-
             <a href="/web/view/add/announcement" class="btn btn-primary">
               + Add Announcement
             </a>
@@ -145,6 +147,9 @@
           </nav>
         </div> 
 
+      </div>
+    </div>
+        </div>
       </div>
     </div>
     <script>

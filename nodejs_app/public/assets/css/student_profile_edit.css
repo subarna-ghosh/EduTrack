@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #f4f6f9;
+}
+
+.profile-card {
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 0.15rem 1.75rem rgba(58, 59, 69, 0.15);
+}
+
+.page-title {
+  font-weight: 700;
+  color: #343a40;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.image-preview {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #dee2e6;
+  margin: auto;
+  position: relative;
+  background: #fff;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-preview i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+  color: #adb5bd;
+}
+
+.readonly-box {
+  background: #f8f9fa;
+}

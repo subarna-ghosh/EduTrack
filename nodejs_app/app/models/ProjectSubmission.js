@@ -16,14 +16,18 @@ const projectSubmissionSchema = new Schema(
 
     githubLink: String,
 
-    liveLink: String,
+    submissionFile: {
+      type: String,
+    },
+
+    submissionFilePublicId: {
+      type: String,
+      default: null,
+    },
 
     remarks: String,
 
-    marks: {
-      type: Number,
-      default: 0,
-    },
+    marks: Number,
 
     status: {
       type: String,
@@ -35,6 +39,6 @@ const projectSubmissionSchema = new Schema(
 );
 const ProjectSubmission = mongoose.model(
   "ProjectSubmission",
- projectSubmissionSchema
+  projectSubmissionSchema,
 );
 module.exports = ProjectSubmission;
