@@ -89,6 +89,8 @@ class BatchScheduleController {
       currentPage: page,
       totalPages,
       search,
+      admin: req.user,
+      navValue: "Batch Schedule",
     });
   }
 
@@ -124,7 +126,12 @@ class BatchScheduleController {
       },
       { $unwind: "$batchInfo" },
     ]);
-    return res.render("admin/add_class_schedule", { listBatch, listFaculty });
+    return res.render("admin/add_class_schedule", {
+      listBatch,
+      listFaculty,
+      admin: req.user,
+      navValue: "Create Batch Schedule",
+    });
   }
 
   async saveSchedule(req, res) {
@@ -214,6 +221,8 @@ class BatchScheduleController {
         schedule,
         listBatch,
         listFaculty,
+        admin: req.user,
+        navValue: "Edit Batch Schedule",
       });
     } catch (err) {
       console.log(err);

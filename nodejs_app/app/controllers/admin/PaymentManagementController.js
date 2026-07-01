@@ -126,7 +126,11 @@ class PaymentManagementController {
       },
       { $unwind: "$courseInfo" },
     ]);
-    return res.render("admin/admin_assign_fee", { listStudents });
+    return res.render("admin/admin_assign_fee", {
+      listStudents,
+      admin: req.user,
+      navValue: "Assign Fee",
+    });
   }
 
   async createFee(req, res) {

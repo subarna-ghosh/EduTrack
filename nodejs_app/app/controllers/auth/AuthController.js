@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Role = require("../../models/Role");
 const User = require("../../models/User");
+const sendEmail = require("../../utils/sendMail");
+const sendForgotPasswordEmail = require("../../utils/sendForgotMail");
 const {
   createAccessToken,
   createRefreshToken,
@@ -151,6 +153,46 @@ class AuthController {
 
   viewforgotPassword(req, res) {
     return res.render("admin/forgot_password");
+  }
+
+  async forgotPassword(req, res) {
+    try {
+      const { email } = req.body;
+
+      // Check User
+      const findUser = await User.findOne({ email });
+
+      if (!findUser) {
+        req.flash("error", "Email not found");
+        return res.redirect("/web/view/forgot-password");
+      }
+
+      // Generate Temporary Password
+      const temporaryPassword =
+        "LMS@" + Math.floor(100000 + Math.random() * 900000);
+
+      // Hash Password
+      const hashPassword = await bcrypt.hash(temporaryPassword, 10);
+
+      // Update Password
+      findUser.password = hashPassword;
+      await findUser.save();
+
+      // Send Email
+      await sendForgotPasswordEmail(req, findUser, temporaryPassword);
+
+      req.flash(
+        "success",
+        "A temporary password has been sent to your registered email.",
+      );
+
+      return res.redirect("/web/view/login");
+    } catch (error) {
+      console.log(error);
+
+      req.flash("error", "Something went wrong");
+      return res.redirect("/web/view/forgot-password");
+    }
   }
 }
 module.exports = new AuthController();

@@ -11,7 +11,11 @@ const sendEmail = require("../../utils/sendMail");
 class FacultyManagementController {
   async viewAddFaculty(req, res) {
     const selectDept = await Department.find({});
-    return res.render("admin/add_faculty", { selectDept });
+    return res.render("admin/add_faculty", {
+      selectDept,
+      admin: req.user,
+      navValue: "Add Faculty",
+    });
   }
 
   async viewListFaculty(req, res) {
@@ -90,6 +94,8 @@ class FacultyManagementController {
         totalPages,
         currentPage: page,
         search,
+        admin: req.user,
+        navValue: "Faculty List",
       });
     } catch (error) {
       console.log(error);
@@ -237,7 +243,11 @@ class FacultyManagementController {
         { $unwind: "$userInfo" },
         { $unwind: "$deptInfo" },
       ]);
-      return res.render("admin/faculty_profile", { showFacultyProfile });
+      return res.render("admin/faculty_profile", {
+        showFacultyProfile,
+        admin: req.user,
+        navValue: "Faculty Profile",
+      });
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while viewing faculty");
@@ -275,7 +285,12 @@ class FacultyManagementController {
         { $unwind: "$deptInfo" },
       ]);
       const selectDept = await Department.find({});
-      return res.render("admin/faculty_edit", { showData, selectDept });
+      return res.render("admin/faculty_edit", {
+        showData,
+        selectDept,
+        admin: req.user,
+        navValue: "Edit Faculty",
+      });
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while editing faculty");

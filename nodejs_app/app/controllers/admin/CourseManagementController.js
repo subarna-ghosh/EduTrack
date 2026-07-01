@@ -7,12 +7,14 @@ const Course = require("../../models/Course");
 const { options } = require("joi");
 class CourseManagementController {
   viewCourse(req, res) {
-    return res.render("admin/add_course");
+    return res.render("admin/add_course", {
+      admin: req.user,
+      navValue: "Add Course",
+    });
   }
 
   async saveCourse(req, res) {
     try {
-      
       console.log(req.body);
       const { courseName, duration, fees, description, status } = req.body;
       const data = new Course({
@@ -56,6 +58,8 @@ class CourseManagementController {
         currentPage: page,
         totalPages,
         limit,
+        admin: req.user,
+        navValue: "Course List",
       });
     } catch (error) {
       console.log(error);
@@ -68,7 +72,11 @@ class CourseManagementController {
     try {
       const id = req.params.id;
       const showData = await Course.findById(id);
-      return res.render("admin/course_edit", { showData });
+      return res.render("admin/course_edit", {
+        showData,
+        admin: req.user,
+        navValue: "Faculty Profile",
+      });
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while editing course");

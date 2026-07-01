@@ -25,6 +25,8 @@ class BatchManagementController {
     return res.render("admin/add_batch", {
       listCourses,
       findFaculty,
+      admin: req.user,
+      navValue: "Add Batch",
     });
   }
 
@@ -139,6 +141,8 @@ class BatchManagementController {
         currentPage: page,
         totalPages,
         search,
+        admin: req.user,
+        navValue: "Batch List",
       });
     } catch (error) {
       console.log(error);
@@ -175,6 +179,8 @@ class BatchManagementController {
         listCourses,
         findFaculty,
         findBatch,
+        admin: req.user,
+        navValue: "Edit Batch",
       });
     } catch (error) {
       req.flash("error", "Something went wrong while editing batch");

@@ -98,12 +98,12 @@
               <!-- CARD 1 -->
               <div class="col-lg-4 col-md-6">
                 <div class="material-card">
-                  <img src="https://placehold.co/600x350?text=NumPy" />
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSc4BCVvdkYKIepaSqt_eC4VDB5O9NGHWk-F0XVOBMqg&s=10" />
 
                   <div class="card-body">
-                    <div class="card-title">NumPy Presentation</div>
-                    <div class="meta"><b>Faculty:</b> Sneha Das</div>
-                    <div class="meta"><b>Uploaded:</b> 22-06-2026</div>
+                    <div class="card-title"><%=materials[0].title%></div>
+                    <div class="meta"><b>Faculty:</b><%=materials[0].facultyName%></div>
+                    <div class="meta"><b>Uploaded:</b><%=new Date(materials[0].createdAt).toLocaleDateString("en-GB")%></div>
                     <div class="meta">
                       <b>Type:</b>
                       <span class="badge bg-warning text-dark badge-file"

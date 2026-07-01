@@ -12,7 +12,11 @@ class StudentManagementController {
   async viewAddStudent(req, res) {
     try {
       const findBatch = await Batch.find({});
-      return res.render("admin/add_student", { findBatch });
+      return res.render("admin/add_student", {
+        findBatch,
+        admin: req.user,
+        navValue: "Add Student",
+      });
     } catch (error) {
       req.flash("error", "Something went wrong while viewing edit student");
       return res.redirect("/web/view/add/student/list");
@@ -209,6 +213,8 @@ class StudentManagementController {
         currentPage: page,
         totalPages,
         search,
+        admin: req.user,
+        navValue: "Student List",
       });
     } catch (error) {
       console.log(error);
@@ -258,7 +264,11 @@ class StudentManagementController {
           $unwind: "$courseInfo",
         },
       ]);
-      return res.render("admin/student_profile", { findStudent });
+      return res.render("admin/student_profile", {
+        findStudent,
+        admin: req.user,
+        navValue: "Student Profile",
+      });
     } catch (error) {
       console.log(error);
       req.flash("error", "Something went wrong while viewing student");
@@ -310,7 +320,12 @@ class StudentManagementController {
           $unwind: "$courseInfo",
         },
       ]);
-      return res.render("admin/student_edit", { findBatch, findStudent });
+      return res.render("admin/student_edit", {
+        findBatch,
+        findStudent,
+        admin: req.user,
+        navValue: "Edit Student",
+      });
     } catch (error) {
       req.flash("error", "Something went wrong while viewing edit student");
       return res.redirect("/web/view/add/student/list");

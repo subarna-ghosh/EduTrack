@@ -64,6 +64,8 @@ class PaymentRecordController {
       currentPage: page,
       totalPages,
       search,
+      admin: req.user,
+      navValue: "Payment Records",
     });
   }
 }

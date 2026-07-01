@@ -185,6 +185,8 @@ class AttendanceManagementController {
 
         currentPage: page,
         totalPages,
+        admin: req.user,
+        navValue: "Attendance List",
       });
     } catch (error) {
       console.log(error);
@@ -234,6 +236,8 @@ class AttendanceManagementController {
         courseId,
         batchId,
         attendanceDate,
+        admin: req.user,
+        navValue: "Mark Attendance",
       });
     } catch (error) {
       console.log(error);

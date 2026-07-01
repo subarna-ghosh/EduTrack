@@ -1,0 +1,77 @@
+<nav class="topbar">
+  <div>
+    <h2 class="page-title"><%=navValue%></h2>
+    <p class="page-subtitle">Welcome back, <%=admin.name%></p>
+  </div>
+
+  <div class="top-right">
+    <!-- Notifications -->
+    <button class="top-btn notification-btn">
+      <i class="fa-regular fa-bell"></i>
+      <span class="notification-count">5</span>
+    </button>
+
+    <!-- Announcements -->
+    <a href="/web/view/announcement/list" class="top-btn">
+      <i class="fa-solid fa-bullhorn"></i>
+      Announcements
+    </a>
+
+    <!-- Quick Add -->
+    <div class="dropdown">
+      <button class="quick-add-btn dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-plus"></i>
+        Quick Add
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" href="/web/view/add/student">
+            Add Student
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item" href="/web/view/add/faculty">
+            Add Faculty
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item" href="/web/view/add/course"> Add Course </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item" href="/web/view/add/batch"> Add Batch </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Admin Profile -->
+    <div class="dropdown">
+      <button
+        class="profile-dropdown dropdown-toggle"
+        data-bs-toggle="dropdown"
+      >
+        <i class="fa-solid fa-user-shield me-2"></i>
+        <%=admin.name%>
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" href="#"> Profile </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item" href="#"> Settings </a>
+        </li>
+
+        <li><hr class="dropdown-divider" /></li>
+
+        <li>
+          <a class="dropdown-item text-danger" href="/web/logout"> Logout </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

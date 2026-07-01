@@ -8,6 +8,7 @@ const Batch = require("../../models/Batch");
 const BatchSchedule = require("../../models/BatchSchedule");
 const Project = require("../../models/Project");
 const ProjectSubmission = require("../../models/ProjectSubmission");
+const Material = require("../../models/Material");
 class StudentProjectSubmission {
   async viewProjectSubmission(req, res) {
     try {
@@ -186,8 +187,84 @@ class StudentProjectSubmission {
     }
   }
 
-  viewStudentMaterial(req, res) {
-    return res.render("student/student_view_material",{student: req.user,navValue: "Materials",});
+  async viewStudentMaterial(req, res) {
+    try {
+      const findUser = await User.findById(req.user.id);
+
+      const materials = await Student.aggregate([
+        {
+          $match: {
+            userId: findUser._id,
+            isDeleted: false,
+          },
+        },
+
+        {
+          $lookup: {
+            from: "materials",
+            localField: "batchId",
+            foreignField: "batchId",
+            as: "materialInfo",
+          },
+        },
+
+        {
+          $unwind: "$materialInfo",
+        },
+
+        {
+          $lookup: {
+            from: "faculties",
+            localField: "materialInfo.facultyId",
+            foreignField: "_id",
+            as: "facultyInfo",
+          },
+        },
+
+        {
+          $unwind: "$facultyInfo",
+        },
+
+        {
+          $lookup: {
+            from: "users",
+            localField: "facultyInfo.userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+
+        {
+          $unwind: "$userInfo",
+        },
+
+        {
+          $project: {
+            _id: "$materialInfo._id",
+            title: "$materialInfo.title",
+            description: "$materialInfo.description",
+            materialImage: "$materialInfo.materialImage",
+            filePublicId: "$materialInfo.filePublicId",
+            createdAt: "$materialInfo.createdAt",
+            facultyName: "$userInfo.name",
+          },
+        },
+
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+      ]);
+
+      return res.render("student/student_view_material", {
+        student: req.user,
+        materials,
+        navValue: "Materials",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 module.exports = new StudentProjectSubmission();

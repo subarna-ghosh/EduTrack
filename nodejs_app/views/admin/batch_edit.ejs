@@ -16,21 +16,20 @@
     />
     <link rel="stylesheet" href="/assets/css/batch.css" />
     <link rel="stylesheet" href="/assets/css/sidebar.css">
+    <link rel="stylesheet" href="/assets/css/admin_navbar.css">
   </head>
 
   <body>
-    <div class="container py-5">
+    <div class="container">
       <div class="row justify-content-center">
         <!-- SIDEBAR -->
         <%-include('../layouts/admin_sidebar')%>
-        <div class="col-lg-8 main-content">
+        <div class="col-lg-10 main-content">
+          <!-- navbar -->
+          <div>
+            <%-include('../layouts/admin_navbar')%>
+          </div>
           <div class="card batch-card">
-            <!-- Header -->
-
-            <div class="card-header bg-white py-3">
-              <h3 class="page-title mb-0">Update Batch</h3>
-            </div>
-
             <!-- Body -->
 
             <div class="card-body p-4">

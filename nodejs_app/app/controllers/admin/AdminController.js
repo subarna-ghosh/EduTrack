@@ -107,7 +107,7 @@ class AdminController {
         },
         { $unwind: "$userInfo" },
       ]);
-      
+
       const todayIndex = new Date().getDay(); // 0 = Sunday
       const now = new Date();
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
@@ -150,6 +150,7 @@ class AdminController {
         collected,
         dueAmount,
         listBatch,
+        navValue: "Dashboard",
       });
     } catch (error) {
       console.error(error);

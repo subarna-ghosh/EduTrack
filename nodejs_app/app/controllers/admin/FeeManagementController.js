@@ -65,6 +65,8 @@ class FeeManagementController {
       currentPage: page,
       totalPages,
       search,
+      admin: req.user,
+      navValue: "Assigned Fee",
     });
   }
 }

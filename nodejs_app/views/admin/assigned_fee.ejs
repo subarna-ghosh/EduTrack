@@ -14,6 +14,7 @@
 
     <link rel="stylesheet" href="/assets/css/fee.css">
     <link rel="stylesheet" href="/assets/css/sidebar.css">
+    <link rel="stylesheet" href="/assets/css/admin_navbar.css">
   </head>
 
   <body>
@@ -21,9 +22,12 @@
       <div class="row">
          <!-- SIDEBAR -->
         <%-include('../layouts/admin_sidebar')%>
-        <div class="col-lg-8 main-content">
+        <div class="col-lg-10 main-content">
+          <!-- navbar -->
           <div>
-      <h2 class="page-title">Assigned Fee</h2>
+            <%-include('../layouts/admin_navbar')%>
+          </div>
+          <div>
 
       <div class="table-card">
         <!-- Top Bar -->

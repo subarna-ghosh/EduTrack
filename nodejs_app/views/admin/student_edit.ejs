@@ -17,23 +17,22 @@
     />
     <link rel="stylesheet" href="/assets/css/student.css">
     <link rel="stylesheet" href="/assets/css/sidebar.css">
+    <link rel="stylesheet" href="/assets/css/admin_navbar.css">
   </head>
 
   <body>
-    <div class="container py-5">
+    <div class="container">
       <div class="row">
 
         <!-- SIDEBAR -->
         <%-include('../layouts/admin_sidebar')%>
 
-        <div class="col-lg-8 main-content">
+        <div class="col-lg-10 main-content">
+          <!-- navbar -->
+          <div>
+            <%-include('../layouts/admin_navbar')%>
+          </div>
           <div class="card form-card">
-            <!-- Header -->
-
-            <div class="card-header bg-white py-3">
-              <h3 class="page-title mb-0">Update Student</h3>
-            </div>
-
             <!-- Body -->
 
             <div class="card-body p-4">
@@ -210,5 +209,10 @@
         document.querySelector(".image-preview i").style.display = "none";
       }
     </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

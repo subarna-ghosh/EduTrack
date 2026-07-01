@@ -75,12 +75,18 @@ class AnnouncementManagementController {
       currentPage: page,
       totalPages,
       search,
+      admin: req.user,
+      navValue: "Announcements",
     });
   }
 
   async viewAddAnnouncement(req, res) {
     const listBatch = await Batch.find({});
-    return res.render("admin/add_announcement", { listBatch });
+    return res.render("admin/add_announcement", {
+      listBatch,
+      admin: req.user,
+      navValue: "Create Announcement",
+    });
   }
 
   async saveAnnouncement(req, res) {
@@ -119,6 +125,8 @@ class AnnouncementManagementController {
     return res.render("admin/announcement_edit", {
       showAnnouncements,
       listBatches,
+      admin: req.user,
+      navValue: "Edit Announcement",
     });
   }
 
@@ -198,6 +206,8 @@ class AnnouncementManagementController {
     return res.render("admin/view_announcement", {
       showAnnouncements,
       listBatches,
+      admin: req.user,
+      navValue: "Announcement Details",
     });
   }
 }

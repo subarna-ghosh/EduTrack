@@ -12,18 +12,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/assets/css/student.css">
     <link rel="stylesheet" href="/assets/css/sidebar.css">
+    <link rel="stylesheet" href="/assets/css/admin_navbar.css">
   </head>
   <body>
     <div class="container-fluid">
       <div class="row">
-
         <!-- SIDEBAR -->
         <%-include('../layouts/admin_sidebar')%>
 
         <div class="col-lg-10 main-content">
-          <div class="page-wrapper">
-      <h2 class="page-title">Student List</h2>
-
+          <!-- navbar -->
+         <div>
+           <%-include('../layouts/admin_navbar')%>
+         </div>
+          <div>
       <div class="student-card">
         <div class="top-bar">
 
