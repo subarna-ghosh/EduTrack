@@ -70,28 +70,28 @@ class FacultyController {
           },
         },
 
-        {
-          $lookup: {
-            from: "students",
-            localField: "_id",
-            foreignField: "batchId",
-            as: "studentsList",
-          },
-        },
-        {
-          $lookup: {
-            from: "users",
-            localField: "studentsList.userId",
-            foreignField: "_id",
-            as: "studentInfo",
-          },
-        },
-        {
-          $unwind: {
-            path: "$studentInfo",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
+        // {
+        //   $lookup: {
+        //     from: "students",
+        //     localField: "_id",
+        //     foreignField: "batchId",
+        //     as: "studentsList",
+        //   },
+        // },
+        // {
+        //   $lookup: {
+        //     from: "users",
+        //     localField: "studentsList.userId",
+        //     foreignField: "_id",
+        //     as: "studentInfo",
+        //   },
+        // },
+        // {
+        //   $unwind: {
+        //     path: "$studentInfo",
+        //     preserveNullAndEmptyArrays: true,
+        //   },
+        // },
 
         {
           $unwind: {
@@ -127,7 +127,6 @@ class FacultyController {
       const batchId = req.params.id;
       const id = req.user.id;
       const profile = await Faculty.findOne({ userId: id });
-
 
       const singleBatch = await Batch.aggregate([
         {
@@ -192,6 +191,30 @@ class FacultyController {
             preserveNullAndEmptyArrays: true,
           },
         },
+
+         {
+          $lookup: {
+            from: "students",
+            localField: "_id",
+            foreignField: "batchId",
+            as: "studentsList",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "studentsList.userId",
+            foreignField: "_id",
+            as: "studentInfo",
+          },
+        },
+        // {
+        //   $unwind: {
+        //     path: "$studentInfo",
+        //     preserveNullAndEmptyArrays: true,
+        //   },
+        // },
+
       ]);
 
       const facultyProfile = await Faculty.aggregate([
@@ -217,7 +240,7 @@ class FacultyController {
 
       ])
 
-      // console.log(facultyProfile);
+      // console.log(singleBatch);
 
       return res.render("faculty/faculty_single_batch", { singleBatch, facultyProfile });
 

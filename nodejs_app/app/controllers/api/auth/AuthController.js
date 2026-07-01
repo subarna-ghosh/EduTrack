@@ -163,31 +163,20 @@ class AuthController {
 
   }
 
-  // async logout(req, res) {
-  //   try {
-  //     const { refreshToken } = req.body;
-
-  //     if (refreshToken) {
-  //       await User.findOneAndUpdate(
-  //         { refreshToken },
-  //         { $unset: { refreshToken: 1 } },
-  //       );
-  //     }
-
-  //     return res.status(httpStatusCode.OK).json({
-  //       success: true,
-  //       message: "Logged out successfully",
-  //     });
-  //   } catch (error) {
-  //     return res.status(httpStatusCode.SERVER_ERROR).json({
-  //       success: false,
-  //       message: error.message
-  //     })
-  //   }
-  //   // viewforgotPassword(req, res) {
-  //   //   return res.render("admin/forgot_password");
-  //   // }
-  // }
+ async logout(req, res) {
+  try {
+    return res.status(httpStatusCode.OK).json({
+      status: true,
+      message: "Logout successful",
+    });
+  } catch (error) {
+    return res.status(httpStatusCode.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+};
 
 }
 

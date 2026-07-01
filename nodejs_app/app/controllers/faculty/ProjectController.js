@@ -433,7 +433,7 @@ class ProjectController {
 
       ])
 
-      // console.log(singleProject);
+      console.log(singleProject);
       // console.log(singleProject[0].studentList[0].address);
 
       return res.render("faculty/faculty_single_project", { singleProject, facultyProfile });

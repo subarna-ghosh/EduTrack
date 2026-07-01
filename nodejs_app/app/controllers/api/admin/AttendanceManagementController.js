@@ -266,7 +266,7 @@ class AttendanceManagementController {
           attendanceDate: new Date(attendanceDate),
         });
         
-        console.log(alreadyExists);
+        // console.log(alreadyExists);
         
         if (alreadyExists) {
           return res.status(httpStatusCode.BAD_REQUEST).json({

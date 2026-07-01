@@ -6,7 +6,7 @@ const role = (...roles) => {
 
     try {
       
-      console.log(req.user.role);
+      // console.log(req.user.role);
       
       if (!roles.includes(req.user.role)) {
         return res.status(httpStatusCode.UNAUTHORIZED).json({

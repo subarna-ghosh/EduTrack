@@ -144,7 +144,7 @@ class FacultyController {
         },
         {
           $sort: {
-            startTime: 1
+            startTime: -1
           }
         }
       ]);

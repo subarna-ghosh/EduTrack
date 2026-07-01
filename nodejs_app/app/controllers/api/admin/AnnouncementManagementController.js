@@ -96,12 +96,7 @@ class AnnouncementManagementController {
         }
     }
 
-    //   async viewAddAnnouncement(req, res) {
-    //     const listBatch = await Batch.find({});
-    //     return res.render("admin/add_announcement", { listBatch });
-    //   }
-
-    async createAnnouncement(req, res) {
+    async saveAnnouncement(req, res) {
         try {
 
             //   console.log(req.body);
@@ -142,36 +137,31 @@ class AnnouncementManagementController {
         }
     }
 
-    async viewEditAnnouncement(req, res) {
-        try {
-            const id = req.params.id;
-            const listBatches = await Batch.find({});
-            const showAnnouncements = await Announcement.findById(id);
-
-            return res.status(httpStatusCode.OK).json({
-                success: true,
-                message: "Announcements gets successfully",
-                showAnnouncements,
-                listBatches,
-            });
-
-        } catch (error) {
-            return res.status(httpStatusCode.SERVER_ERROR).json({
-                success: false,
-                message: error.message
-            });
-        }
-    }
-
     async updateAnnouncement(req, res) {
         try {
             const id = req.params.id;
 
-            const updateData = { ...req.body };
+            const updateData = await Announcement.findById(id);
+
+            const {
+                title, description, announcementType, batchId, status
+            } = req.body;
+
             if (updateData.announcementType !== "batch") {
                 updateData.batchId = null;
             }
-            const result = await Announcement.findByIdAndUpdate(id, updateData, { new: true });
+
+            updateData.title = title || updateData.title;
+            updateData.description = description || updateData.description;
+            updateData.announcementType = announcementType || updateData.announcementType;
+            //   project.facultyId = profile.id || project.facultyId;
+            //   project.startDate = startDate || project.startDate;
+            //   project.dueDate = dueDate || project.dueDate;
+            //   project.githubRequired = githubRequired || project.githubRequired;
+            updateData.status = status || updateData.status;
+
+            // const result = await Announcement.findByIdAndUpdate(id, updateData, { new: true });
+            const result = await updateData.save();
 
             return res.status(httpStatusCode.OK).json({
                 success: true,

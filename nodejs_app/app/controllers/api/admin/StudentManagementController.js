@@ -189,33 +189,33 @@ class StudentManagementController {
       ]);
 
       const totalStudent = await Student.aggregate([
-              {
-                $lookup: {
-                  from: "users",
-                  localField: "userId",
-                  foreignField: "_id",
-                  as: "userInfo",
-                },
-              },
-              {
-                $unwind: "$userInfo",
-              },
-              {
-                $match: {
-                  "userInfo.name": {
-                    $regex: search,
-                    $options: "i",
-                  },
-                },
-              },
-              {
-                $count: "total",
-              },
-            ]);
-      
-            const totalRecords = totalStudent.length > 0 ? totalStudent[0].total : 0;
-      
-            const totalPages = Math.ceil(totalRecords / limit);
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userInfo",
+          },
+        },
+        {
+          $unwind: "$userInfo",
+        },
+        {
+          $match: {
+            "userInfo.name": {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        },
+        {
+          $count: "total",
+        },
+      ]);
+
+      const totalRecords = totalStudent.length > 0 ? totalStudent[0].total : 0;
+
+      const totalPages = Math.ceil(totalRecords / limit);
 
       return res.status(httpStatusCode.OK).json({
         success: true,
@@ -363,6 +363,59 @@ class StudentManagementController {
       const id = req.params.id;
       const isExist = await Student.findById(id);
 
+      if (!isExist) {
+        return res.status(httpStatusCode.NOT_FOUND).json({
+          success: false,
+          message: "Student does not found"
+        });
+      }
+
+      const {
+        name,
+        email,
+        phone,
+        password,
+        address,
+        batchId,
+        studentCode,
+        status
+      } = req.body;
+
+      if (name && name !== "string" && name.trim() !== "") {
+        isExist.name = name;
+      }
+
+      if (email && email !== "string" && email.trim() !== "") {
+        isExist.email = email;
+      }
+
+      if (phone !== undefined && phone !== "string" && phone.trim() !== "") {
+        isExist.phone = phone;
+      }
+
+      if (password !== undefined && password !== "string" && password.trim() !== "") {
+        isExist.password = password;
+      }
+
+      if (address !== undefined && address !== "string" && address.trim() !== "") {
+        isExist.address = address;
+      }
+
+
+      if (batchId && batchId.trim() !== "" && mongoose.Types.ObjectId.isValid(batchId)) {
+        isExist.batchId = new mongoose.Types.ObjectId(batchId);
+
+        if (studentCode !== undefined && studentCode !== "string" && studentCode.trim() !== "") {
+          isExist.studentCode = studentCode;
+        }
+
+      }
+
+      if (status !== undefined && status !== "") {
+        isExist.status = status;
+      }
+
+
       if (req.file) {
         // Deletes old image only when a new image is uploaded
         if (isExist.profileImagePublicId) {
@@ -372,13 +425,11 @@ class StudentManagementController {
           folder: "student",
         });
         await fs.unlink(req.file.path);
-        req.body.profileImage = data.secure_url;
-        req.body.profileImagePublicId = data.public_id;
+        isExist.profileImage = data.secure_url;
+        isExist.profileImagePublicId = data.public_id;
       }
 
-      const updatedStudent = await Student.findByIdAndUpdate(id, req.body, {
-        returnDocument: "after",
-      });
+      const updatedStudent = await isExist.save();
 
       return res.status(httpStatusCode.OK).json({
         success: true,

@@ -50,9 +50,47 @@ router.post(
 
 // router.get("/view/forgot-password", AuthController.viewforgotPassword);
 
-router.post("/refreshtoken", AuthController.refreshToken);
+// router.post("/refreshtoken", AuthController.refreshToken);
 
-// router.post("/user/logout", authCheck, AuthController.logout);
+/**
+ * @swagger
+ * /api/logout:
+ *   post:
+ *     summary: Logout User
+ *     description: Logout the authenticated user by providing a valid JWT token.
+ *     tags:
+ *       - Authentication
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Logout successful
+ *       401:
+ *         description: Unauthorized or Invalid Token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Invalid token
+ */
+router.post("/user/logout", authCheck, AuthController.logout);
 
 
 module.exports = router;

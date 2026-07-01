@@ -48,7 +48,6 @@ router.get("/view/admin/dashboard",
   AdminController.viewAdminDashboard
 );
 
-
 // department
 
 /**
@@ -86,8 +85,6 @@ router.post("/save/department",
   validateApi(departmentSchema),
   FacultyManagementController.createDepartment
 );
-
-
 
 // faculty
 
@@ -367,10 +364,7 @@ router.delete(
   FacultyManagementController.deleteFaculty,
 );
 
-
-
 // student
-
 
 /**
  * @swagger
@@ -559,14 +553,74 @@ router.get(
   StudentManagementController.viewEditStudent,
 );
 
-// router.put(
-//   "/update/student/:id",
-//   authCheck,
-//   roleCheck("admin"),
-//   uploadProfileImage.single("profileImage"),
-//   StudentManagementController.updateStudent
-// );
 
+/**
+ * @swagger
+ * /api/update/student/{id}:
+ *   put:
+ *     tags:
+ *       - Student
+ *     summary: Update Student
+ *     description: Update Student details including profile image.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Student ID
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               batchId:
+ *                 type: string              
+ *               studentCode:
+ *                 type: string     
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - inactive
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Faculty updated successfully.
+ *       400:
+ *         description: Bad Request.
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: Faculty not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
+router.put(
+  "/update/student/:id",
+  authCheck,
+  roleCheck("admin"),
+  uploadProfileImage.single("profileImage"),
+  StudentManagementController.updateStudent
+);
 
 
 /**
@@ -733,13 +787,70 @@ router.get(
 );
 
 
+/**
+ * @swagger
+ * /api/course/update/{id}:
+ *   put:
+ *     tags:
+ *       - Course
+ *     summary: Update Course
+ *     description: Update an existing course by its ID.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Course ID
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - courseName
+ *               - duration
+ *               - fees
+ *               - description
+ *               - status
+ *             properties:
+ *               courseName:
+ *                 type: string
+ *               duration:
+ *                 type: string
+ *               fees:
+ *                 type: number
+ *               description:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - Active
+ *                   - Inactive
+ *     responses:
+ *       200:
+ *         description: Course updated successfully.
+ *       400:
+ *         description: Invalid request data.
+ *       401:
+ *         description: Unauthorized. Token is missing or invalid.
+ *       403:
+ *         description: Access denied. Admin only.
+ *       404:
+ *         description: Course not found.
+ *       500:
+ *         description: Internal server error.
+ */
+
 router.put(
   "/update/course/:id",
   authCheck,
   roleCheck("admin"),
   CourseManagementController.courseUpdate
 );
-
 
 
 /**
@@ -847,7 +958,6 @@ router.post(
 );
 
 
-
 /**
  * @swagger
  * /api/view/allbatch:
@@ -872,7 +982,6 @@ router.get(
   roleCheck("admin"),
   BatchManagementController.viewAllBatch
 );
-
 
 
 /**
@@ -914,6 +1023,71 @@ router.get(
   BatchManagementController.viewEditBatch
 );
 
+/**
+ * @swagger
+ * /api/update/batch/{id}:
+ *   put:
+ *     tags:
+ *       - Batch
+ *     summary: Update Batch
+ *     description: Update an existing batch by its ID.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Batch ID
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - batchName
+ *               - courseId
+ *               - facultyId
+ *               - startDate
+ *               - endDate
+ *               - status
+ *             properties:
+ *               batchName:
+ *                 type: string
+ *               courseId:
+ *                 type: string
+ *                 description: MongoDB ObjectId of the course
+ *               facultyId:
+ *                 type: string
+ *                 description: MongoDB ObjectId of the faculty
+ *               startDate:
+ *                 type: string
+ *                 format: date
+ *               endDate:
+ *                 type: string
+ *                 format: date
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - Active
+ *                   - Inactive
+ *                 example: "Active"
+ *     responses:
+ *       200:
+ *         description: Batch updated successfully.
+ *       400:
+ *         description: Invalid request data.
+ *       401:
+ *         description: Unauthorized. Token is missing or invalid.
+ *       403:
+ *         description: Access denied. Admin only.
+ *       404:
+ *         description: Batch not found.
+ *       500:
+ *         description: Internal server error.
+ */
 
 router.put(
   "/update/batch/:id",
@@ -966,6 +1140,22 @@ router.delete(
 
 // attendance management apis
 
+/**
+ * @swagger
+ * /api/view/attendance/list:
+ *   get:
+ *     tags:
+ *       - Attendance
+ *     summary: Get Attendance
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Data fetched successfully.
+ *       500:
+ *         description: Server error
+ */
+
 router.get(
   "/view/attendance/list",
   authCheck,
@@ -973,12 +1163,50 @@ router.get(
   AttendanceManagementController.viewAttendanceList,
 );
 
-// router.get(
-//   "/view/mark/attendance",
-//   authCheck,
-//   roleCheck("admin"),
-//   AttendanceManagementController.viewMarkAttendance,
-// );
+/**
+ * @swagger
+ * /api/view/mark/attendance:
+ *   get:
+ *     tags:
+ *       - Attendance
+ *     summary: Mark Attendance
+ *     description: Fetch all courses, batches, and students based on the selected course, batch, and attendance date.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: courseId
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: batchId
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: attendanceDate
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: Attendance data fetched successfully.
+ *       401:
+ *         description: Unauthorized. Token is missing or invalid.
+ *       403:
+ *         description: Access denied.
+ *       500:
+ *         description: Internal Server Error.
+ */
+
+router.get(
+  "/view/mark/attendance",
+  authCheck,
+  roleCheck("admin"),
+  AttendanceManagementController.viewMarkAttendance,
+);
 
 /**
  * @swagger
@@ -1047,110 +1275,225 @@ router.post(
   AttendanceManagementController.saveAttendance
 );
 
-// shown below are payment management apis
-// router.get(
-//   "/view/payment/management",
-//   authCheck,
-//   roleCheck("admin"),
-//   PaymentManagementController.viewPaymentPage,
-// );
-
-// router.get(
-//   "/view/assign/fee",
-//   authCheck,
-//   roleCheck("admin"),
-//   PaymentManagementController.viewAssignFee,
-// );
-
-// router.post(
-//   "/create/fee",
-//   authCheck,
-//   roleCheck("admin"),
-//   validateWeb(feeSchema, "/web/view/assign/fee"),
-//   PaymentManagementController.createFee,
-// );
-
-// router.post(
-//   "/admin/payment/approve/:id",
-//   authCheck,
-//   roleCheck("admin"),
-//   PaymentManagementController.approvePayment,
-// );
-
-// router.post(
-//   "/admin/payment/reject/:id",
-//   authCheck,
-//   roleCheck("admin"),
-//   PaymentManagementController.rejectPayment,
-// );
-
-// shown below are assigned fee to student apis
-// router.get(
-//   "/view/assigned/fee/student",
-//   authCheck,
-//   roleCheck("admin"),
-//   FeeManagementController.viewAssignedFee,
-// );
-
-// shown below are payment records of student apis
-
-// router.get(
-//   "/view/payment/record",
-//   authCheck,
-//   roleCheck("admin"),
-//   PaymentRecordController.viewPaymentRecord,
-// );
-
 // shown below are announcement management apis
-// router.get(
-//   "/view/announcement/list",
-//   authCheck,
-//   roleCheck("admin"),
-//   AnnouncementManagementController.viewListAnnouncement,
-// );
 
-// router.get(
-//   "/view/add/announcement",
-//   authCheck,
-//   roleCheck("admin"),
-//   AnnouncementManagementController.viewAddAnnouncement,
-// );
+/**
+ * @swagger
+ * /api/view/announcement/list:
+ *   get:
+ *     tags:
+ *       - Announcement
+ *     summary: Get announcement
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Data fetched successfully.
+ *       500:
+ *         description: Server error
+ */
 
-// router.post(
-//   "/save/announcement",
-//   authCheck,
-//   roleCheck("admin"),
-//   validateWeb(announcementSchema, "/web/view/announcement/list"),
-//   AnnouncementManagementController.saveAnnouncement,
-// );
+router.get(
+  "/view/announcement/list",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewAnnouncementList
+);
 
-// router.get(
-//   "/view/announcement/:id",
-//   authCheck,
-//   roleCheck("admin"),
-//   AnnouncementManagementController.viewAnnouncement,
-// );
 
-// router.get(
-//   "/view/edit/announcement/:id",
-//   authCheck,
-//   roleCheck("admin"),
-//   AnnouncementManagementController.viewEditAnnouncement,
-// );
+/**
+ * @swagger
+ * /api/save/announcement:
+ *   post:
+ *     summary: Create a new announcement
+ *     tags:
+ *       - Announcement
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - description
+ *               - announcementType
+ *               - status
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               announcementType:
+ *                 type: string
+ *                 enum:
+ *                   - global
+ *                   - student 
+ *                   - faculty 
+ *                   - batch
+ *               batchId:
+ *                 type: string
+ *                 description: Required only when announcementType is "batch".
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - inactive       
+ *     responses:
+ *       201:
+ *         description: Department created successfully
+ *       400:
+ *         description: Bad Request - Missing fields
+ *       500:
+ *         description: Server error
+ */
 
-// router.post(
-//   "/update/announcement/:id",
-//   authCheck,
-//   roleCheck("admin"),
-//   validateWeb(announcementSchema, "/web/view/announcement/list"),
-//   AnnouncementManagementController.updateAnnouncement,
-// );
+router.post(
+  "/save/announcement",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.saveAnnouncement
+);
 
-// router.get(
-//   "/delete/announcement/:id",
-//   authCheck,
-//   roleCheck("admin"),
-//   AnnouncementManagementController.deleteAnnouncement,
-// );
+/**
+ * @swagger
+ * /api/view/announcement/{id}:
+ *   get:
+ *     tags:
+ *       - Announcement
+ *     summary: View Announcement
+ *     description: Get an announcement by its ID.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Announcement ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Announcement fetched successfully.
+ *       400:
+ *         description: Invalid Announcement ID.
+ *       401:
+ *         description: Unauthorized. Token is missing or invalid.
+ *       403:
+ *         description: Access denied. Admin only.
+ *       404:
+ *         description: Announcement not found.
+ *       500:
+ *         description: Internal server error.
+ */
+
+router.get(
+  "/view/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.viewAnnouncement
+);
+
+
+/**
+ * @swagger
+ * /api/update/announcement/{id}:
+ *   put:
+ *     summary: Update an announcement
+ *     tags:
+ *       - Announcement
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Announcement ID
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               announcementType:
+ *                 type: string
+ *                 enum:
+ *                   - global
+ *                   - student 
+ *                   - faculty 
+ *                   - batch
+ *               batchId:
+ *                 type: strin
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - active
+ *                   - inactive
+ *     responses:
+ *       200:
+ *         description: Announcement updated successfully.
+ *       404:
+ *         description: Announcement not found.
+ *       500:
+ *         description: Internal Server Error
+ */
+
+router.put(
+  "/update/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.updateAnnouncement
+);
+
+
+/**
+ * @swagger
+ * /api/delete/announcement/{id}:
+ *   delete:
+ *     tags:
+ *       - Announcement
+ *     summary: Delete Announcement
+ *     description: Delete a Announcement by ID. Only Admin can access this API.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Announcement ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Announcement deleted successfully.
+ *       400:
+ *         description: Invalid Announcement ID.
+ *       401:
+ *         description: Unauthorized. Invalid or missing token.
+ *       403:
+ *         description: Forbidden. Admin access only.
+ *       404:
+ *         description: Announcement not found.
+ *       500:
+ *         description: Internal server error.
+ */
+
+router.delete(
+  "/delete/announcement/:id",
+  authCheck,
+  roleCheck("admin"),
+  AnnouncementManagementController.deleteAnnouncement,
+);
+
+
 
 module.exports = router;

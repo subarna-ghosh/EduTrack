@@ -2,7 +2,7 @@
   "definition": {
     "openapi": "3.0.0",
     "info": {
-      "title": "Test API",
+      "title": "LMS API",
       "version": "1.0.0",
       "description": "Edu Track API documentation"
     },
