@@ -145,9 +145,17 @@ class StudentController {
       userId: req.user.id,
     });
 
-    const listFees = await Fee.findOne({
+    let listFees = await Fee.findOne({
       studentId: student._id,
     });
+
+    if (!listFees) {
+      listFees = {
+        totalFee: 0,
+        paidAmount: 0,
+        dueAmount: 0,
+      };
+    }
 
     const announcementsMade = await Announcement.find({
       status: "active",
@@ -172,7 +180,7 @@ class StudentController {
   async viewStudentPayNow(req, res) {
     // Get the student's profile using the logged-in user's ID
     const student = await Student.findOne({
-      userId: req.user.id,   
+      userId: req.user.id,
     });
 
     if (!student) {
